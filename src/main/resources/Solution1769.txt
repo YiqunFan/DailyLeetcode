@@ -1,0 +1,15 @@
+// 1769. Minimum Number of Operations to Move All Balls to Each Box
+class Solution {
+    public int[] minOperations(String boxes) {
+        char[] charArray = boxes.toCharArray();
+        int n = charArray.length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; ++i) {
+            int c = charArray[i] - 48;
+            for (int j = 0; j < n; ++j) {
+                ans[j] += Math.abs(i - j) * c;
+            }
+        }
+        return ans;
+    }
+}

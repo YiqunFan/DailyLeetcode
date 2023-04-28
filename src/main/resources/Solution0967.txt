@@ -1,0 +1,31 @@
+import java.util.HashSet;
+
+// 0967. Numbers With Same Consecutive Differences
+class Solution {
+    private int lowerLimit = 0;
+    private int difference = 0;
+    private HashSet<Integer> res = new HashSet<>();
+
+    public int[] numsSameConsecDiff(int n, int k) {
+        lowerLimit = (int) Math.pow(10, n - 1) - 1;
+        difference = k;
+        for (int i = 1; i < 10; ++i) {
+            dfs(i);
+        }
+        return res.stream().mapToInt(Integer::valueOf).toArray();
+    }
+
+    private void dfs(int n) {
+        if (n > lowerLimit) {
+            res.add(n);
+            return;
+        }
+        if (n % 10 + difference < 10) {
+            dfs(n * 10 + n % 10 + difference);
+        }
+        if (n % 10 - difference > -1) {
+            dfs(n * 10 + n % 10 - difference);
+        }
+    }
+
+}

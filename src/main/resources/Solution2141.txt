@@ -1,0 +1,28 @@
+// 2141. Maximum Running Time of N Computers
+class Solution {
+    public long maxRunTime(int n, int[] batteries) {
+        long left = 0;
+        long right = Long.MAX_VALUE / n;
+        while (left < right) {
+            long mid = left + (right - left) / 2;
+            if (canRunAllSimultaneously(mid, n, batteries)) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left - 1;
+    }
+
+    boolean canRunAllSimultaneously(long time, int n, int[] batteries) {
+        long target = time * n;
+        long sum = 0L;
+        for (int battery : batteries) {
+            sum += Math.min(time, battery);
+            if (sum >= target) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

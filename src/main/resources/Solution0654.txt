@@ -1,0 +1,23 @@
+// 0654. Maximum Binary Tree
+class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        return construct(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode construct(int[] nums, int left, int right) {
+        if (left > right) return null;
+        if (left == right) return new TreeNode(nums[left]);
+        int maxValue = -1;
+        int mid = 0;
+        for (int i = left; i <= right; ++i) {
+            if (nums[i] > maxValue) {
+                maxValue = nums[i];
+                mid = i;
+            }
+        }
+        TreeNode node = new TreeNode(maxValue);
+        node.left = construct(nums, left, mid - 1);
+        node.right = construct(nums, mid + 1, right);
+        return node;
+    }
+}

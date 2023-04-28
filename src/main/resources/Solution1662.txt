@@ -1,0 +1,24 @@
+// 1662. Check If Two String Arrays are Equivalent
+class Solution {
+    public boolean arrayStringsAreEqual(String[] word1, String[] word2) {
+        StringBuilder words1 = new StringBuilder();
+        for (String word : word1) {
+            words1.append(word);
+        }
+        StringBuilder words2 = new StringBuilder();
+        for (String word : word2) {
+            words2.append(word);
+        }
+        char[] chars1 = words1.toString().toCharArray();
+        char[] chars2 = words2.toString().toCharArray();
+        if (chars1.length != chars2.length) {
+            return false;
+        }
+        for (int i = 0; i < chars1.length; ++i) {
+            if (chars1[i] != chars2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

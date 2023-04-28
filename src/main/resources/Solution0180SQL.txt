@@ -1,0 +1,10 @@
+-- 0180. Consecutive Numbers
+select distinct num as ConsecutiveNums
+from (
+         select id,
+                num,
+                lead(num, 1, -9) over (order by id asc) as lead1,
+                lead(num, 2, -9) over (order by id asc) as lead2
+         from Logs) temp
+where num = lead1
+  and num = lead2;

@@ -1,0 +1,67 @@
+import java.util.*;
+
+// 2092. Find All People With Secret
+class Solution {
+    public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
+        boolean[] hasSecret = new boolean[n];
+        hasSecret[0] = true;
+        hasSecret[firstPerson] = true;
+        Arrays.sort(meetings, (int[] m1, int[] m2) -> m1[2] - m2[2]);
+        int len = meetings.length;
+        for (int i = 0, j = 0; i < len; i = j + 1) {
+            j = i;
+            while (j + 1 < len && meetings[j + 1][2] == meetings[i][2]) {
+                ++j;
+            }
+            if (j == i) {
+                if (hasSecret[meetings[i][0]]) hasSecret[meetings[i][1]] = true;
+                if (hasSecret[meetings[i][1]]) hasSecret[meetings[i][0]] = true;
+            } else {
+                HashMap<Integer, List<Integer>> hashMap = new HashMap<>();
+                for (int k = i; k <= j; ++k) {
+                    if (hashMap.containsKey(meetings[k][0])) {
+                        List<Integer> list = hashMap.get(meetings[k][0]);
+                        list.add(meetings[k][1]);
+                    } else {
+                        List<Integer> list = new ArrayList<>();
+                        list.add(meetings[k][1]);
+                        hashMap.put(meetings[k][0], list);
+                    }
+                    if (hashMap.containsKey(meetings[k][1])) {
+                        List<Integer> list = hashMap.get(meetings[k][1]);
+                        list.add(meetings[k][0]);
+                    } else {
+                        List<Integer> list = new ArrayList<>();
+                        list.add(meetings[k][0]);
+                        hashMap.put(meetings[k][1], list);
+                    }
+                }
+                Queue<Integer> queue = new LinkedList<>();
+                for (int key : hashMap.keySet()) {
+                    if (hasSecret[key]) {
+                        queue.offer(key);
+                    }
+                }
+                while (!queue.isEmpty()) {
+                    int front = queue.poll();
+                    if (hashMap.containsKey(front)) {
+                        List<Integer> list = hashMap.get(front);
+                        for (int to : list) {
+                            if (!hasSecret[to]) {
+                                hasSecret[to] = true;
+                                queue.offer(to);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            if (hasSecret[i]) {
+                ans.add(i);
+            }
+        }
+        return ans;
+    }
+}

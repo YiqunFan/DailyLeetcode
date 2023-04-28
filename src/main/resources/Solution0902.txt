@@ -1,0 +1,36 @@
+// 0902. Numbers At Most N Given Digit Set
+class Solution {
+    public int atMostNGivenDigitSet(String[] digits, int n) {
+        int quantity = digits.length;
+        char[] digitsArray = new char[quantity];
+        for (int i = 0; i < quantity; ++i) {
+            digitsArray[i] = digits[i].charAt(0);
+        }
+        char[] nArray = String.valueOf(n).toCharArray();
+        int len = nArray.length;
+        int[] memory = new int[len];
+        memory[0] = 1;
+        for (int i = 1; i < len; ++i) {
+            memory[i] = memory[i - 1] * quantity;
+        }
+        int ans = 0;
+        for (int i = 1; i < len; ++i) {
+            ans += memory[i];
+        }
+        ans += dfs(0, digitsArray, quantity, nArray, len, memory);
+        return ans;
+    }
+
+    private int dfs(int currentIndex, char[] digitsArray, int quantity, char[] nArray, int len, int[] memory) {
+        if (currentIndex == len) return 1;
+        int ret = 0;
+        for (int i = 0; i < quantity; ++i) {
+            if (digitsArray[i] < nArray[currentIndex]) {
+                ret += memory[len - 1 - currentIndex];
+            } else if (digitsArray[i] == nArray[currentIndex]) {
+                ret += dfs(currentIndex + 1, digitsArray, quantity, nArray, len, memory);
+            }
+        }
+        return ret;
+    }
+}

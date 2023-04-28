@@ -1,0 +1,56 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
+// 1514. Path with Maximum Probability
+class Solution {
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+        ArrayList<ArrayList<Path>> paths = new ArrayList<>();
+        for (int i = 0; i < n; ++i) paths.add(new ArrayList<>());
+        for (int i = 0; i < succProb.length; ++i) {
+            paths.get(edges[i][0]).add(new Path(edges[i][1], succProb[i]));
+            paths.get(edges[i][1]).add(new Path(edges[i][0], succProb[i]));
+        }
+        PriorityQueue<Path> pq = new PriorityQueue<>(new Comparator<Path>() {
+            @Override
+            public int compare(Path o1, Path o2) {
+                return (int) ((o2.prob - o1.prob) * 10000000);
+            }
+        });
+        pq.offer(new Path(start, 1.0));
+        double[] maxProb = new double[n];
+        maxProb[start] = 1.0;
+        double currentProb = 1.0;
+        int currentNode = start;
+        HashSet<Integer> visited = new HashSet<>();
+        visited.add(start);
+        while (!visited.contains(end)) {
+            for (Path p : paths.get(currentNode)) {
+                if (!visited.contains(p.to)) {
+                    double prob = currentProb * p.prob;
+                    if (prob > maxProb[p.to]) {
+                        maxProb[p.to] = prob;
+                        pq.offer(new Path(p.to, prob));
+                    }
+                }
+            }
+            while (!pq.isEmpty() && visited.contains(pq.peek().to)) pq.poll();
+            if (pq.isEmpty()) return 0.0;
+            visited.add(pq.peek().to);
+            currentNode = pq.peek().to;
+            currentProb = pq.poll().prob;
+        }
+        return maxProb[end];
+    }
+}
+
+class Path {
+    int to;
+    double prob;
+
+    public Path(int to, double prob) {
+        this.to = to;
+        this.prob = prob;
+    }
+}

@@ -1,0 +1,8 @@
+-- 1511. Customer Order Frequency
+select C.customer_id, C.name
+from Customers C
+         inner join Orders O on O.customer_id = C.customer_id
+         inner join Product P on P.product_id = O.product_id
+group by C.customer_id, C.name
+having sum(case when O.order_date like '2020-06%' then P.price * O.quantity else 0 end) >= 100
+   and sum(case when O.order_date like '2020-07%' then P.price * O.quantity else 0 end) >= 100;

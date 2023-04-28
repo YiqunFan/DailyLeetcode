@@ -1,0 +1,23 @@
+// 1922. Count Good Numbers
+class Solution {
+    public int countGoodNumbers(long n) {
+        long even = (n + 1) / 2;
+        long odd = n / 2;
+        long fp1 = fastPower(5L, even);
+        long fp2 = fastPower(4L, odd);
+        long ans = fp1 * fp2 % 1000000007L;
+        return (int) ans;
+    }
+
+    public long fastPower(long a, long b) {
+        if (b == 0) return 1L;
+        if (b == 1) return a;
+        long ans = fastPower(a, b / 2);
+        if (b % 2 == 0) {
+            ans = ans * ans % 1000000007L;
+        } else {
+            ans = ans * ans * a % 1000000007L;
+        }
+        return ans;
+    }
+}

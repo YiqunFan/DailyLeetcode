@@ -1,0 +1,18 @@
+// 2366. Minimum Replacements to Sort the Array
+class Solution {
+    public long minimumReplacement(int[] nums) {
+        int len = nums.length;
+        long ans = 0;
+        int right = nums[len - 1];
+        for (int i = len - 2; i > -1; --i) {
+            if (nums[i] <= right) {
+                right = nums[i];
+            } else {
+                int part = (nums[i] - 1) / right + 1;
+                right = nums[i] / part;
+                ans += part - 1;
+            }
+        }
+        return ans;
+    }
+}

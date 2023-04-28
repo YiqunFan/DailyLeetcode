@@ -1,0 +1,22 @@
+import java.util.PriorityQueue;
+
+// 2336. Smallest Number in Infinite Set
+class SmallestInfiniteSet {
+
+    private int remainingMinimum;
+    private final PriorityQueue<Integer> pq;
+
+    public SmallestInfiniteSet() {
+        remainingMinimum = 1;
+        pq = new PriorityQueue<>();
+    }
+
+    public int popSmallest() {
+        if (pq.isEmpty()) return remainingMinimum++;
+        return pq.poll();
+    }
+
+    public void addBack(int num) {
+        if (num < remainingMinimum && !pq.contains(num)) pq.offer(num);
+    }
+}

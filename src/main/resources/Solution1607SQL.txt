@@ -1,0 +1,6 @@
+-- 1607. Sellers With No Sales
+select S.seller_name
+from Seller S
+         left outer join Orders O on O.seller_id = S.seller_id and O.sale_date like '2020%'
+where O.order_id is null
+order by seller_name asc;

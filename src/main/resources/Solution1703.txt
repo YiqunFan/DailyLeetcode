@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+
+// 1703. Minimum Adjacent Swaps for K Consecutive Ones
+class Solution {
+    public int minMoves(int[] nums, int k) {
+        ArrayList<Integer> ones = new ArrayList<>();
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] == 1) {
+                ones.add(i);
+            }
+        }
+        int sum = 0;
+        int mid = k / 2;
+        for (int i = 0; i < k; ++i) {
+            sum += Math.abs(ones.get(i) - ones.get(mid));
+        }
+        int ans = sum;
+        for (int i = 0; k + i < ones.size(); ++i) {
+            mid = k / 2 + i;
+            sum -= Math.abs(ones.get(mid) - ones.get(i));
+            sum += Math.abs(ones.get(k + i) - ones.get(mid + 1));
+            sum += (ones.get(mid + 1) - ones.get(mid)) * (k / 2);
+            sum -= (ones.get(mid + 1) - ones.get(mid)) * (k - 1 - k / 2);
+            ans = Math.min(ans, sum);
+        }
+        int offset = 0;
+        for (int i = 1; i < k; ++i) {
+            offset += (i - 1) / 2 + 1;
+        }
+        return ans - offset;
+    }
+}

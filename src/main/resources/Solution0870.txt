@@ -1,0 +1,25 @@
+import java.util.Arrays;
+
+// 0870. Advantage Shuffle
+class Solution {
+    public int[] advantageCount(int[] nums1, int[] nums2) {
+        int len = nums1.length;
+        Integer[] indexNums2 = new Integer[len];
+        for (int i = 0; i < len; ++i) indexNums2[i] = i;
+        Arrays.sort(nums1);
+        Arrays.sort(indexNums2, (i, j) -> nums2[j] - nums2[i]);
+        int biggest = len - 1;
+        int smallest = 0;
+        int[] ans = new int[len];
+        for (Integer i : indexNums2) {
+            if (nums1[biggest] > nums2[i]) {
+                ans[i] = nums1[biggest];
+                --biggest;
+            } else {
+                ans[i] = nums1[smallest];
+                ++smallest;
+            }
+        }
+        return ans;
+    }
+}

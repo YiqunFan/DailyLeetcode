@@ -1,0 +1,21 @@
+// 0907. Sum of Subarray Minimums
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        final int MOD = 1000000007;
+        int n = arr.length;
+        int[][] minValues = new int[n][n];
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            minValues[i][i] = arr[i];
+            ans = (ans + arr[i]) % MOD;
+        }
+        for (int len = 2; len <= n; ++len) {
+            for (int left = 0; left < n - len + 1; ++left) {
+                int right = left + len - 1;
+                minValues[left][right] = Math.min(minValues[left][right - 1], arr[right]);
+                ans = (ans + minValues[left][right]) % MOD;
+            }
+        }
+        return ans;
+    }
+}

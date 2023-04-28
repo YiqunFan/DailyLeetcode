@@ -1,0 +1,4 @@
+-- 0613. Shortest Distance in a Line
+select (lead(x) over (order by x) - x) shortest
+from point
+order by shortest limit 1, 1;

@@ -1,0 +1,15 @@
+// 1832. Check if the Sentence Is Pangram
+class Solution {
+    public boolean checkIfPangram(String sentence) {
+        char[] chars = sentence.toCharArray();
+        int[] letter = new int[123];
+        for (char c : chars) {
+            letter[c] = 1;
+        }
+        int ans = 0;
+        for (int i = 97; i < 123; ++i) {
+            if (letter[i] != 1) return false;
+        }
+        return true;
+    }
+}

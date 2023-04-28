@@ -1,0 +1,66 @@
+// 0874. Walking Robot Simulation
+class Solution {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[] pos = {0, 0};
+        int direction = 0;
+        int maximumEuclideanDistance = 0;
+        for (int command : commands) {
+            if (command == -2) {
+                direction = (direction + 3) % 4;
+            } else if (command == -1) {
+                direction = (direction + 1) % 4;
+            } else {
+                int euclideanDistance = move(command, obstacles, pos, direction);
+                if (euclideanDistance > maximumEuclideanDistance) {
+                    maximumEuclideanDistance = euclideanDistance;
+                }
+            }
+        }
+        return maximumEuclideanDistance;
+    }
+
+    private int move(int distance, int[][] obstacles, int[] pos, int direction) {
+        if (direction == 0) {
+            int maxY = pos[1] + distance;
+            for (int[] obs : obstacles) {
+                if (obs[0] == pos[0] && obs[1] > pos[1] && obs[1] <= pos[1] + distance) {
+                    if (obs[1] - 1 < maxY) {
+                        maxY = obs[1] - 1;
+                    }
+                }
+            }
+            pos[1] = maxY;
+        } else if (direction == 1) {
+            int maxX = pos[0] + distance;
+            for (int[] obs : obstacles) {
+                if (obs[1] == pos[1] && obs[0] > pos[0] && obs[0] <= pos[0] + distance) {
+                    if (obs[0] - 1 < maxX) {
+                        maxX = obs[0] - 1;
+                    }
+                }
+            }
+            pos[0] = maxX;
+        } else if (direction == 2) {
+            int minY = pos[1] - distance;
+            for (int[] obs : obstacles) {
+                if (obs[0] == pos[0] && obs[1] < pos[1] && obs[1] >= pos[1] - distance) {
+                    if (obs[1] + 1 > minY) {
+                        minY = obs[1] + 1;
+                    }
+                }
+            }
+            pos[1] = minY;
+        } else {
+            int minX = pos[0] - distance;
+            for (int[] obs : obstacles) {
+                if (obs[1] == pos[1] && obs[0] < pos[0] && obs[0] >= pos[0] - distance) {
+                    if (obs[0] + 1 > minX) {
+                        minX = obs[0] + 1;
+                    }
+                }
+            }
+            pos[0] = minX;
+        }
+        return pos[0] * pos[0] + pos[1] * pos[1];
+    }
+}

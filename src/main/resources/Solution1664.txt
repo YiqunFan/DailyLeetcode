@@ -1,0 +1,34 @@
+// 1664. Ways to Make a Fair Array
+class Solution {
+    public int waysToMakeFair(int[] nums) {
+        int n = nums.length;
+        int frontOdd = 0;
+        int frontEven = 0;
+        int backOdd = 0;
+        int backEven = 0;
+        for (int i = 0; i < n; ++i) {
+            if ((i & 1) == 1) {
+                backOdd += nums[i];
+            } else {
+                backEven += nums[i];
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            if ((i & 1) == 1) {
+                backOdd -= nums[i];
+            } else {
+                backEven -= nums[i];
+            }
+            if (frontOdd + backEven == frontEven + backOdd) {
+                ++ans;
+            }
+            if ((i & 1) == 1) {
+                frontOdd += nums[i];
+            } else {
+                frontEven += nums[i];
+            }
+        }
+        return ans;
+    }
+}

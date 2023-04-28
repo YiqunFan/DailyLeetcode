@@ -1,0 +1,35 @@
+// 1819. Number of Different Subsequences GCDs
+class Solution {
+    public int countDifferentSubsequenceGCDs(int[] nums) {
+        int[] GCDs = new int[200001];
+        for (int num : nums) {
+            for (int i = 1; i * i <= num; ++i) {
+                if (num % i == 0) {
+                    if (GCDs[i] == 0) {
+                        GCDs[i] = num;
+                    } else if (GCDs[i] != i) {
+                        GCDs[i] = gcd(GCDs[i], num);
+                    }
+                    int numOverI = num / i;
+                    if (GCDs[numOverI] == 0) {
+                        GCDs[numOverI] = num;
+                    } else if (GCDs[numOverI] != numOverI) {
+                        GCDs[numOverI] = gcd(GCDs[numOverI], num);
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i < 200001; ++i) {
+            if (GCDs[i] == i) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+
+    private int gcd(int a, int b) {
+        if (b == 0) return a;
+        return gcd(b, a % b);
+    }
+}

@@ -1,0 +1,22 @@
+// 0817. Linked List Components
+class Solution {
+    public int numComponents(ListNode head, int[] nums) {
+        boolean[] exist = new boolean[10001];
+        for (int num : nums) exist[num] = true;
+        ListNode node = head;
+        int ans = 0;
+        boolean continues = false;
+        while (node != null) {
+            if (exist[node.val]) {
+                if (!continues) {
+                    ++ans;
+                }
+                continues = true;
+            } else {
+                continues = false;
+            }
+            node = node.next;
+        }
+        return ans;
+    }
+}

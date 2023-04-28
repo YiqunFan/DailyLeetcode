@@ -1,0 +1,65 @@
+// 1631. Path With Minimum Effort
+class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        int left = 0;
+        int right = 1000000;
+        if (isConnected(heights, 1023)) {
+            right = 1023;
+        } else {
+            left = 1024;
+        }
+        while (left < right) {
+            int middle = (left + right) / 2;
+            if (isConnected(heights, middle)) {
+                right = middle;
+            } else {
+                left = middle + 1;
+            }
+        }
+        return left;
+    }
+
+    boolean isConnected(int[][] heights, int effort) {
+        int height = heights.length;
+        int width = heights[0].length;
+        UnionFind uf = new UnionFind(height * width);
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                if (i + 1 < height && Math.abs(heights[i][j] - heights[i + 1][j]) <= effort) {
+                    uf.union(i * width + j, (i + 1) * width + j);
+                }
+                if (j + 1 < width && Math.abs(heights[i][j] - heights[i][j + 1]) <= effort) {
+                    uf.union(i * width + j, i * width + j + 1);
+                }
+            }
+        }
+        return uf.find(0) == uf.find(height * width - 1);
+    }
+}
+
+class UnionFind {
+    int[] parent;
+
+    public UnionFind(int n) {
+        parent = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+    }
+
+    public int find(int son) {
+        if (parent[son] == son) {
+            return son;
+        }
+        parent[son] = find(parent[son]);
+        return parent[son];
+    }
+
+    public void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parent[parentOfA]  = parentOfB;
+        }
+    }
+}

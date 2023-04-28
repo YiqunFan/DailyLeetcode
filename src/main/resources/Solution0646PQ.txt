@@ -1,0 +1,31 @@
+import java.util.PriorityQueue;
+
+// 0646. Maximum Length of Pair Chain
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        PriorityQueue<Pair> pairPriorityQueue = new PriorityQueue<>((Pair p1, Pair p2) -> p1.right - p2.right);
+        for (int[] pair : pairs) {
+            pairPriorityQueue.offer(new Pair(pair[0], pair[1]));
+        }
+        int ans = 0;
+        int currentRight = Integer.MIN_VALUE;
+        while (!pairPriorityQueue.isEmpty()) {
+            if (pairPriorityQueue.peek().left > currentRight) {
+                ++ans;
+                currentRight = pairPriorityQueue.peek().right;
+            }
+            pairPriorityQueue.poll();
+        }
+        return ans;
+    }
+}
+
+class Pair {
+    int left;
+    int right;
+
+    Pair(int left, int right) {
+        this.left = left;
+        this.right = right;
+    }
+}

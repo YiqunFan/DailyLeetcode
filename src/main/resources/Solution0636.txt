@@ -1,0 +1,38 @@
+import java.util.List;
+import java.util.Stack;
+
+// 0636. Exclusive Time of Functions
+class Solution {
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] ans = new int[n];
+        Stack<LogObject> stack = new Stack<>();
+        for (String log : logs) {
+            LogObject logObject = new LogObject(log);
+            if (stack.empty()) {
+                stack.push(logObject);
+            } else if (logObject.isStart) {
+                ans[stack.peek().functionId] += logObject.timestamp - stack.peek().timestamp;
+                stack.push(logObject);
+            } else {
+                ans[stack.peek().functionId] += logObject.timestamp - stack.peek().timestamp + 1;
+                stack.pop();
+                if (!stack.empty()) {
+                    stack.peek().timestamp = logObject.timestamp + 1;
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+class LogObject {
+    int functionId;
+    boolean isStart;
+    int timestamp;
+
+    LogObject(String s) {
+        this.functionId = Integer.parseInt(s.substring(0, s.indexOf(':')));
+        this.isStart = s.substring(s.indexOf(':') + 1, s.lastIndexOf(':')).equals("start");
+        this.timestamp = Integer.parseInt(s.substring(s.lastIndexOf(':') + 1));
+    }
+}

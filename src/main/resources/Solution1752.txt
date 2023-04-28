@@ -1,0 +1,29 @@
+// 1752. Check if Array Is Sorted and Rotated
+class Solution {
+    public boolean check(int[] nums) {
+        int len = nums.length;
+        int minNum = Integer.MAX_VALUE;
+        int minNumIndex = -1;
+        for (int i = 0; i < len; ++i) {
+            if (nums[i] < minNum) {
+                minNum = nums[i];
+                minNumIndex = i;
+            }
+        }
+        if (minNumIndex == 0) {
+            for (int i = len - 1; i > 0; --i) {
+                if (nums[i] == minNum) {
+                    minNumIndex = i;
+                } else {
+                    break;
+                }
+            }
+        }
+        for (int i = 1; i < len; ++i) {
+            if (nums[(minNumIndex + i) % len] < nums[(minNumIndex + i - 1) % len]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

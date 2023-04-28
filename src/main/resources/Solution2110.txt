@@ -1,0 +1,17 @@
+// 2110. Number of Smooth Descent Periods of a Stock
+class Solution {
+    public long getDescentPeriods(int[] prices) {
+        int n = prices.length;
+        long ans = 1L;
+        long previous = 1L;
+        for (int i = 1; i < n; ++i) {
+            if (prices[i] == prices[i - 1] - 1) {
+                ++previous;
+            } else {
+                previous = 1L;
+            }
+            ans += previous;
+        }
+        return ans;
+    }
+}

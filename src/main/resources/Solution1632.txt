@@ -1,0 +1,139 @@
+import java.util.*;
+
+// 1632. Rank Transform of a Matrix
+class Solution {
+    public int[][] matrixRankTransform(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        UnionFind unionFind = new UnionFind(m * n);
+        List<List<Integer>> next = new ArrayList<>();
+        for (int i = 0; i < m * n; ++i) {
+            next.add(new ArrayList<>());
+        }
+        int[] inDegree = new int[m * n];
+        for (int i = 0; i < m; ++i) {
+            Point[] pointsOfRow = new Point[n];
+            for (int j = 0; j < n; ++j) {
+                pointsOfRow[j] = new Point(matrix[i][j], i * n + j);
+            }
+            Arrays.sort(pointsOfRow, (p1, p2) -> p1.value - p2.value);
+            for (int j = 1; j < n; ++j) {
+                if (pointsOfRow[j - 1].value == pointsOfRow[j].value) {
+                    unionFind.union(pointsOfRow[j - 1].position, pointsOfRow[j].position);
+                } else {
+                    next.get(pointsOfRow[j - 1].position).add(pointsOfRow[j].position);
+                    ++inDegree[pointsOfRow[j].position];
+                }
+            }
+        }
+        for (int j = 0; j < n; ++j) {
+            Point[] pointsOfCol = new Point[m];
+            for (int i = 0; i < m; ++i) {
+                pointsOfCol[i] = new Point(matrix[i][j], i * n + j);
+            }
+            Arrays.sort(pointsOfCol, (p1, p2) -> p1.value - p2.value);
+            for (int i = 1; i < m; ++i) {
+                if (pointsOfCol[i - 1].value == pointsOfCol[i].value) {
+                    unionFind.union(pointsOfCol[i - 1].position, pointsOfCol[i].position);
+                } else {
+                    next.get(pointsOfCol[i - 1].position).add(pointsOfCol[i].position);
+                    ++inDegree[pointsOfCol[i].position];
+                }
+            }
+        }
+        HashMap<Integer, List<Integer>> fatherAndSons = new HashMap<>();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int son = i * n + j;
+                int father = unionFind.find(son);
+                if (fatherAndSons.containsKey(father)) {
+                    fatherAndSons.get(father).add(son);
+                } else {
+                    List<Integer> sons = new ArrayList<>();
+                    sons.add(son);
+                    fatherAndSons.put(father, sons);
+                }
+            }
+        }
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int son = i * n + j;
+                int father = unionFind.find(son);
+                if (son != father) {
+                    inDegree[father] = inDegree[father] + inDegree[son];
+                }
+            }
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int son = i * n + j;
+                int father = unionFind.find(son);
+                if (son == father && inDegree[son] == 0) {
+                    queue.offer(son);
+                }
+            }
+        }
+        int[][] ans = new int[m][n];
+        int fill = 1;
+        while (!queue.isEmpty()) {
+            int queueSize = queue.size();
+            while (queueSize > 0) {
+                --queueSize;
+                Integer poll = queue.poll();
+                List<Integer> sons = fatherAndSons.get(poll);
+                for (int son : sons) {
+                    ans[son / n][son % n] = fill;
+                }
+                for (int son : sons) {
+                    for (int nxt : next.get(son)) {
+                        int boss = unionFind.find(nxt);
+                        --inDegree[boss];
+                        if (inDegree[boss] == 0) {
+                            queue.offer(boss);
+                        }
+                    }
+                }
+            }
+            ++fill;
+        }
+        return ans;
+    }
+}
+
+class Point {
+    int value;
+    int position;
+
+    public Point(int value, int position) {
+        this.value = value;
+        this.position = position;
+    }
+}
+
+class UnionFind {
+    int[] parents;
+
+    public UnionFind(int n) {
+        parents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parents[i] = i;
+        }
+    }
+
+    public int find(int son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    public void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parents[parentOfA] = parentOfB;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 1087. Brace Expansion
+class Solution {
+    public String[] expand(String s) {
+        Queue<String> q = new LinkedList<>();
+        q.offer("");
+        for (int i = 0; i < s.length(); ++i) {
+            int queueSize = q.size();
+            if (s.charAt(i) == '{') {
+                boolean[] appear = new boolean[128];
+                while (s.charAt(i) != '}') {
+                    appear[s.charAt(i)] = true;
+                    ++i;
+                }
+                for (int j = 0; j < queueSize; ++j) {
+                    String temp = q.poll();
+                    for (char k = 97; k < 123; ++k) {
+                        if (appear[k]) {
+                            String tempPlus = temp + k;
+                            q.offer(tempPlus);
+                        }
+                    }
+                }
+            } else {
+                for (int j = 0; j < queueSize; ++j) {
+                    String temp = q.poll();
+                    temp += s.charAt(i);
+                    q.offer(temp);
+                }
+            }
+        }
+        return q.toArray(new String[0]);
+    }
+}

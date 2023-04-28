@@ -1,0 +1,18 @@
+// 1598. Crawler Log Folder
+class Solution {
+    public int minOperations(String[] logs) {
+        int ans = 0;
+        for (String log : logs) {
+            if (log.equals("../")) {
+                --ans;
+                if (ans == -1) {
+                    ans = 0;
+                }
+            } else if (log.equals("./")) {
+            } else {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}

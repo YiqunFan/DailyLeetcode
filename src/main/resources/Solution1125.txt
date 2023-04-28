@@ -1,0 +1,60 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+// 1125. Smallest Sufficient Team
+class Solution {
+    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+        // 将技能转数字存hashmap
+        int n = req_skills.length;
+        int target = (1 << n) - 1;
+        HashMap<String, Integer> skillToNumber = new HashMap<>();
+        for (int i = 0; i < n; ++i) skillToNumber.put(req_skills[i], 1 << i);
+        // 计算每个人总得技能的数字
+        int population = people.size();
+        int[] peopleNumber = new int[population];
+        for (int i = 0; i < population; ++i) {
+            for (String skill : people.get(i)) {
+                peopleNumber[i] |= skillToNumber.get(skill);
+            }
+        }
+        // 创建滚动DP数组，解法详见www.bilibili.com/video/BV14t411G7WL
+        int[] dp = new int[target + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE / 2);
+        dp[0] = 0;
+        // 创建到达路径数组，记录j | skillNumber从j来的，添加的是i这个人
+        Path[] paths = new Path[target + 1];
+        // 遍历每一个人，如果没技能就别浪费时间，如果有技能就看看新抵达的点人是不是更少
+        for (int i = 0; i < population; ++i) {
+            int skillNumber = peopleNumber[i];
+            if (skillNumber == 0) continue;
+            for (int j = target; j >= 0; --j) {
+                // 这题状态转移特别难，j | skillNumber是可以从j来加上i这个人，当然也可以是原地（多维为上面那格）从j | skillNumber来。
+                if (dp[j] + 1 < dp[j | skillNumber]) {
+                    dp[j | skillNumber] = dp[j] + 1;
+                    paths[j | skillNumber] = new Path(j, i);
+                }
+            }
+        }
+        // 从终点开始寻找过来的路线，把人都添加进数组中
+        int to = target;
+        int[] ans = new int[dp[target]];
+        int i = 0;
+        while (to != 0) {
+            ans[i] = paths[to].insertPeople;
+            ++i;
+            to = paths[to].from;
+        }
+        return ans;
+    }
+}
+
+class Path {
+    int from;
+    int insertPeople;
+
+    public Path(int from, int insertPeople) {
+        this.from = from;
+        this.insertPeople = insertPeople;
+    }
+}

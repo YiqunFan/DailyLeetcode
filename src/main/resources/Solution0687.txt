@@ -1,0 +1,27 @@
+// 0687. Longest Univalue Path
+class Solution {
+    public int longestUnivaluePath(TreeNode root) {
+        int[] ans = new int[]{0};
+        if (root == null) return 0;
+        dfs(root, ans);
+        return ans[0];
+    }
+
+    int dfs(TreeNode root, int[] ans) {
+        if (root.left == null && root.right == null) return 1;
+        int left = 0;
+        int right = 0;
+        if (root.left != null) {
+            left = dfs(root.left, ans);
+            if (root.left.val != root.val) left = 0;
+        }
+        if (root.right != null) {
+            right = dfs(root.right, ans);
+            if (root.right.val != root.val) right = 0;
+        }
+        int selfMax = left + right;
+        if (selfMax > ans[0]) ans[0] = selfMax;
+        if (left > right) return left + 1;
+        return right + 1;
+    }
+}

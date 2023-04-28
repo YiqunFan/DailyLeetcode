@@ -1,0 +1,77 @@
+import java.util.HashSet;
+import java.util.Set;
+
+// 1740. Find Distance in a Binary Tree
+class Solution {
+    public int findDistance(TreeNode root, int p, int q) {
+        Set<NodeDistance> parentsOfP = new HashSet<>();
+        Set<NodeDistance> parentsOfQ = new HashSet<>();
+        int distanceOfP = findNode(root, p, parentsOfP, 0, p, q);
+        int distanceOfQ = findNode(root, q, parentsOfQ, 0, p, q);
+        Set<NodeDistance> publicParents = new HashSet<>();
+        for (NodeDistance pop : parentsOfP) {
+            if (parentsOfQ.contains(pop)) {
+                publicParents.add(pop);
+            }
+        }
+        int maxDistance = 0;
+        for (NodeDistance pp : publicParents) {
+            if (pp.distance > maxDistance) {
+                maxDistance = pp.distance;
+            }
+        }
+        return distanceOfP - maxDistance + distanceOfQ - maxDistance;
+    }
+
+    private int findNode(TreeNode current, int target, Set<NodeDistance> parents, Integer distance, int p, int q) {
+        NodeDistance nodeDistance = new NodeDistance(current, distance);
+        parents.add(nodeDistance);
+        if (current.val == target) {
+            return distance;
+        }
+        int ret = -1;
+        if (current.left != null) {
+            int retLeft = findNode(current.left, target, parents, distance + 1, p, q);
+            if (retLeft != -1) {
+                ret = retLeft;
+            }
+        }
+        if (current.right != null) {
+            int retRight = findNode(current.right, target, parents, distance + 1, p, q);
+            if (retRight != -1) {
+                ret = retRight;
+            }
+        }
+        if (ret == -1) parents.remove(nodeDistance);
+        return ret;
+    }
+
+}
+
+class NodeDistance {
+    TreeNode node;
+    Integer distance;
+
+    public NodeDistance(TreeNode node, Integer distance) {
+        this.node = node;
+        this.distance = distance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NodeDistance that = (NodeDistance) o;
+
+        if (node != null ? !node.equals(that.node) : that.node != null) return false;
+        return distance != null ? distance.equals(that.distance) : that.distance == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = node != null ? node.hashCode() : 0;
+        result = 31 * result + (distance != null ? distance.hashCode() : 0);
+        return result;
+    }
+}

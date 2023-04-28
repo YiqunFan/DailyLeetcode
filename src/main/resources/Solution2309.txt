@@ -1,0 +1,15 @@
+// 2309. Greatest English Letter in Upper and Lower Case
+class Solution {
+    public String greatestLetter(String s) {
+        boolean[] appeared = new boolean[123];
+        for (char c : s.toCharArray()) {
+            appeared[c] = true;
+        }
+        for (char c = 'Z'; c >= 'A'; --c) {
+            if (appeared[c] && appeared[c + 32]) {
+                return String.valueOf(c);
+            }
+        }
+        return "";
+    }
+}

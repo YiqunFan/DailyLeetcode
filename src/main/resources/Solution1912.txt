@@ -1,0 +1,88 @@
+import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.List;
+import java.util.ArrayList;
+
+// 1912. Design Movie Rental System
+class MovieRentingSystem {
+
+    HashMap<Long, Videotape> shopvideoPriceMap = new HashMap<>();
+    HashMap<Integer, TreeSet<Videotape>> inShop = new HashMap<>();
+    TreeSet<Videotape> rented = new TreeSet<>();
+
+    public MovieRentingSystem(int n, int[][] entries) {
+        for (int[] entry : entries) {
+            Videotape v = new Videotape(entry[0], entry[1], entry[2]);
+            shopvideoPriceMap.put(entry[0] * 10000L + entry[1], v);
+            if (inShop.containsKey(entry[1])) {
+                inShop.get(entry[1]).add(v);
+            } else {
+                TreeSet<Videotape> treeSet = new TreeSet<>();
+                treeSet.add(v);
+                inShop.put(entry[1], treeSet);
+            }
+        }
+    }
+
+    public List<Integer> search(int movie) {
+        List<Integer> ret = new ArrayList<>();
+        if (!inShop.containsKey(movie)) return ret;
+        TreeSet<Videotape> treeSet = inShop.get(movie);
+        if (treeSet.size() == 0) return ret;
+        int count = 0;
+        for (Videotape videotape : treeSet) {
+            ret.add(videotape.shopId);
+            ++count;
+            if (count == 5) break;
+        }
+        return ret;
+    }
+
+    public void rent(int shop, int movie) {
+        Long key = shop * 10000L + movie;
+        Videotape v = shopvideoPriceMap.get(key);
+        rented.add(v);
+        inShop.get(movie).remove(v);
+    }
+
+    public void drop(int shop, int movie) {
+        Long key = shop * 10000L + movie;
+        Videotape v = shopvideoPriceMap.get(key);
+        rented.remove(v);
+        inShop.get(movie).add(v);
+    }
+
+    public List<List<Integer>> report() {
+        List<List<Integer>> ret = new ArrayList<>();
+        if (rented.size() == 0) return ret;
+        int count = 0;
+        for (Videotape videotape : rented) {
+            List<Integer> inside = new ArrayList<>();
+            inside.add(videotape.shopId);
+            inside.add(videotape.movie);
+            ret.add(inside);
+            ++count;
+            if (count == 5) break;
+        }
+        return ret;
+    }
+}
+
+class Videotape implements Comparable<Videotape> {
+    int shopId;
+    int movie;
+    int price;
+
+    public Videotape(int s, int m, int p) {
+        this.shopId = s;
+        this.movie = m;
+        this.price = p;
+    }
+
+    @Override
+    public int compareTo(Videotape o2) {
+        if (price != o2.price) return price - o2.price;
+        if (shopId != o2.shopId) return shopId - o2.shopId;
+        return movie - o2.movie;
+    }
+}

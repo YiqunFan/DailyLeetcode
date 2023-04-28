@@ -1,0 +1,7 @@
+-- 0574. Winning Candidate
+select name
+from Candidate C
+         inner join (select candidateId
+                     from Vote
+                     group by candidateId
+                     order by count(*) desc limit 1) V on V.candidateId = C.id;

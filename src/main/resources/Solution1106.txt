@@ -1,0 +1,35 @@
+import java.util.Stack;
+
+// 1106. Parsing A Boolean Expression
+class Solution {
+    public boolean parseBoolExpr(String expression) {
+        Stack<Character> stack = new Stack<>();
+        char[] charArray = expression.toCharArray();
+        for (char c : charArray) {
+            if (c == 't' || c == 'f' || c == '!' || c == '&' || c == '|') {
+                stack.push(c);
+            } else if (c == ')') {
+                boolean hasTrue = false;
+                boolean hasFalse = false;
+                while (stack.peek() == 't' || stack.peek() == 'f') {
+                    if (stack.pop() == 't') {
+                        hasTrue = true;
+                    } else {
+                        hasFalse = true;
+                    }
+                }
+                char operator = stack.pop();
+                char preIn;
+                if (operator == '!') {
+                    preIn = hasTrue ? 'f' : 't';
+                } else if (operator == '&') {
+                    preIn = hasFalse ? 'f' : 't';
+                } else {
+                    preIn = hasTrue ? 't' : 'f';
+                }
+                stack.push(preIn);
+            }
+        }
+        return stack.peek() == 't';
+    }
+}

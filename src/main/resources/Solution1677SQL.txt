@@ -1,0 +1,10 @@
+-- 1677. Product's Worth Over Invoices
+select P.name,
+       coalesce(sum(I.rest), 0)     as rest,
+       coalesce(sum(I.paid), 0)     as paid,
+       coalesce(sum(I.canceled), 0) as canceled,
+       coalesce(sum(I.refunded), 0) as refunded
+from Product P
+         left outer join Invoice I on I.product_id = P.product_id
+group by P.product_id
+order by 1 asc;

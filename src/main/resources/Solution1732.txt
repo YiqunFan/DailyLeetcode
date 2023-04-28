@@ -1,0 +1,12 @@
+// 1732. Find the Highest Altitude
+class Solution {
+    public int largestAltitude(int[] gain) {
+        int prefixSum = 0;
+        int ans = 0;
+        for (int g : gain) {
+            prefixSum += g;
+            ans = Math.max(ans, prefixSum);
+        }
+        return ans;
+    }
+}

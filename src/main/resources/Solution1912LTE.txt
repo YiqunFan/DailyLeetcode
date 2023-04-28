@@ -1,0 +1,100 @@
+import java.util.*;
+
+// 1912. Design Movie Rental System
+class MovieRentingSystem {
+    ArrayList<Videotape> rented = new ArrayList<>();
+    HashMap<Integer, ArrayList<Videotape>> inShop = new HashMap<>();
+
+    public MovieRentingSystem(int n, int[][] entries) {
+        for (int[] entry : entries) {
+            if (inShop.containsKey(entry[1])) {
+                ArrayList<Videotape> videotapes = inShop.get(entry[1]);
+                videotapes.add(new Videotape(entry[0], entry[1], entry[2]));
+            } else {
+                ArrayList<Videotape> videotapes = new ArrayList<>();
+                videotapes.add(new Videotape(entry[0], entry[1], entry[2]));
+                inShop.put(entry[1], videotapes);
+            }
+        }
+        for (Map.Entry<Integer, ArrayList<Videotape>> entry : inShop.entrySet()) {
+            ArrayList<Videotape> value = entry.getValue();
+            value.sort((Videotape v1, Videotape v2) -> {
+                if (v1.price != v2.price) return v1.price - v2.price;
+                return v1.shopId - v2.shopId;
+            });
+        }
+    }
+
+    public List<Integer> search(int movie) {
+        ArrayList<Videotape> list = inShop.get(movie);
+        List<Integer> ret = new ArrayList<>();
+        if (list == null) return ret;
+        for (int i = 0; i < list.size() && i < 5; ++i) {
+            ret.add(list.get(i).shopId);
+        }
+        return ret;
+    }
+
+    public void rent(int shop, int movie) {
+        ArrayList<Videotape> videotapes = inShop.get(movie);
+        for (int i = 0; i < videotapes.size(); ++i) {
+            if (videotapes.get(i).shopId == shop) {
+                Videotape v = videotapes.remove(i);
+                insertAndBubbleSort(rented, v);
+            }
+        }
+    }
+
+    public void drop(int shop, int movie) {
+        for (int i = 0; i < rented.size(); ++i) {
+            if (rented.get(i).shopId == shop && rented.get(i).movie == movie) {
+                Videotape v = rented.remove(i);
+                ArrayList<Videotape> list = inShop.get(movie);
+                insertAndBubbleSort(list, v);
+            }
+        }
+    }
+
+    public List<List<Integer>> report() {
+        List<List<Integer>> ret = new ArrayList<>();
+        for (int i = 0; i < rented.size() && i < 5; ++i) {
+            ArrayList<Integer> inside = new ArrayList<>();
+            inside.add(rented.get(i).shopId);
+            inside.add(rented.get(i).movie);
+            ret.add(inside);
+        }
+        return ret;
+    }
+
+    private void insertAndBubbleSort(ArrayList<Videotape> list, Videotape v) {
+        list.add(v);
+        if (list.size() == 1) return;
+        for (int i = list.size() - 1; i > 0; --i) {
+            Videotape changer = list.get(i - 1);
+            if (v.price < changer.price) {
+                list.set(i - 1, v);
+                list.set(i, changer);
+            } else if (v.price == changer.price && v.shopId < changer.shopId) {
+                list.set(i - 1, v);
+                list.set(i, changer);
+            } else if (v.price == changer.price && v.shopId == changer.shopId && v.movie < changer.movie) {
+                list.set(i - 1, v);
+                list.set(i, changer);
+            } else {
+                break;
+            }
+        }
+    }
+}
+
+class Videotape {
+    int shopId;
+    int movie;
+    int price;
+
+    public Videotape(int s, int m, int p) {
+        this.shopId = s;
+        this.movie = m;
+        this.price = p;
+    }
+}

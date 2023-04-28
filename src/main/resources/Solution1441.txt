@@ -1,0 +1,21 @@
+import java.util.LinkedList;
+import java.util.List;
+
+// 1441. Build an Array With Stack Operations
+class Solution {
+    public List<String> buildArray(int[] target, int n) {
+        int len = target.length;
+        int maximum = target[len - 1];
+        LinkedList<String> ans = new LinkedList<>();
+        for (int i = 0, f = 1; f <= maximum; ++f) {
+            if (target[i] == f) {
+                ans.add("Push");
+                ++i;
+            } else {
+                ans.add("Push");
+                ans.add("Pop");
+            }
+        }
+        return ans;
+    }
+}

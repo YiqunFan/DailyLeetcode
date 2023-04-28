@@ -1,0 +1,31 @@
+// 1764. Form Array by Concatenating Subarrays of Another Array
+class Solution {
+    public boolean canChoose(int[][] groups, int[] nums) {
+        int i = 0;
+        int j = 0;
+        while (i < groups.length && j < nums.length) {
+            while (j < nums.length && groups[i][0] != nums[j]) {
+                ++j;
+            }
+            if (isSame(groups[i], nums, j)) {
+                j += groups[i].length;
+                ++i;
+            } else {
+                ++j;
+            }
+        }
+        return groups.length == i;
+    }
+
+    private boolean isSame(int[] group, int[] nums, int start) {
+        if (nums.length - start < group.length) {
+            return false;
+        }
+        for (int i = 1; i < group.length; ++i) {
+            if (group[i] != nums[start + i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

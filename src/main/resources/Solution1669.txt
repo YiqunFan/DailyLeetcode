@@ -1,0 +1,24 @@
+// 1669. Merge In Between Linked Lists
+class Solution {
+    public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
+        int index = 0;
+        ListNode currentNode = list1;
+        while (index < a - 1) {
+            currentNode = currentNode.next;
+            ++index;
+        }
+        ListNode leftNode = currentNode;
+        while (index < b + 1) {
+            currentNode = currentNode.next;
+            ++index;
+        }
+        ListNode rightNode = currentNode;
+        leftNode.next = list2;
+        currentNode = list2;
+        while (currentNode.next != null) {
+            currentNode = currentNode.next;
+        }
+        currentNode.next = rightNode;
+        return list1;
+    }
+}

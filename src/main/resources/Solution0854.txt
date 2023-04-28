@@ -1,0 +1,59 @@
+// 0854. K-Similar Strings
+class Solution {
+    public int kSimilarity(String s1, String s2) {
+        if (s1.equals(s2)) return 0;
+        int moves = 0;
+        int len = s1.length();
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(s1);
+        HashSet<String> hashSet = new HashSet<>();
+        hashSet.add(s1);
+        int newShortest = closer(s1, s2);
+        int oldShortest = newShortest;
+        while (!queue.isEmpty()) {
+            ++moves;
+            oldShortest = newShortest;
+            int queueSize = queue.size();
+            for (int i = 0; i < queueSize; ++i) {
+                String front = queue.poll();
+                if (closer(front, s2) == oldShortest) {
+                    for (int j = 0; j < len - 1; ++j) {
+                        for (int k = j + 1; k < len; ++k) {
+                            String swapped = swap(front, j, k);
+                            if (!hashSet.contains(swapped)) {
+                                if (s2.equals(swapped)) {
+                                    return moves;
+                                }
+                                int distance = closer(swapped, s2);
+                                if (distance < oldShortest) {
+                                    if (distance <= newShortest) {
+                                        newShortest = distance;
+                                        hashSet.add(swapped);
+                                        queue.offer(swapped);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    String swap(String origin, int i1, int i2) {
+        char[] charArray = origin.toCharArray();
+        char temp = charArray[i1];
+        charArray[i1] = charArray[i2];
+        charArray[i2] = temp;
+        return new String(charArray);
+    }
+
+    int closer(String s, String s2) {
+        int ret = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) != s2.charAt(i)) ++ret;
+        }
+        return ret;
+    }
+}

@@ -1,0 +1,43 @@
+import java.util.*;
+
+// 1224. Maximum Equal Frequency
+class Solution {
+    public int maxEqualFreq(int[] nums) {
+        HashMap<Integer, Integer> numberFrequencyMap = new HashMap<>();
+        HashMap<Integer, Integer> frequencyFrequencyMap = new HashMap<>();
+        int ans = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            int frequency = numberFrequencyMap.getOrDefault(nums[i], 0) + 1;
+            numberFrequencyMap.put(nums[i], frequency);
+            if (frequency > 1) {
+                if (frequencyFrequencyMap.get(frequency - 1) == 1) {
+                    frequencyFrequencyMap.remove(frequency - 1);
+                } else {
+                    frequencyFrequencyMap.put(frequency - 1, frequencyFrequencyMap.get(frequency - 1) - 1);
+                }
+            }
+            frequencyFrequencyMap.put(frequency, frequencyFrequencyMap.getOrDefault(frequency, 0) + 1);
+            if (possible(frequencyFrequencyMap)) ans = i + 1;
+        }
+        return ans;
+    }
+
+    private boolean possible(HashMap<Integer, Integer> ffm) {
+        if (ffm.size() > 2) {
+            return false;
+        } else if (ffm.size() == 2) {
+            Iterator<Map.Entry<Integer, Integer>> iterator = ffm.entrySet().iterator();
+            Map.Entry<Integer, Integer> e1 = iterator.next();
+            Map.Entry<Integer, Integer> e2 = iterator.next();
+            if (e1.getKey() - e2.getKey() == 1 && e1.getValue() == 1) return true;
+            if (e2.getKey() - e1.getKey() == 1 && e2.getValue() == 1) return true;
+            if (e1.getKey() == 1 && e1.getValue() == 1) return true;
+            if (e2.getKey() == 1 && e2.getValue() == 1) return true;
+            return false;
+        } else {
+            Iterator<Map.Entry<Integer, Integer>> iterator = ffm.entrySet().iterator();
+            Map.Entry<Integer, Integer> e1 = iterator.next();
+            return e1.getKey() == 1 || e1.getValue() == 1;
+        }
+    }
+}

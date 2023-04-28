@@ -1,0 +1,7 @@
+-- 1082. Sales Analysis I
+select seller_id
+from(
+        select seller_id, rank() over (order by sum(price) desc) as rk
+        from Sales
+        group by seller_id) temp
+where rk = 1;

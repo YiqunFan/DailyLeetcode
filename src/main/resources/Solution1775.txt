@@ -1,0 +1,63 @@
+// 1775. Equal Sum Arrays With Minimum Number of Operations
+class Solution {
+    public int minOperations(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length * 6 || nums2.length > nums1.length * 6) {
+            return -1;
+        }
+        int[] frequency1 = new int[7];
+        int[] frequency2 = new int[7];
+        int sum1 = 0;
+        int sum2 = 0;
+        for (int num : nums1) {
+            sum1 += num;
+            ++frequency1[num];
+        }
+        for (int num : nums2) {
+            sum2 += num;
+            ++frequency2[num];
+        }
+        if (sum1 < sum2) {
+            int t = sum2;
+            sum2 = sum1;
+            sum1 = t;
+            int[] te = frequency1;
+            frequency1 = frequency2;
+            frequency2 = te;
+        }
+        int ans = 0;
+        int change = 1;
+        while (sum1 > sum2) {
+            int diff = sum1 - sum2;
+            if (frequency1[7 - change] * (6 - change) < diff) {
+                int changeTimes = frequency1[7 - change];
+                frequency1[7 - change] = 0;
+                sum1 -= changeTimes * (6 - change);
+                ans += changeTimes;
+            } else {
+                int changeTimes = diff / (6 - change);
+                ans += changeTimes;
+                if (diff % (6 - change) != 0) {
+                    ++ans;
+                }
+                return ans;
+            }
+            diff = sum1 - sum2;
+            if (frequency2[change] * (6 - change) < diff) {
+                int changeTimes = frequency2[change];
+                frequency2[change] = 0;
+                sum2 += changeTimes * (6 - change);
+                ans += changeTimes;
+            } else {
+                int changeTimes = diff / (6 - change);
+                ans += changeTimes;
+                if (diff % (6 - change) != 0) {
+                    ++ans;
+                }
+                return ans;
+            }
+
+            ++change;
+        }
+        return ans;
+    }
+}

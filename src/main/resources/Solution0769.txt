@@ -1,0 +1,13 @@
+// 0769. Max Chunks To Make Sorted
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        int len = arr.length;
+        int leftMax = -1;
+        int ans = 0;
+        for (int i = 0; i < len; ++i) {
+            if (arr[i] > leftMax) leftMax = arr[i];
+            if (leftMax == i) ++ans;
+        }
+        return ans;
+    }
+}

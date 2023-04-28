@@ -1,0 +1,23 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 1302. Deepest Leaves Sum
+class Solution {
+    public int deepestLeavesSum(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int ans = 0;
+        int queueSize = 1;
+        while (!queue.isEmpty()) {
+            ans = 0;
+            queueSize = queue.size();
+            for (int i = 0; i < queueSize; ++i) {
+                TreeNode node = queue.poll();
+                ans += node.val;
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+        }
+        return ans;
+    }
+}

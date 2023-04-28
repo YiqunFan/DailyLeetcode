@@ -1,0 +1,15 @@
+// 1739. Building Boxes
+class Solution {
+    public int minimumBoxes(int n) {
+        int ans = 0;
+        for (int i = 1, j = 1; n >= j; ++i, j += i) {
+            ans = j;
+            n -= j;
+        }
+        for (int i = 1; n > 0; ++i) {
+            n -= i;
+            ++ans;
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,6 @@
+-- 1407. Top Travellers
+select u.name, coalesce(sum(r.distance), 0) as travelled_distance
+from Users u
+         left outer join Rides r on r.user_id = u.id
+group by r.user_id
+order by travelled_distance desc, u.name asc;

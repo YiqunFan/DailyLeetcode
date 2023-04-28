@@ -1,0 +1,35 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 1711. Count Good Meals
+class Solution {
+    public int countPairs(int[] deliciousness) {
+        HashMap<Integer, Long> hashMap = new HashMap<>();
+        int max = 0;
+        for (int delicious : deliciousness) {
+            if (hashMap.containsKey(delicious)) {
+                hashMap.put(delicious, hashMap.get(delicious) + 1);
+            } else {
+                hashMap.put(delicious, 1L);
+            }
+            if (delicious > max) max = delicious;
+        }
+        max <<= 1;
+        long ans = 0;
+        for (Map.Entry<Integer, Long> entry : hashMap.entrySet()) {
+            Integer key = entry.getKey();
+            Long value = entry.getValue();
+            for (int sum = 1; sum <= max; sum <<= 1) {
+                if (hashMap.containsKey(sum - key)) {
+                    if (sum == key + key) {
+                        ans += value * (value - 1) / 2;
+                    } else if (key < sum - key) {
+                        ans += value * hashMap.get(sum - key);
+                    }
+                }
+            }
+            ans %= 1000000007;
+        }
+        return (int)ans;
+    }
+}

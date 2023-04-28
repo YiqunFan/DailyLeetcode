@@ -1,0 +1,23 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 1726. Tuple with Same Product
+class Solution {
+    public int tupleSameProduct(int[] nums) {
+        int len = nums.length;
+        HashMap<Integer, Integer> products = new HashMap<>();
+        for (int i = 0; i < len; ++i) {
+            for (int j = i + 1; j < len; ++j) {
+                int product = nums[i] * nums[j];
+                products.put(product, products.getOrDefault(product, 0) + 1);
+            }
+        }
+        int oneEighth = 0;
+        for (Map.Entry<Integer, Integer> entry : products.entrySet()) {
+            if (entry.getValue() > 1) {
+                oneEighth += entry.getValue() * (entry.getValue() - 1) / 2;
+            }
+        }
+        return oneEighth * 8;
+    }
+}

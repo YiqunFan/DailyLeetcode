@@ -1,0 +1,34 @@
+import java.util.HashMap;
+
+// 1487. Making File Names Unique
+class Solution {
+    public String[] getFolderNames(String[] names) {
+        int len = names.length;
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        String[] ans = new String[len];
+        for (int i = 0; i < len; ++i) {
+            if (hashMap.containsKey(names[i])) {
+                int j = hashMap.get(names[i]);
+                while (true) {
+                    ++j;
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(names[i]);
+                    sb.append('(');
+                    sb.append(j);
+                    sb.append(')');
+                    String sb2s = sb.toString();
+                    if (!hashMap.containsKey(sb2s)) {
+                        hashMap.put(names[i], j);
+                        hashMap.put(sb2s, 0);
+                        ans[i] = sb2s;
+                        break;
+                    }
+                }
+            } else {
+                hashMap.put(names[i], 0);
+                ans[i] = names[i];
+            }
+        }
+        return ans;
+    }
+}

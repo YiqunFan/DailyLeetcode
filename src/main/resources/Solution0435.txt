@@ -1,0 +1,18 @@
+import java.util.Arrays;
+
+// 0435. Non-overlapping Intervals
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        Arrays.sort(intervals, (i1, i2) -> i1[1] - i2[1]);
+        int rightest = -100000;
+        int ans = 0;
+        for (int[] interval : intervals) {
+            if (interval[0] >= rightest) {
+                rightest = interval[1];
+            } else {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}

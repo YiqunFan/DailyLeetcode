@@ -1,0 +1,16 @@
+// 0998. Maximum Binary Tree II
+class Solution {
+    public TreeNode insertIntoMaxTree(TreeNode root, int val) {
+        if (val > root.val) {
+            return new TreeNode(val, root, null);
+        }
+        TreeNode up = root;
+        TreeNode down = root.right;
+        while (down != null && val < down.val) {
+            up = down;
+            down = down.right;
+        }
+        up.right = new TreeNode(val, down, null);
+        return root;
+    }
+}

@@ -1,0 +1,15 @@
+// 2315. Count Asterisks
+class Solution {
+    public int countAsterisks(String s) {
+        int outside = 1;
+        int asterisks = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '*') {
+                asterisks += outside;
+            } else if (c == '|') {
+                outside = 1 - outside;
+            }
+        }
+        return asterisks;
+    }
+}

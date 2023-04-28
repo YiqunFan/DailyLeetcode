@@ -1,0 +1,23 @@
+import java.util.HashSet;
+
+// 0983. Minimum Cost For Tickets
+class Solution {
+    public int mincostTickets(int[] days, int[] costs) {
+        HashSet<Integer> travelDays = new HashSet<>();
+        for (int day : days) {
+            travelDays.add(day);
+        }
+        int[] minCosts = new int[366];
+        for (int i = 1; i < 366; ++i) {
+            if (travelDays.contains(i)) {
+                int a = minCosts[i - 1] + costs[0];
+                int b = minCosts[Math.max(i - 7, 0)] + costs[1];
+                int c = minCosts[Math.max(i - 30, 0)] + costs[2];
+                minCosts[i] = Math.min(Math.min(a, b), c);
+            } else {
+                minCosts[i] = minCosts[i - 1];
+            }
+        }
+        return minCosts[365];
+    }
+}

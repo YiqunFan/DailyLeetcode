@@ -1,0 +1,42 @@
+import java.util.HashSet;
+import java.util.Set;
+
+// 0805. Split Array With Same Average
+class Solution {
+    public boolean splitArraySameAverage(int[] nums) {
+        int n = nums.length;
+        if (n == 1) return false;
+        int mid = n / 2;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        for (int i = 0; i < n; ++i) {
+            nums[i] = nums[i] * n - sum;
+        }
+        int leftCombinations = 1 << mid;
+        int rightCombinations = 1 << n - mid;
+        Set<Integer> leftSums = new HashSet<>();
+        for (int i = 1; i < leftCombinations; ++i) {
+            int total = 0;
+            for (int j = 0; j < mid; ++j) {
+                if ((i & (1 << j)) != 0) {
+                    total += nums[j];
+                }
+            }
+            if (total == 0) return true;
+            leftSums.add(total);
+        }
+        for (int i = 1; i < rightCombinations - 1; ++i) {
+            int total = 0;
+            for (int j = mid; j < n; ++j) {
+                if ((i & (1 << j - mid)) != 0) {
+                    total += nums[j];
+                }
+            }
+            if (total == 0) return true;
+            if (leftSums.contains(total * -1)) return true;
+        }
+        return false;
+    }
+}

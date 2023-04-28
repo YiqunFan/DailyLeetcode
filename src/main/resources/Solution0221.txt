@@ -1,0 +1,32 @@
+// 0221. Maximal Square
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int height = matrix.length;
+        int width = matrix[0].length;
+        int[][] maximalEdge = new int[height][width];
+        int ans = 0;
+        for (int i = 0; i < height; ++i) {
+            maximalEdge[i][0] = matrix[i][0] - 48;
+            if (matrix[i][0] == '1') ans = 1;
+        }
+        for (int j = 0; j < width; ++j) {
+            maximalEdge[0][j] = matrix[0][j] - 48;
+            if (matrix[0][j] == '1') ans = 1;
+        }
+        for (int i = 1; i < height; ++i) {
+            for (int j = 1; j < width; ++j) {
+                if (matrix[i][j] == '0') {
+                    maximalEdge[i][j] = 0;
+                } else {
+                    int min = maximalEdge[i - 1][j - 1];
+                    if (min > maximalEdge[i - 1][j]) min = maximalEdge[i - 1][j];
+                    if (min > maximalEdge[i][j - 1]) min = maximalEdge[i][j - 1];
+                    ++min;
+                    maximalEdge[i][j] = min;
+                    if (min > ans) ans = min;
+                }
+            }
+        }
+        return ans * ans;
+    }
+}

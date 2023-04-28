@@ -1,0 +1,17 @@
+// 0334. Increasing Triplet Subsequence
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        int firstNum = Integer.MAX_VALUE;
+        int secondNum = Integer.MAX_VALUE;
+        for (int thirdNum : nums) {
+            if (thirdNum > secondNum) {
+                return true;
+            } else if (thirdNum <= firstNum) {
+                firstNum = thirdNum;
+            } else {
+                secondNum = thirdNum;
+            }
+        }
+        return false;
+    }
+}

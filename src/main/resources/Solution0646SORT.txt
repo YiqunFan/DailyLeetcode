@@ -1,0 +1,17 @@
+import java.util.Arrays;
+
+// 0646. Maximum Length of Pair Chain
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        Arrays.sort(pairs, (int[] pair1, int[] pair2) -> pair1[1] - pair2[1]);
+        int ans = 0;
+        int currentRight = Integer.MIN_VALUE;
+        for (int[] pair : pairs) {
+            if (pair[0] > currentRight) {
+                ++ans;
+                currentRight = pair[1];
+            }
+        }
+        return ans;
+    }
+}

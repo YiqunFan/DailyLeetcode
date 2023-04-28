@@ -1,0 +1,33 @@
+import java.util.TreeSet;
+
+// 0646. Maximum Length of Pair Chain
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        TreeSet<Pair> pairTreeSet = new TreeSet<>((Pair p1, Pair p2) -> (p1.right - p2.right) / 2 - 1);
+        int index = 0;
+        for (int[] pair : pairs) {
+            pairTreeSet.add(new Pair(pair[0], pair[1], index++));
+        }
+        int ans = 0;
+        int currentRight = Integer.MIN_VALUE;
+        for (Pair pair : pairTreeSet) {
+            if (pair.left > currentRight) {
+                ++ans;
+                currentRight = pair.right;
+            }
+        }
+        return ans;
+    }
+}
+
+class Pair {
+    int left;
+    int right;
+    int index;
+
+    Pair(int left, int right, int index) {
+        this.left = left;
+        this.right = right;
+        this.index = index;
+    }
+}

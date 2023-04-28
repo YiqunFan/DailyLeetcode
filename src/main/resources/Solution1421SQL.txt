@@ -1,0 +1,4 @@
+-- 1421. NPV Queries
+select q.id, q.year, coalesce(n.npv, 0) as npv
+from Queries q
+         left outer join NPV n on q.id = n.id and q.year = n.year;

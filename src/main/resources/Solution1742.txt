@@ -1,0 +1,24 @@
+import java.util.HashMap;
+
+// 1742. Maximum Number of Balls in a Box
+class Solution {
+    public int countBalls(int lowLimit, int highLimit) {
+        HashMap<Integer, Integer> numberQuantity = new HashMap<>();
+        for (int i = lowLimit; i <= highLimit; ++i) {
+            int j = i;
+            int number = 0;
+            while (j != 0) {
+                number += j % 10;
+                j /= 10;
+            }
+            numberQuantity.put(number, numberQuantity.getOrDefault(number, 0) + 1);
+        }
+        int ans = 0;
+        for (Integer value : numberQuantity.values()) {
+            if (value > ans) {
+                ans = value;
+            }
+        }
+        return ans;
+    }
+}

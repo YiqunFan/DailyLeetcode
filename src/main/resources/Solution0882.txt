@@ -1,0 +1,50 @@
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
+// 0882. Reachable Nodes In Subdivided Graph
+class Solution {
+    public int reachableNodes(int[][] edges, int maxMoves, int n) {
+        HashMap<Integer, HashMap<Integer, Integer>> graph = new HashMap<>();
+        for (int i = 0; i < n; ++i) {
+            graph.put(i, new HashMap<>());
+        }
+        for (int[] edge : edges) {
+            graph.get(edge[0]).put(edge[1], edge[2]);
+            graph.get(edge[1]).put(edge[0], edge[2]);
+        }
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> (b.remainingMoves - a.remainingMoves));
+        pq.add(new Node(0, maxMoves));
+        int ans = 0;
+        boolean[] visited = new boolean[n];
+        while (!pq.isEmpty()) {
+            Node currNode = pq.poll();
+            if (visited[currNode.nodeId]) {
+                continue;
+            } else {
+                visited[currNode.nodeId] = true;
+            }
+            ans += 1;
+            for (int adjNodeId : graph.get(currNode.nodeId).keySet()) {
+                int middleNodeCount = graph.get(currNode.nodeId).get(adjNodeId);
+                if (!visited[adjNodeId] && currNode.remainingMoves >= (middleNodeCount + 1)) {
+                    pq.add(new Node(adjNodeId, currNode.remainingMoves - (middleNodeCount + 1)));
+                }
+                int reachedMiddleNodeCount = Math.min(currNode.remainingMoves, middleNodeCount);
+                ans += reachedMiddleNodeCount;
+                graph.get(currNode.nodeId).put(adjNodeId, middleNodeCount - reachedMiddleNodeCount);
+                graph.get(adjNodeId).put(currNode.nodeId, middleNodeCount - reachedMiddleNodeCount);
+            }
+        }
+        return ans;
+    }
+}
+
+class Node {
+    int nodeId;
+    int remainingMoves;
+
+    public Node(int nodeId, int remainingMoves) {
+        this.nodeId = nodeId;
+        this.remainingMoves = remainingMoves;
+    }
+}

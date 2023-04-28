@@ -1,0 +1,82 @@
+// 0307. Range Sum Query - Mutable
+class NumArray {
+
+    int[] originNums;
+    SegmentTreeNode root = new SegmentTreeNode();
+
+    public NumArray(int[] nums) {
+        originNums = nums;
+        buildSegmentTree(root, 0, nums.length - 1);
+    }
+
+    void buildSegmentTree(SegmentTreeNode node, int start, int end) {
+        if (start == end) {
+            node.value = originNums[start];
+        } else {
+            node.left = new SegmentTreeNode();
+            node.right = new SegmentTreeNode();
+            int mid = (start + end) / 2;
+            buildSegmentTree(node.left, start, mid);
+            buildSegmentTree(node.right, mid + 1, end);
+            node.value = node.left.value + node.right.value;
+        }
+    }
+
+    public void update(int index, int val) {
+        updateSegmentTree(index, val, root, 0, originNums.length - 1);
+    }
+
+    void updateSegmentTree(int index, int val, SegmentTreeNode node, int start, int end) {
+        if (start == end) {
+            node.value = val;
+        } else {
+            int mid = (start + end) / 2;
+            if (index <= mid) {
+                updateSegmentTree(index, val, node.left, start, mid);
+            } else {
+                updateSegmentTree(index, val, node.right, mid + 1, end);
+            }
+            node.value = node.left.value + node.right.value;
+        }
+    }
+
+    public int sumRange(int left, int right) {
+        return sumRangeSegmentTree(left, right, root, 0, originNums.length - 1);
+    }
+
+    int sumRangeSegmentTree(int left, int right, SegmentTreeNode node, int start, int end) {
+        if (left == start && right == end) {
+            return node.value;
+        }
+        int mid = (start + end) / 2;
+        if (right <= mid) {
+            return sumRangeSegmentTree(left, right, node.left, start, mid);
+        } else if (left > mid) {
+            return sumRangeSegmentTree(left, right, node.right, mid + 1, end);
+        } else {
+            return sumRangeSegmentTree(left, mid, node.left, start, mid) + sumRangeSegmentTree(mid + 1, right, node.right, mid + 1, end);
+        }
+    }
+
+}
+
+class SegmentTreeNode {
+
+    int value;
+    SegmentTreeNode left;
+    SegmentTreeNode right;
+
+    SegmentTreeNode() {
+    }
+
+    SegmentTreeNode(int value) {
+        this.value = value;
+    }
+
+    SegmentTreeNode(int value, SegmentTreeNode left, SegmentTreeNode right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+
+}

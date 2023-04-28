@@ -1,0 +1,23 @@
+// 0481. Magical String
+class Solution {
+    public int magicalString(int n) {
+        if (n <= 3) return 1;
+        int ans = 1;
+        int[] magical = new int[n + 1];
+        magical[0] = 1;
+        magical[1] = magical[2] = 2;
+        int slow = 2;
+        int fast = 3;
+        int fill = 1;
+        while (fast < n) {
+            for (int i = 0; i < magical[slow]; ++i) {
+                magical[fast] = fill;
+                if (fill == 1 && fast < n) ++ans;
+                ++fast;
+            }
+            fill = 3 - fill;
+            ++slow;
+        }
+        return ans;
+    }
+}

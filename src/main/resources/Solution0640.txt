@@ -1,0 +1,51 @@
+// 0640. Solve the Equation
+class Solution {
+    public String solveEquation(String equation) {
+        equation += '+';
+        boolean beforeEqualSign = true;
+        boolean positive = true;
+        boolean isConstant = true;
+        int totalCoefficients = 0;
+        int totalConstants = 0;
+        int num = 0;
+        for (int i = 0; i < equation.length(); ++i) {
+            char charAtI = equation.charAt(i);
+            if (charAtI == '+' || charAtI == '-' || charAtI == '=') {
+                if (!positive) {
+                    num *= -1;
+                }
+                if (isConstant) {
+                    totalConstants += num;
+                } else {
+                    totalCoefficients += num;
+                }
+                if (charAtI == '+') {
+                    positive = beforeEqualSign;
+                } else if (charAtI == '-') {
+                    positive = !beforeEqualSign;
+                } else {
+                    positive = false;
+                    beforeEqualSign = false;
+                }
+                isConstant = true;
+                num = 0;
+            } else if (charAtI == 'x') {
+                isConstant = false;
+                if (i == 0 || equation.charAt(i - 1) == '+' || equation.charAt(i - 1) == '=' || equation.charAt(i - 1) == '-') {
+                    num = 1;
+                }
+            } else {
+                num = num * 10 + charAtI - 48;
+            }
+        }
+        totalConstants *= -1;
+        if (totalCoefficients == 0) {
+            if (totalConstants == 0) {
+                return "Infinite solutions";
+            } else {
+                return "No solution";
+            }
+        }
+        return "x=" + totalConstants / totalCoefficients;
+    }
+}

@@ -1,0 +1,36 @@
+import java.util.PriorityQueue;
+
+// 1792. Maximum Average Pass Ratio
+class Solution {
+    public double maxAverageRatio(int[][] classes, int extraStudents) {
+        int size = classes.length;
+        PriorityQueue<Clazz> pq = new PriorityQueue<>((Clazz o1, Clazz o2) -> {
+            return (int) ((((o2.pass + 1.0) / (o2.total + 1.0) - o2.pass * 1.0 / o2.total) - ((o1.pass + 1.0) / (o1.total + 1.0) - o1.pass * 1.0 / o1.total)) * 100000000);
+        });
+        for (int[] cla : classes) {
+            pq.offer(new Clazz(cla[0], cla[1]));
+        }
+        while (extraStudents != 0) {
+            Clazz poll = pq.poll();
+            poll.pass += 1;
+            poll.total += 1;
+            pq.offer(poll);
+            --extraStudents;
+        }
+        double ans = 0.0;
+        for (Clazz clazz : pq) {
+            ans += clazz.pass * 1.0 / clazz.total;
+        }
+        return ans / size;
+    }
+}
+
+class Clazz {
+    int pass;
+    int total;
+
+    public Clazz(int pass, int total) {
+        this.pass = pass;
+        this.total = total;
+    }
+}

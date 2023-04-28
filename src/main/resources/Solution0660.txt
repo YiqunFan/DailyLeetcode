@@ -1,0 +1,13 @@
+// 0660. Remove 9
+class Solution {
+    public int newInteger(int n) {
+        int ans = 0;
+        int base = 1;
+        while (n != 0) {
+            ans += n % 9 * base;
+            base *= 10;
+            n /= 9;
+        }
+        return ans;
+    }
+}

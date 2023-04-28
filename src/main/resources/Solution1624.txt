@@ -1,0 +1,19 @@
+// 1624. Largest Substring Between Two Equal Characters
+class Solution {
+    public int maxLengthBetweenEqualCharacters(String s) {
+        int[] firstSeen = new int[123];
+        for (int i = 97; i < 123; ++i) firstSeen[i] = -1;
+        char[] charArray = s.toCharArray();
+        int ans = -1;
+        for (int i = 0; i < charArray.length; ++i) {
+            if (firstSeen[charArray[i]] != -1) {
+                if (i - firstSeen[charArray[i]] - 1 > ans) {
+                    ans = i - firstSeen[charArray[i]] - 1;
+                }
+            } else {
+                firstSeen[charArray[i]] = i;
+            }
+        }
+        return ans;
+    }
+}

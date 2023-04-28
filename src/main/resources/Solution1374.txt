@@ -1,0 +1,11 @@
+import java.util.Arrays;
+
+// 1374. Generate a String With Characters That Have Odd Counts
+class Solution {
+    public String generateTheString(int n) {
+        char[] ans = new char[n];
+        Arrays.fill(ans, 'b');
+        ans[0] = "ab".charAt(n & 1);
+        return new String(ans);
+    }
+}

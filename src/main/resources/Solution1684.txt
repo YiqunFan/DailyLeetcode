@@ -1,0 +1,23 @@
+// 1684. Count the Number of Consistent Strings
+class Solution {
+    public int countConsistentStrings(String allowed, String[] words) {
+        boolean[] forbiddenLetters = new boolean[123];
+        for (int i = 97; i < 123; ++i) {
+            forbiddenLetters[i] = true;
+        }
+        for (char c : allowed.toCharArray()) {
+            forbiddenLetters[c] = false;
+        }
+        int ans = 0;
+        OUTER:
+        for (String word : words) {
+            for (char letter : word.toCharArray()) {
+                if (forbiddenLetters[letter]) {
+                    continue OUTER;
+                }
+            }
+            ++ans;
+        }
+        return ans;
+    }
+}

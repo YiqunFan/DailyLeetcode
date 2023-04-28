@@ -1,0 +1,21 @@
+// 1760. Minimum Limit of Balls in a Bag
+class Solution {
+    public int minimumSize(int[] nums, int maxOperations) {
+        int l = 1;
+        int r = 1;
+        for (int num : nums) r = Math.max(r, num);
+        while (l < r) {
+            int mid = (l + r) / 2;
+            int operations = 0;
+            for (int num : nums) {
+                operations += (num - 1) / mid;
+            }
+            if (operations > maxOperations) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        return r;
+    }
+}

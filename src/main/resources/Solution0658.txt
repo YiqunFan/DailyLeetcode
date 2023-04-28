@@ -1,0 +1,51 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0658. Find K Closest Elements
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int left = 0;
+        int right = arr.length - 1;
+        int middle = 0;
+        while (left + 1 < right) {
+            middle = (left + right) / 2;
+            if (arr[middle] == x) {
+                left = middle;
+                right = middle;
+                break;
+            } else if (arr[middle] > x) {
+                right = middle;
+            } else {
+                left = middle;
+            }
+        }
+        if (left != right) {
+            if (Math.abs(arr[left] - x) > Math.abs(arr[right] - x)) {
+                middle = right;
+            } else {
+                middle = left;
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        ans.add(arr[middle]);
+        left = middle - 1;
+        right = middle + 1;
+        while (ans.size() < k) {
+            if (left < 0) {
+                ans.add(arr[right]);
+                ++right;
+            } else if (right >= arr.length) {
+                ans.add((arr[left]));
+                --left;
+            } else if (x - arr[left] > arr[right] - x) {
+                ans.add(arr[right]);
+                ++right;
+            } else {
+                ans.add((arr[left]));
+                --left;
+            }
+        }
+        ans.sort((Integer i1, Integer i2) -> (i1 - i2));
+        return ans;
+    }
+}

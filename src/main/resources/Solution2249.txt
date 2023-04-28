@@ -1,0 +1,22 @@
+import java.util.HashSet;
+
+// 2249. Count Lattice Points Inside a Circle
+class Solution {
+    public int countLatticePoints(int[][] circles) {
+        HashSet<Integer> insidePoints = new HashSet<>();
+        for (int[] circle : circles) {
+            int x = circle[0];
+            int y = circle[1];
+            int r = circle[2];
+            int rSquare = r * r;
+            for (int nx = x - r; nx <= x + r; ++nx) {
+                for (int ny = y - r; ny <= y + r; ++ny) {
+                    if ((nx - x) * (nx - x) + (ny - y) * (ny - y) <= rSquare) {
+                        insidePoints.add(nx * 10000 + ny);
+                    }
+                }
+            }
+        }
+        return insidePoints.size();
+    }
+}

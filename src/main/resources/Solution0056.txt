@@ -1,0 +1,56 @@
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+// 0056. Merge Intervals
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        TreeSet<Point> pointSet = new TreeSet<Point>();
+        for (int[] interval : intervals) {
+            pointSet.add(new Point(true, interval[0]));
+            pointSet.add(new Point(false, interval[1]));
+        }
+        ArrayList<ArrayList<Integer>> merged = new ArrayList<>();
+        ArrayList<Integer> section = new ArrayList<>();
+        int start = 0;
+        for (Point p : pointSet) {
+            if (start == 0) {
+                ++start;
+                section = new ArrayList<>();
+                section.add(p.x);
+            } else if (p.isStart) {
+                ++start;
+            } else {
+                --start;
+                if (start == 0) {
+                    section.add(p.x);
+                    merged.add(section);
+                }
+            }
+        }
+        int[][] ans = new int[merged.size()][2];
+        for (int i = 0; i < ans.length; ++i) {
+            ans[i][0] = merged.get(i).get(0);
+            ans[i][1] = merged.get(i).get(1);
+        }
+        return ans;
+    }
+}
+
+class Point implements Comparable<Point> {
+    boolean isStart;
+    int x;
+
+    public Point(boolean isStart, int x) {
+        this.isStart = isStart;
+        this.x = x;
+    }
+
+    @Override
+    public int compareTo(Point p2) {
+        if (x == p2.x) {
+            if (isStart) return -1;
+            else return 1;
+        }
+        return x - p2.x;
+    }
+}

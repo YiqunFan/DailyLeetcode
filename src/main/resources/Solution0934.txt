@@ -1,0 +1,73 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 0934. Shortest Bridge
+class Solution {
+    public int shortestBridge(int[][] grid) {
+        Queue<Land> queue = new LinkedList<>();
+        Queue<Land> land1 = new LinkedList<>();
+        int n = grid.length;
+        boolean[][] visited = new boolean[n][n];
+        outer:
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == 1) {
+                    Land land = new Land(i, j);
+                    queue.add(land);
+                    land1.add(land);
+                    visited[i][j] = true;
+                    break outer;
+                }
+            }
+        }
+        int[][] direction = new int[][]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; ++i) {
+                Land front = queue.poll();
+                for (int j = 0; j < 4; ++j) {
+                    int newX = front.x + direction[j][0];
+                    int newY = front.y + direction[j][1];
+                    if (newX >= 0 && newX < n && newY >= 0 && newY < n && grid[newX][newY] == 1 && !visited[newX][newY]) {
+                        visited[newX][newY] = true;
+                        Land land = new Land(newX, newY);
+                        queue.add(land);
+                        land1.add(land);
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        while (!land1.isEmpty()) {
+            int size = land1.size();
+            for (int i = 0; i < size; ++i) {
+                Land front = land1.poll();
+                for (int j = 0; j < 4; ++j) {
+                    int newX = front.x + direction[j][0];
+                    int newY = front.y + direction[j][1];
+                    if (newX >= 0 && newX < n && newY >= 0 && newY < n && !visited[newX][newY]) {
+                        if (grid[newX][newY] == 1) {
+                            return ans;
+                        } else {
+                            visited[newX][newY] = true;
+                            Land land = new Land(newX, newY);
+                            land1.add(land);
+                        }
+                    }
+                }
+            }
+            ++ans;
+        }
+        return -1;
+    }
+}
+
+class Land {
+    int x;
+    int y;
+
+    public Land(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}

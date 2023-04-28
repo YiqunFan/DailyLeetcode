@@ -1,0 +1,28 @@
+import java.util.PriorityQueue;
+
+// 1675. Minimize Deviation in Array
+class Solution {
+    public int minimumDeviation(int[] nums) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((Integer i1, Integer i2) -> i2 - i1);
+        int minValue = Integer.MAX_VALUE;
+        for (int num : nums) {
+            if ((num & 1) == 0) {
+                pq.offer(num);
+                if (num < minValue) minValue = num;
+            } else {
+                pq.offer(num * 2);
+                if (num * 2 < minValue) minValue = num * 2;
+            }
+        }
+        int ans = pq.peek() - minValue;
+        while ((pq.peek() & 1) == 0) {
+            int over2 = pq.poll() / 2;
+            pq.offer(over2);
+            if (over2 < minValue) minValue = over2;
+            if (pq.peek() - minValue < ans) {
+                ans = pq.peek() - minValue;
+            }
+        }
+        return ans;
+    }
+}

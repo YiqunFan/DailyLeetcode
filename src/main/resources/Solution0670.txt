@@ -1,0 +1,23 @@
+// 0670. Maximum Swap
+class Solution {
+    public int maximumSwap(int num) {
+        char[] chars = String.valueOf(num).toCharArray();
+        int len = chars.length;
+        int[] rightest = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+        for (int i = len - 1; i >= 0; --i) {
+            if (rightest[chars[i] - 48] == -1) {
+                rightest[chars[i] - 48] = i;
+            }
+        }
+        for (int i = 0; i < len; ++i) {
+            for (int j = 9; j > chars[i] - 48; --j) {
+                if (rightest[j] > i) {
+                    chars[rightest[j]] = chars[i];
+                    chars[i] = (char) (j + 48);
+                    return Integer.parseInt(String.valueOf(chars));
+                }
+            }
+        }
+        return num;
+    }
+}

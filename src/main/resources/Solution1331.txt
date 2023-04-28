@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+
+// 1331. Rank Transform of an Array
+class Solution {
+    public int[] arrayRankTransform(int[] arr) {
+        int len = arr.length;
+        if (len == 0) return new int[0];
+        ArrayList<Rank> ranks = new ArrayList<>();
+        for (int i = 0; i < len; ++i) {
+            ranks.add(new Rank(arr[i], i));
+        }
+        ranks.sort((r1, r2) -> {
+            return r1.value - r2.value;
+        });
+        int value = 1;
+        int previous = ranks.get(0).value;
+        ranks.get(0).value = 1;
+        for (int i = 1; i < len; ++i) {
+            if (ranks.get(i).value != previous) {
+                ++value;
+                previous = ranks.get(i).value;
+            }
+            ranks.get(i).value = value;
+        }
+        int[] ans = new int[len];
+        for (Rank r : ranks) {
+            ans[r.index] = r.value;
+        }
+        return ans;
+    }
+}
+
+class Rank {
+    int value;
+    int index;
+
+    public Rank(int value, int index) {
+        this.value = value;
+        this.index = index;
+    }
+}

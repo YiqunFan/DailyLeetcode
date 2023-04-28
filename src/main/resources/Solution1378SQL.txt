@@ -1,0 +1,4 @@
+-- 1378. Replace Employee ID With The Unique Identifier
+select uni.unique_id, e.name
+from Employees e
+         left outer join EmployeeUNI uni on e.id = uni.id;

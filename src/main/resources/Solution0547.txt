@@ -1,0 +1,48 @@
+import java.util.HashSet;
+
+// 0547. Number of Provinces
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        int n = isConnected.length;
+        UnionFind unionFind = new UnionFind(n);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (isConnected[i][j] == 1) {
+                    unionFind.union(i, j);
+                }
+            }
+        }
+        HashSet<Integer> hashSet = new HashSet<>();
+        for (int i = 0; i < n; ++i) {
+            hashSet.add(unionFind.find(i));
+        }
+        return hashSet.size();
+    }
+}
+
+class UnionFind {
+    int[] parents;
+
+    public UnionFind(int n) {
+        parents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parents[i] = i;
+        }
+    }
+
+    int find(int son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parents[parentOfA] = parentOfB;
+        }
+    }
+}

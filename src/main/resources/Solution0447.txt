@@ -1,0 +1,21 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 0447. Number of Boomerangs
+class Solution {
+    public int numberOfBoomerangs(int[][] points) {
+        int ans = 0;
+        for (int[] p1 : points) {
+            Map<Integer, Integer> distanceQuantity = new HashMap<>();
+            for (int[] p2 : points) {
+                int distance = (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]);
+                distanceQuantity.put(distance, distanceQuantity.getOrDefault(distance, 0) + 1);
+            }
+            for (Map.Entry<Integer, Integer> entry : distanceQuantity.entrySet()) {
+                int v = entry.getValue();
+                ans += v * (v - 1);
+            }
+        }
+        return ans;
+    }
+}

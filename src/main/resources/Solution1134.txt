@@ -1,0 +1,19 @@
+// 1134. Armstrong Number
+class Solution {
+    public boolean isArmstrong(int n) {
+        if (n == 0) return true;
+        int origin = n;
+        long sum = 0L;
+        int[] digits = new int[10];
+        int len = 0;
+        while (n > 0) {
+            digits[len] = n % 10;
+            n /= 10;
+            ++len;
+        }
+        for (int digit : digits) {
+            sum = (long) (sum + Math.pow(digit, len));
+        }
+        return sum == origin;
+    }
+}

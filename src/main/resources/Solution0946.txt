@@ -1,0 +1,33 @@
+// 0946. Validate Stack Sequences
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        int len = pushed.length;
+        boolean[] pop = new boolean[len];
+        int i = 0;
+        int j = 0;
+        while (j < len) {
+            if (pushed[i] == popped[j]) {
+                pop[i] = true;
+                ++j;
+                if (j == len) return true;
+                while (pop[i]) {
+                    --i;
+                    if (i < 0) {
+                        ++i;
+                        while (pop[i]) {
+                            ++i;
+                        }
+                    }
+                }
+            } else {
+                ++i;
+                if (i == len) return false;
+                while (pop[i]) {
+                    ++i;
+                    if (i == len) return false;
+                }
+            }
+        }
+        return true;
+    }
+}

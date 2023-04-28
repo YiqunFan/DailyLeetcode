@@ -1,0 +1,35 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+// 0895. Maximum Frequency Stack
+class FreqStack {
+    Map<Integer, Integer> cnt;
+    Map<Integer, ArrayList<Integer>> stack;
+    int maxFrequency;
+
+    public FreqStack() {
+        cnt = new HashMap<>();
+        stack = new HashMap<>();
+        maxFrequency = 0;
+    }
+
+    public void push(int val) {
+        int valCnt = cnt.getOrDefault(val, 0) + 1;
+        cnt.put(val, valCnt);
+        if (valCnt > maxFrequency) {
+            maxFrequency = valCnt;
+            stack.put(maxFrequency, new ArrayList<>());
+        }
+        stack.get(valCnt).add(val);
+    }
+
+    public int pop() {
+        int top = stack.get(maxFrequency).remove(stack.get(maxFrequency).size() - 1);
+        cnt.put(top, cnt.get(top) - 1);
+        if (stack.get(maxFrequency).size() == 0) {
+            --maxFrequency;
+        }
+        return top;
+    }
+}

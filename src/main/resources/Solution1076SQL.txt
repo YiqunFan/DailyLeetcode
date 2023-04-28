@@ -1,0 +1,7 @@
+-- 1076. Project Employees II
+select project_id
+from (
+         select project_id, rank() over (order by count(employee_id) desc) as rk
+         from Project
+         group by project_id) temp
+where rk = 1;

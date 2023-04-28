@@ -1,0 +1,243 @@
+0175. Combine Two Tables
+left outer join，右边找不动东西也会保留null。
+
+0181. Employees Earning More Than Their Managers
+inner join，除了on的条件还要加一个比较条件筛选。
+
+0182. Duplicate Emails
+group by + having，查看数量大于1的。
+
+0183. Customers Who Never Order
+not in，过滤掉不在集合内的。
+
+0196. Delete Duplicate Emails
+去重算法，自然连接，delete后面接要从哪张里面删除，很少见用的语法。
+
+0197. Rising Temperature
+datediff函数，注意是前面减后面，datediff('20230212', '20230211')结果是1，参数颠倒就是-1。
+
+0511. Game Play Analysis I
+group by + min函数，日期也是可以使用min函数求出最小值的。
+
+0512. Game Play Analysis II
+row_number() + over (partition by ... order by ... asc)，窗口函数，row_number函数。额外rank()是有间隔排名，dense_rank()是无间隔排名。
+
+0577. Employee Bonus
+is null + left outer join，注意如果需要>或者<这样的比较，注意null的数据是否需要保留。
+
+0584. Find Customer Referee
+is null + !=，也是注意判断的值为空时结果是否需要保留的问题。
+
+0586. Customer Placing the Largest Number of Orders
+group by + order by + count函数 + limit，限制只要最高的一条。
+
+0595. Big Countries
+or，很简单的一道条件搜索题。
+
+0596. Classes More Than 5 Students
+group by + having + distinct关键字的妙用，这里的distinct不是用在select而用在了count里面。
+
+0597. Friend Requests I: Overall Acceptance Rate
+coalesce函数 + round函数 + count函数，三个函数的嵌套使用，coalesce比ifnull更强大，round设置保留小数点位数，count就是计数。
+
+0603. Consecutive Available Seats
+inner join + abs函数 + order by + distinct，先用笛卡尔积连接，然后用abs函数来看距离是否为1，用distinct去重，order by保证升序。
+
+0607. Sales Person
+left outer join + not in，这道题是三标查询，但是注意不需要两次外连，因为销售号就足够最后输出名字了。
+
+0610. Triangle Judgement
+case when，三角形的任意两边之和大于第三边。
+
+0613. Shortest Distance in a Line
+lead(x) + over (order by ...)，窗口函数，lead函数。lead是找x的下一个。
+
+0619. Biggest Single Number
+group by + having + max函数，本来应该用order by和limit来处理，但是题目要求没有需要报告null，这就只能用max函数了。
+
+0620. Not Boring Movies
+取余 + order by，这道题就是根据两个条件and一起筛一下，然后排序。
+
+0627. Swap Salary
+update语句中使用case when语句。
+
+1050. Actors and Directors Who Cooperated At Least Three Times
+group by + having，这里用了两个字段来group by，就是要两个都一致。
+
+1068. Product Sales Analysis I
+left outer join或者inner join都可以。
+
+1069. Product Sales Analysis II
+group by + sum函数，分组求和即可。
+
+1075. Project Employees I
+group by + avg函数 + round函数，分组求平均值的题，最后再保留位数控制一下就好了。
+
+1076. Project Employees II
+rank() + over (order by ... desc)窗口函数，这道题很坑，很多人做错用了partitionby，应该用group by，因为这里使用的是聚合函数count(*)。
+
+1082. Sales Analysis I
+rank() + over (order by ... desc)窗口函数，和上一题很像，聚合函数sum()。
+
+1083. Sales Analysis II
+group by + having + sum函数和if函数嵌套，这道题应该不属于简单，已经有点难度了。
+
+1084. Sales Analysis III
+left outer join + group by + having 使用max和min函数对日期进行排查。
+
+1113. Reported Posts
+group by + distinct关键字的妙用，这里的distinct不是直接用在select而用在了count里面。
+
+1141. User Activity for the Past 30 Days I
+group by + distinct关键字的妙用 + datediff函数，这里的distinct不是直接用在select而用在了count里面。datediff函数是前面减后面。
+
+1142. User Activity for the Past 30 Days II
+group by + coalesce函数 + avg函数 + round函数 + distinct关键字的妙用，这道题是很考察基本功的一道题目。
+
+1148. Article Views I
+distinct + order by，结果去重和排序。
+
+1173. Immediate Food Delivery I
+count函数 + round函数 + sum函数的妙用，sum函数可以加总判断条件结果的布尔值。
+
+1179. Reformat Department Table
+group by + sum函数 + case when，经典的行转列的题目。
+
+1211. Queries Quality and Percentage
+group by + round函数 + avg函数的妙用，avg函数可以加总判断条件结果的布尔值。
+
+1241. Number of Comments per Post
+left outer join + group by + count函数，自己左外连自己，然后可以计算节点父子关系。
+
+1251. Average Selling Price
+left outer join + 日期的between关键字 + group by + sum函数 + round函数，这是一道数学类的问题，先求总价和件数，才可以求平均值。
+
+1280. Students and Examinations
+cross join + left outer join + group by + order by + count函数，这不像一道简单题，三张表的联表查询，一开始容易搞错先用哪张表后用哪张表，虽然看上去像没有新字段，但最后count的时候用新联的表字段可以计数。
+
+1294. Weather Type in Each Country
+left outer join + group by + avg函数 + case when + between and，各种基础关键字的复合使用。
+
+1303. Find the Team Size
+count() + over (order by ... desc)窗口函数 + order by，窗口函数的经典题目。
+
+1322. Ads Performance
+group by + order by + sum函数的妙用，这里很容易用错成count函数。
+
+1327. List the Products Ordered in a Period
+left outer join + group by + having + sum函数 + 日期like的妙用，这道题注意不要group by之后忘记掉可以having而再嵌套一层把原本结果当做子查询。
+
+1350. Students With Invalid Departments
+left outer join，右边找不动东西也会保留null，就和第一道sql题差不多一个意思。
+
+1378. Replace Employee ID With The Unique Identifier
+left outer join，右边找不动东西也会保留null，就和第一道sql题差不多一个意思。
+
+1407. Top Travellers
+left outer join + group by + order by + coalesce函数，这道题要注意谁在左谁在右，然后是要注意
+
+1421. NPV Queries
+left outer join + coalesce函数，要注意null要变成0。
+
+1435. Create a Session Bar Chart
+union连接多个结果，直接搜索字面值做数据后还可以加上列别名。
+
+1484. Group Sold Products By The Date
+group by + order by + count函数 + distinct的妙用 + group_concat函数，主要是group_concat函数，函数里面可以排序可以用distinct，还可以用separator来调整分隔符。
+
+1495. Friendly Movies Streamed Last Month
+left outer join + 日期like的妙用。
+
+1511. Customer Order Frequency
+inner join + group by + having + sum函数 + 日期like的妙用 + case when，这道题是综合各种基础小技巧和计算的好题。
+
+1517. Find Users With Valid E-Mails
+regexp 使用正则表达式。[a-zA-Z]是所有大小写字母，/w所有大小写加下划线，+表示一次及以上，*表示任意次。
+
+1527. Patients With a Condition
+like + or，两种可能性分析清楚就好了。
+
+1543. Fix Product Name Format
+trim函数 + lower函数 + date_format函数 + count函数 + group by + order by，这道题关键是用数字表示列的妙用。
+
+1565. Unique Orders and Customers Per Month
+date_format函数 + count函数 + distinct的妙用 + group by，这是一道简单的综合运用的题目。'%Y-%m'大写M是英文月，小写m是数字月，分钟是i，容易混淆。
+
+1571. Warehouse Manager
+left outer join + group by + sum函数，这是一道偏数学的简单题。
+
+1581. Customer Who Visited but Did Not Make Any Transactions
+left outer join + group by + count函数，这道题就是考察一下逻辑，有where的写法啊和having的写法，having的写法我感觉效率的确低一点点，所以后面改where了。
+
+1587. Bank Account Summary II
+left outer join + group by + having + sum函数，合并统计后筛掉部分数据，最后外联上名字。
+
+1607. Sellers With No Sales
+left outer join + 日期like的妙用 + order by，虽然有三张表，但其实就用到两张就行。
+
+1623. All Valid Triplets That Can Represent a Country
+cross join，先全部可能性都产生，然后删除掉不可能的。
+
+1633. Percentage of Users Attended a Contest
+group by + order by + count函数 + round函数，其实只用了一张表，
+
+1661. Average Time of Process per Machine
+group by + if函数 + avg函数 + round函数，这是一道有趣的数学题目，千万不要忘记*2，不然avg算出来的会折半。
+
+1667. Fix Names in a Table
+substr函数 + upper函数 + lower函数 + order by，这是一道字符串处理的简单题目，但是千万不要忘记排序。
+
+1677. Product's Worth Over Invoices
+left outer join + group by + order by + coalesce函数 + sum函数，这是一道坑题目，题目没解释清楚，有一些产品没有在发票中出现也要列出来，所以就变成了面向测试用例的编程了。
+
+1683. Invalid Tweets
+length函数，这是所有题目里面最简单的一题。
+
+1693. Daily Leads and Partners
+group by + count函数 + distinct关键字的妙用，这道题目也是单表题，主要考察count和distinct的组合使用，要分清楚sum和count。
+
+1729. Find Followers Count
+group by + order by + count函数，这道题不用想太多，并没有重复的情况，所以不需要distinct。
+
+1731. The Number of Employees Which Report to Each Employee
+自连接 + group by + order by + count函数 + avg函数 + round函数，这里一定要能想到自连接，不然会比较抽象。
+
+1741. Find Total Time Spent by Each Employee
+group by + sum函数，group by时候要两个字段来确定分组。
+
+1757. Recyclable and Low Fat Products
+说不出什么点，应该是最简单的题目排前三的。
+
+1777. Product's Price for Each Store
+case when + group by + min函数，这道题因为值是唯一的，但是需要用聚合函数，所以就用max和min都可以。
+
+1789. Primary Department for Each Employee
+count() + over (partition by ... )窗口函数，这道题目也可以使用union把为空和为1的结果合并，也可以用子查询。
+
+1795. Rearrange Products Table
+union，行转列的典型题目。
+
+1809. Ad-Free Sessions
+left outer join + is null，用外连接把连不上的数据给挑出来。
+
+1821. Find Customers With Positive Revenue this Year
+没有什么知识点，最简单的题目之一。
+
+1853. Convert Date Format
+date_format函数，具体语句需要查询https://www.runoob.com/sql/func-date-format.html。
+
+1873. Calculate Special Bonus
+if函数 + % + not like + order by，一道逻辑诡异的简单题目。
+
+1890. The Latest Login in 2020
+group by + like日期的妙用 + max比较日期，日期类的基础好题。
+
+1939. Users That Actively Request Confirmation Messages
+date_add函数 + distinct关键字，这是一道日期类的基础题。
+
+1965. Employees With Missing Information
+left outer join + union + order，本质上是查找两个集合的交集的补集。
+
+1978. Employees Whose Manager Left the Company
+left outer join + order by，这道题我脑子短路了，忘记加上薪资小于30000的限制了，加上后一开始眼花也加成了3000。
+

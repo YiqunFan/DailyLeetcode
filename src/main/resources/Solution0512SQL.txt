@@ -1,0 +1,7 @@
+-- 0512. Game Play Analysis II
+select player_id, device_id
+from (
+         select player_id, device_id, row_number() over (partition boy player_id order by event_date asc) as rn
+         from Activity
+     ) temp
+where rn = 1;

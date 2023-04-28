@@ -1,0 +1,24 @@
+// 1813. Sentence Similarity III
+class Solution {
+    public boolean areSentencesSimilar(String sentence1, String sentence2) {
+        String[] words1 = sentence1.split(" ");
+        String[] words2 = sentence2.split(" ");
+        int left;
+        int right;
+        int shortLength = Math.min(words1.length, words2.length);
+        for (left = 0; left < shortLength; ++left) {
+            if (!words1[left].equals(words2[left])) {
+                break;
+            }
+        }
+        if (left == shortLength) {
+            return true;
+        }
+        for (right = 0; right < shortLength - left; ++right) {
+            if (!words1[words1.length - 1 - right].equals(words2[words2.length - 1 - right])) {
+                break;
+            }
+        }
+        return shortLength == left + right;
+    }
+}

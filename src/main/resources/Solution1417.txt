@@ -1,0 +1,39 @@
+// 1417. Reformat The String
+class Solution {
+    public String reformat(String s) {
+        int letterQuantity = 0;
+        for (char c : s.toCharArray()) {
+            letterQuantity += c / 97;
+        }
+        boolean fillDigit;
+        if (letterQuantity * 2 + 1 == s.length()) {
+            fillDigit = true;
+        } else if (letterQuantity * 2 - 1 == s.length()) {
+            fillDigit = false;
+        } else if (letterQuantity * 2 == s.length()) {
+            fillDigit = true;
+        } else {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        int indexDigit = 0;
+        int indexLetter = 0;
+        while (sb.length() < s.length()) {
+            if (fillDigit) {
+                while (s.charAt(indexDigit) > 96) {
+                    ++indexDigit;
+                }
+                sb.append(s.charAt(indexDigit));
+                ++indexDigit;
+            } else {
+                while (s.charAt(indexLetter) < 59) {
+                    ++indexLetter;
+                }
+                sb.append(s.charAt(indexLetter));
+                ++indexLetter;
+            }
+            fillDigit = !fillDigit;
+        }
+        return sb.toString();
+    }
+}

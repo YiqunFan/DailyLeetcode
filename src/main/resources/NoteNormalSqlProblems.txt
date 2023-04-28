@@ -1,0 +1,74 @@
+0176. Second Highest Salary
+第一道中等题，就把我难到了。
+一看题目以为挺简单，用个limit offset就可以了，结过根本不是那么回事。
+如果第二名不存在，不能简单用ifnull，而是要包一层再用ifnull。
+而且必须加上distinct，因为如果并列第一的话，第二就往后延了。
+
+0177. Nth Highest Salary
+第一次遇到要写函数返回值的题目。
+用到了窗口函数dense_rank，这是稠密排名。
+如果数据是500, 500 ,400, 300, 200这样的。
+要注意三个函数的区别
+rank:1,1,3,4,5
+dense_rank:1,1,2,3,4
+row_number:1,2,3,4,5
+稠密排名是我个人很喜欢使用的排名方法，只要有相同成绩，就可以美化其后每个人的名次。
+
+0178. Rank Scores
+竟然一回头又遇到了窗口函数dense_rank的题目了。
+这里的坑点在于字段命名是rank，但是rank也是函数名，所以as rank不行，要as 'rank'才可以。
+
+0180. Consecutive Numbers
+这道题可以使用窗口函数lead()和lag()，分别是向下和向上。
+lead(哪个字段向下，向下几格，如果为空则按什么来算)
+lag(哪个字段向上，向上几格，如果为空则按什么来算)
+
+0184. Department Highest Salary
+这道题目用到了窗口函数max()按照部门来进行分区。
+先查出要的所有数据，然后外层嵌套一层把题解查出来。
+
+0534. Game Play Analysis III
+这里用到了sum()，这里用到了窗口函数里聚合函数的特点。
+如果partition by player_id那么窗口里面的就是分组的总和了。
+但是如果是partition by player_id order by event_date asc，那么就是排序到这里的加总之和。
+很有趣的特性。
+
+0550. Game Play Analysis IV
+这道题用到了date_add()，并且第一次用到了两个元素的in。
+两个元素的in是很有趣的写法，必须一行上的两个元素都符合才可以通过。
+其它还用了round和count的一些简单计算。
+
+0570. Managers with at Least 5 Direct Reports
+这道题总体不难，就是用了group by + having的组合，然后当做子查询。
+
+0574. Winning Candidate
+这道题也是用到了子查询，将子查询的结果用作inner join来筛选。
+取第一名这种主要用到了limit子句，用例比较简单保证了第一名只有一个。
+
+0578. Get Highest Answer Rate Question
+这道题就是需要排序，先group by后就完成了分组。
+接下来聚合函数sum就可以在order by子句中妙用了。
+
+0580. Count Student Number in Departments
+在中等题中算比较简单的题目，搞清楚到底哪个是left表哪个是right表就行。
+用到了group by，这里有count函数的妙用，最后千万不要忘记排个序。
+
+0585. Investments in 2016
+这道题就是窗口函数count的使用，partition的时候要注意两个字段一起分区可以使用concat函数来变魔术。
+其余的sum函数和round函数就是很基础的使用。
+
+0602. Friend Requests II: Who Has the Most Friends
+这道题用到了union all，这个是不去重的。所以查出来之后就可以方便统计了。
+
+
+
+
+
+
+
+
+
+
+
+
+

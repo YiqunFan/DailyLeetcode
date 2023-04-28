@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1253. Reconstruct a 2-Row Binary Matrix
+class Solution {
+    public List<List<Integer>> reconstructMatrix(int upper, int lower, int[] colsum) {
+        int total = 0;
+        for (int col : colsum) {
+            total += col;
+        }
+        List<List<Integer>> ans = new ArrayList<>();
+        if (total != upper + lower) return ans;
+        List<Integer> up = new ArrayList<>();
+        List<Integer> down = new ArrayList<>();
+        for (int col : colsum) {
+            if (col == 2) {
+                up.add(1);
+                down.add(1);
+                --upper;
+                --lower;
+            } else {
+                up.add(0);
+                down.add(0);
+            }
+        }
+        if (upper < 0) return new ArrayList<>();
+        if (lower < 0) return new ArrayList<>();
+        for (int i = 0; i < colsum.length; ++i) {
+            if (colsum[i] == 1) {
+                if (upper > 0) {
+                    up.set(i, 1);
+                    --upper;
+                } else {
+                    down.set(i, 1);
+                }
+            }
+        }
+        ans.add(up);
+        ans.add(down);
+        return ans;
+    }
+}

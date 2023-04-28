@@ -1,0 +1,15 @@
+// 1860. Incremental Memory Leak
+class Solution {
+    public int[] memLeak(int memory1, int memory2) {
+        int time = 1;
+        while (memory1 >= time || memory2 >= time) {
+            if (memory2 > memory1) {
+                memory2 -= time;
+            } else {
+                memory1 -= time;
+            }
+            ++time;
+        }
+        return new int[]{time, memory1, memory2};
+    }
+}

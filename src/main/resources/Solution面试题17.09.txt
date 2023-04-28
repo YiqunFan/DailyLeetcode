@@ -1,0 +1,18 @@
+// 面试题 17.09. Get Kth Magic Number LCCI
+class Solution {
+    public int getKthMagicNumber(int k) {
+        int[] magicNumbers = new int[k + 1];
+        magicNumbers[1] = 1;
+        int pointer3 = 1;
+        int pointer5 = 1;
+        int pointer7 = 1;
+        for (int i = 2; i <= k; ++i) {
+            int min = Math.min(Math.min(magicNumbers[pointer3] * 3, magicNumbers[pointer5] * 5), magicNumbers[pointer7] * 7);
+            if (min == magicNumbers[pointer3] * 3) ++pointer3;
+            if (min == magicNumbers[pointer5] * 5) ++pointer5;
+            if (min == magicNumbers[pointer7] * 7) ++pointer7;
+            magicNumbers[i] = min;
+        }
+        return magicNumbers[k];
+    }
+}

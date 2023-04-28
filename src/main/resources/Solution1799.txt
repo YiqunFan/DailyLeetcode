@@ -1,0 +1,30 @@
+// 1799. Maximize Score After N Operations
+class Solution {
+    public int maxScore(int[] nums) {
+        int len = nums.length;
+        int[] memo = new int[1 << len];
+        return helper(nums, len, 1, 0, memo);
+    }
+
+    private int helper(int[] nums, int len, int operations, int mask, int[] memo) {
+        if (operations > (len / 2)) return 0;
+        if (memo[mask] != 0) return memo[mask];
+        int ret = 0;
+        for (int i = 0; i < len; ++i) {
+            if ((mask & (1 << i)) != 0) continue;
+            for (int j = i + 1; j < len; ++j) {
+                if ((mask & (1 << j)) != 0) continue;
+                int newMask = mask | (1 << i) | (1 << j);
+                int score = operations * gcd(nums[i], nums[j]);
+                ret = Math.max(ret, score + helper(nums, len, operations + 1, newMask, memo));
+            }
+        }
+        memo[mask] = ret;
+        return ret;
+    }
+
+    private int gcd(int a, int b) {
+        if (b == 0) return a;
+        return gcd(b, a % b);
+    }
+}

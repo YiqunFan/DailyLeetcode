@@ -1,0 +1,30 @@
+// 1774. Closest Dessert Cost
+class Solution {
+    int ans = Integer.MAX_VALUE;
+    int minDistanceToTarget = Integer.MAX_VALUE;
+
+    public int closestCost(int[] baseCosts, int[] toppingCosts, int target) {
+        for (int baseCost : baseCosts) {
+            addTopping(baseCost, 0, toppingCosts, target);
+        }
+        return ans;
+    }
+
+    private void addTopping(int cost, int index, int[] toppingCosts, int target) {
+        int distanceToTarget = Math.abs(cost - target);
+        if (distanceToTarget < minDistanceToTarget) {
+            ans = cost;
+            minDistanceToTarget = distanceToTarget;
+        } else if (distanceToTarget == minDistanceToTarget) {
+            if (cost < ans) {
+                ans = cost;
+            }
+        }
+        if (cost > target || index >= toppingCosts.length) {
+            return;
+        }
+        addTopping(cost, index + 1, toppingCosts, target);
+        addTopping(cost + toppingCosts[index], index + 1, toppingCosts, target);
+        addTopping(cost + toppingCosts[index] * 2, index + 1, toppingCosts, target);
+    }
+}

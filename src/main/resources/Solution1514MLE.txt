@@ -1,0 +1,40 @@
+import java.util.HashSet;
+
+// 1514. Path with Maximum Probability
+class Solution {
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+        double[][] succProbs = new double[n][n];
+        for (int i = 0; i < succProb.length; ++i) {
+            succProbs[edges[i][0]][edges[i][1]] = succProb[i];
+            succProbs[edges[i][1]][edges[i][0]] = succProb[i];
+        }
+        double[] maxProb = new double[n];
+        maxProb[start] = 1.0;
+        int currentNode = start;
+        HashSet<Integer> visited = new HashSet<>();
+        visited.add(start);
+        while (!visited.contains(end)) {
+            double currentProb = maxProb[currentNode];
+            for (int i = 0; i < n; ++i) {
+                if (!visited.contains(i)) {
+                    double prob = currentProb * succProbs[currentNode][i];
+                    if (prob > maxProb[i]) {
+                        maxProb[i] = prob;
+                    }
+                }
+            }
+            double maxProbWithoutVisited = 0.0;
+            for (int i = 0; i < n; ++i) {
+                if (!visited.contains(i)) {
+                    if (maxProb[i] > maxProbWithoutVisited) {
+                        maxProbWithoutVisited = maxProb[i];
+                        currentNode = i;
+                    }
+                }
+            }
+            visited.add(currentNode);
+            if (maxProbWithoutVisited == 0.0) break;
+        }
+        return maxProb[end];
+    }
+}

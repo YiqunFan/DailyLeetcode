@@ -1,0 +1,5 @@
+-- 1571. Warehouse Manager
+select W.name as WAREHOUSE_NAME, sum(W.units * P.Width * P.Length * P.Height) as VOLUME
+from Warehouse W
+         left outer join Products P on W.product_id = P.product_id
+group by W.name;

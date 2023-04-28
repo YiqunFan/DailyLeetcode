@@ -1,0 +1,24 @@
+import java.util.Arrays;
+
+// 0899. Orderly Queue
+class Solution {
+    public String orderlyQueue(String s, int k) {
+        if (k == 1) {
+            String ans = s;
+            StringBuilder sb = new StringBuilder(s);
+            int loop = s.length();
+            while (--loop > 0) {
+                sb.append(sb.charAt(0)).deleteCharAt(0);
+                if (sb.toString().compareTo(ans) < 0) {
+                    ans = sb.toString();
+                }
+            }
+            return ans;
+        } else {
+            char[] charArray = s.toCharArray();
+            Arrays.sort(charArray);
+            s = String.valueOf(charArray);
+            return s;
+        }
+    }
+}

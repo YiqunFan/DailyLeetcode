@@ -1,0 +1,40 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+// 0244. Shortest Word Distance II
+class WordDistance {
+    HashMap<String, ArrayList<Integer>> hashMap;
+
+    public WordDistance(String[] wordsDict) {
+        hashMap = new HashMap<>();
+        int n = wordsDict.length;
+        for (int i = 0; i < n; ++i) {
+            if (hashMap.containsKey(wordsDict[i])) {
+                ArrayList<Integer> subList = hashMap.get(wordsDict[i]);
+                subList.add(i);
+            } else {
+                ArrayList<Integer> subList = new ArrayList<>();
+                subList.add(i);
+                hashMap.put(wordsDict[i], subList);
+            }
+        }
+    }
+
+    public int shortest(String word1, String word2) {
+        ArrayList<Integer> subList1 = hashMap.get(word1);
+        ArrayList<Integer> subList2 = hashMap.get(word2);
+        int i = 0;
+        int j = 0;
+        int ret = Math.abs(subList1.get(0) - subList2.get(0));
+        while (i < subList1.size() && j < subList2.size()) {
+            if (subList1.get(i) < subList2.get(j)) {
+                ret = Math.min(ret, subList2.get(j) - subList1.get(i));
+                ++i;
+            } else {
+                ret = Math.min(ret, subList1.get(i) - subList2.get(j));
+                ++j;
+            }
+        }
+        return ret;
+    }
+}

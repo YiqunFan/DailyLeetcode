@@ -1,0 +1,27 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 1814. Count Nice Pairs in an Array
+class Solution {
+    public int countNicePairs(int[] nums) {
+        Map<Integer, Integer> selfMinusReverse = new HashMap<>();
+        for (int num : nums) {
+            int diff = num - reverse(num);
+            selfMinusReverse.put(diff, selfMinusReverse.getOrDefault(diff, 0) + 1);
+        }
+        long ans = 0L;
+        for (Map.Entry<Integer, Integer> entry : selfMinusReverse.entrySet()) {
+            ans += (long) entry.getValue() * (entry.getValue() - 1) / 2;
+        }
+        return (int) (ans % 1000000007L);
+    }
+
+    private int reverse(int num) {
+        int res = 0;
+        while (num > 0) {
+            res = res * 10 + num % 10;
+            num /= 10;
+        }
+        return res;
+    }
+}

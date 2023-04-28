@@ -1,0 +1,31 @@
+// 0007. Reverse Integer
+class Solution {
+    public int reverse(int x) {
+        if (x == 0 || x == -2147483648) return 0;
+        boolean negative = false;
+        long y = (long) x;
+        if (x < 0) {
+            negative = true;
+            y *= -1;
+        }
+        int[] digits = new int[12];
+        int left = 0;
+        int right = 0;
+        while (y != 0) {
+            digits[left] = (int) (y % 10);
+            ++left;
+            y /= 10;
+        }
+        while (digits[right] == 0) {
+            ++right;
+        }
+        for (int i = right; i < left; ++i) {
+            y *= 10;
+            y += digits[i];
+        }
+        if (negative) y *= -1;
+        if (y > 2147483647) return 0;
+        if (y < -2147483648) return 0;
+        return (int) y;
+    }
+}

@@ -1,0 +1,19 @@
+// 1422. Maximum Score After Splitting a String
+class Solution {
+    public int maxScore(String s) {
+        char[] chars = s.toCharArray();
+        int score = 0;
+        for (char c : chars) {
+            score += c - 48;
+        }
+        score += 97 - chars[0] * 2;
+        int maxScore = score;
+        for (int i = 1; i < chars.length - 1; ++i) {
+            score += 97 - chars[i] * 2;
+            if (score > maxScore) {
+                maxScore = score;
+            }
+        }
+        return maxScore;
+    }
+}

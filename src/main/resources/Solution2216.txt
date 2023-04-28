@@ -1,0 +1,19 @@
+// 2216. Minimum Deletions to Make Array Beautiful
+class Solution {
+    public int minDeletion(int[] nums) {
+        int len = nums.length;
+        int del = 0;
+        int previous = -1;
+        boolean odd = false;
+        for (int i = 0; i < len; ++i) {
+            if (odd && nums[i] == previous) {
+                ++del;
+            } else {
+                previous = nums[i];
+                odd = !odd;
+            }
+        }
+        if (odd) ++del;
+        return del;
+    }
+}

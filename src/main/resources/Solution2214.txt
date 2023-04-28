@@ -1,0 +1,15 @@
+// 2214. Minimum Health to Beat Game
+class Solution {
+    public long minimumHealth(int[] damage, int armor) {
+        long ans = 0L;
+        int maxDamage = 0;
+        for (int d : damage) {
+            ans += d;
+            if (d > maxDamage) {
+                maxDamage = d;
+            }
+        }
+        if (maxDamage > armor) return ans - armor + 1;
+        return ans - maxDamage + 1;
+    }
+}

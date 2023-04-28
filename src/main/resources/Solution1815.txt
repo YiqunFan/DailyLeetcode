@@ -1,0 +1,39 @@
+import java.util.HashMap;
+
+// 1815. Maximum Number of Groups Getting Fresh Donuts
+class Solution {
+    public int maxHappyGroups(int batchSize, int[] groups) {
+        int n = groups.length;
+        long[] count = new long[batchSize];
+        for (int group : groups) {
+            ++count[group % batchSize];
+        }
+        long state = 0L;
+        for (int i = 0; i < batchSize; ++i) {
+            state += (count[i] << (i * 5));
+        }
+        HashMap<Long, Integer> memo = new HashMap<>();
+        return dfs(state, 0, 0, batchSize, n, memo);
+    }
+
+    private int dfs(long state, int prefixSum, int i, int batchSize, int n, HashMap<Long, Integer> memo) {
+        if (i == n) {
+            return 0;
+        }
+        if (memo.containsKey(state)) {
+            return memo.get(state);
+        }
+        int ret = 0;
+        int bonus = (prefixSum % batchSize) == 0 ? 1 : 0;
+        for (int j = 0; j < batchSize; ++j) {
+            if ((state >> (j * 5)) % 32 == 0) {
+                continue;
+            }
+            state -= 1L << (j * 5);
+            ret = Math.max(ret, dfs(state, (prefixSum + j) % batchSize, i + 1, batchSize, n, memo));
+            state += 1L << (j * 5);
+        }
+        memo.put(state, ret + bonus);
+        return ret + bonus;
+    }
+}

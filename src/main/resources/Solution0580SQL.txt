@@ -1,0 +1,6 @@
+-- 0580. Count Student Number in Departments
+select D.dept_name, count(S.student_id) as student_number
+from Department D
+left outer join Student S on D.dept_id = S.dept_id
+group by D.dept_name
+order by 2 desc, 1 asc;

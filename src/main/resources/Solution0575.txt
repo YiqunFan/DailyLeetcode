@@ -1,0 +1,11 @@
+import java.util.HashSet;
+
+// 0575. Distribute Candies
+class Solution {
+    public int distributeCandies(int[] candyType) {
+        HashSet<Integer> hashSet = new HashSet<>();
+        for (int candy : candyType) hashSet.add(candy);
+        if (hashSet.size() > candyType.length / 2) return candyType.length / 2;
+        return hashSet.size();
+    }
+}

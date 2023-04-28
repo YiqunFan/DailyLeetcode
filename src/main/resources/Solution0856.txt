@@ -1,0 +1,34 @@
+// 0856. Score of Parentheses
+class Solution {
+    public int scoreOfParentheses(String s) {
+        char[] parentheses = s.toCharArray();
+        int[] stack = new int[25];
+        int pointer = -1;
+        for (char c : parentheses) {
+            if (c == '(') {
+                ++pointer;
+                stack[pointer] = 0;
+            } else if (stack[pointer] == 0) {
+                --pointer;
+                if (pointer == -1 || stack[pointer] == 0) {
+                    ++pointer;
+                    stack[pointer] = 1;
+                } else {
+                    stack[pointer] = stack[pointer] + 1;
+                }
+            } else {
+                int top = stack[pointer];
+                --pointer;
+                --pointer;
+                if (pointer == -1 || stack[pointer] == 0) {
+                    ++pointer;
+                    stack[pointer] = top * 2;
+                } else {
+                    top = top * 2 + stack[pointer];
+                    stack[pointer] = top;
+                }
+            }
+        }
+        return stack[0];
+    }
+}

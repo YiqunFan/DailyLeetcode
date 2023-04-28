@@ -1,0 +1,34 @@
+// 1861. Rotating the Box
+class Solution {
+    public char[][] rotateTheBox(char[][] box) {
+        int width = box.length;
+        int height = box[0].length;
+        char[][] ans = new char[height][width];
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                ans[j][width - 1 - i] = box[i][j];
+            }
+        }
+        for (int j = 0; j < width; ++j) {
+            int down = height - 1;
+            while (down > 0) {
+                while (down > 0 && '.' != ans[down][j]) {
+                    --down;
+                }
+                if (down == 0) break;
+                int up = down - 1;
+                while (up >= 0 && '.' == ans[up][j]) {
+                    --up;
+                }
+                if (up < 0) break;
+                if (ans[up][j] == '*') {
+                    down = up - 1;
+                } else {
+                    ans[down][j] = '#';
+                    ans[up][j] = '.';
+                }
+            }
+        }
+        return ans;
+    }
+}

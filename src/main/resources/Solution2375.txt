@@ -1,0 +1,26 @@
+import java.util.Stack;
+
+// 2375. Construct Smallest Number From DI String
+class Solution {
+    public String smallestNumber(String pattern) {
+        StringBuilder sb = new StringBuilder();
+        Stack<Integer> stack = new Stack<>();
+        int fill = 1;
+        for (char c : pattern.toCharArray()) {
+            if (c == 'D') {
+                stack.push(fill);
+            } else {
+                sb.append(fill);
+                while (!stack.isEmpty()) {
+                    sb.append(stack.pop());
+                }
+            }
+            ++fill;
+        }
+        sb.append(fill);
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+        return sb.toString();
+    }
+}

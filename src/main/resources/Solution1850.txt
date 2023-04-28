@@ -1,0 +1,54 @@
+// 1850. Minimum Adjacent Swaps to Reach the Kth Smallest Number
+class Solution {
+    public int getMinSwaps(String num, int k) {
+        char[] origin = num.toCharArray();
+        char[] charArray = origin.clone();
+        int len = charArray.length;
+        while (k > 0) {
+            --k;
+            int i = len - 2;
+            while (i >= 0 && charArray[i] >= charArray[i + 1]) {
+                --i;
+            }
+            if (i >= 0) {
+                int j = len - 1;
+                while (charArray[j] <= charArray[i]) {
+                    --j;
+                }
+                swap(charArray, i, j);
+            }
+            reverse(charArray, i + 1, len - 1);
+        }
+        int ans = 0;
+        for (int i = 0; i < len; ++i) {
+            if (origin[i] != charArray[i]) {
+                int j = i + 1;
+                while (charArray[i] != origin[j]) {
+                    ++j;
+                }
+                while (j > i) {
+                    char t = origin[j];
+                    origin[j] = origin[j - 1];
+                    origin[j - 1] = t;
+                    --j;
+                    ++ans;
+                }
+            }
+        }
+        return ans;
+    }
+
+    public void swap(char[] chars, int x, int y) {
+        char t = chars[x];
+        chars[x] = chars[y];
+        chars[y] = t;
+    }
+
+    public void reverse(char[] chars, int i, int j) {
+        while (i < j) {
+            swap(chars, i, j);
+            ++i;
+            --j;
+        }
+    }
+}

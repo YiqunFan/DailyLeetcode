@@ -1,0 +1,23 @@
+import java.util.Stack;
+
+// 0907. Sum of Subarray Minimums
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        final long MOD = 1000000007;
+        int n = arr.length;
+        int[] arr_0 = new int[n + 1];
+        System.arraycopy(arr, 0, arr_0, 0, n);
+        arr_0[n] = 0;
+        Stack<Integer> stack = new Stack<>();
+        long ans = 0L;
+        for (int i = 0; i <= n; ++i) {
+            while (!stack.isEmpty() && arr_0[stack.peek()] > arr_0[i]) {
+                int mid = stack.pop();
+                int left = stack.isEmpty() ? -1 : stack.peek();
+                ans = (ans + (long) (i - mid) * (mid - left) * arr_0[mid]) % MOD;
+            }
+            stack.push(i);
+        }
+        return (int) ans;
+    }
+}

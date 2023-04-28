@@ -1,0 +1,40 @@
+import java.util.Arrays;
+
+// 0475. Heaters
+class Solution {
+    public int findRadius(int[] houses, int[] heaters) {
+        Arrays.sort(houses);
+        Arrays.sort(heaters);
+        int left = 0;
+        int right = Math.max(houses[houses.length - 1], heaters[heaters.length - 1]);
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (couldCover(mid, houses, heaters)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    private boolean couldCover(int radius, int[] houses, int[] heaters) {
+        int j = 0;
+        for (int i = 0; i < houses.length; ++i) {
+            if (houses[i] < heaters[j]) {
+                if (houses[i] < heaters[j] - radius) {
+                    return false;
+                }
+            } else if (houses[i] > heaters[j]) {
+                if (houses[i] > heaters[j] + radius) {
+                    ++j;
+                    if (j == heaters.length) {
+                        return false;
+                    }
+                    --i;
+                }
+            }
+        }
+        return true;
+    }
+}

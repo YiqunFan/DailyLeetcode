@@ -1,0 +1,16 @@
+// 2348. Number of Zero-Filled Subarrays
+class Solution {
+    public long zeroFilledSubarray(int[] nums) {
+        long ans = 0L;
+        int consecutiveZeroes = 0;
+        for (int num : nums) {
+            if (num == 0) {
+                ++consecutiveZeroes;
+                ans += consecutiveZeroes;
+            } else {
+                consecutiveZeroes = 0;
+            }
+        }
+        return ans;
+    }
+}

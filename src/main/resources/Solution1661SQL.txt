@@ -1,0 +1,4 @@
+-- 1661. Average Time of Process per Machine
+select machine_id, round(avg(if(activity_type = 'end', timestamp, timestamp * -1)) * 2, 3) as processing_time
+from Activity
+group by machine_id;

@@ -1,0 +1,18 @@
+// 0940. Distinct Subsequences II
+class Solution {
+    public int distinctSubseqII(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        final int MOD = 1000000007;
+        int[] lastTimeIncrementByLetter = new int[123];
+        int[] subsequences = new int[len];
+        subsequences[0] = 2;
+        lastTimeIncrementByLetter[chars[0]] = 1;
+        for (int i = 1; i < len; ++i) {
+            int previous = subsequences[i - 1];
+            subsequences[i] = (previous * 2 % MOD - lastTimeIncrementByLetter[chars[i]] % MOD + MOD) % MOD;
+            lastTimeIncrementByLetter[chars[i]] = previous;
+        }
+        return subsequences[len - 1] - 1;
+    }
+}

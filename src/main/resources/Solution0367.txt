@@ -1,0 +1,18 @@
+// 0367. Valid Perfect Square
+class Solution {
+    public boolean isPerfectSquare(int num) {
+        int left = 0;
+        int right = 46340;
+        while (left <= right) {
+            int middle = (left + right) / 2;
+            if (middle * middle > num) {
+                right = middle - 1;
+            } else if (middle * middle < num) {
+                left = middle + 1;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+}

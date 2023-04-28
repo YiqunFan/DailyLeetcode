@@ -1,0 +1,75 @@
+import java.util.*;
+
+// 0652. Find Duplicate Subtrees
+class Solution {
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        HashMap<String, ArrayList<TreeNode>> hashMap = new HashMap<>();
+        Queue<TreeNode> q = new LinkedList<>();
+        if (root.left != null) q.add(root.left);
+        if (root.right != null) q.add(root.right);
+        boolean hasNext = true;
+        while (hasNext) {
+            hasNext = false;
+            int size = q.size();
+            for (int i = 0; i < size; ++i) {
+                TreeNode front = q.poll();
+                String s = binaryTree2String(front);
+                if (hashMap.containsKey(s)) {
+                    hashMap.get(s).add(front);
+                } else {
+                    ArrayList<TreeNode> treeNodeArrayList = new ArrayList<>();
+                    treeNodeArrayList.add(front);
+                    hashMap.put(s, treeNodeArrayList);
+                }
+                if (front.left != null) {
+                    q.offer(front.left);
+                    hasNext = true;
+                }
+                if (front.right != null) {
+                    q.offer(front.right);
+                    hasNext = true;
+                }
+            }
+        }
+        List<TreeNode> ans = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<TreeNode>> e : hashMap.entrySet()) {
+            if (e.getValue().size() > 1) {
+                ans.add(e.getValue().get(0));
+            }
+        }
+        return ans;
+    }
+
+    private String binaryTree2String(TreeNode node) {
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(node);
+        boolean hasNext = true;
+        while (hasNext) {
+            hasNext = false;
+            int size = q.size();
+            for (int i = 0; i < size; ++i) {
+                TreeNode front = q.poll();
+                if (front == null) {
+                    sb.append('n');
+                } else {
+                    sb.append('e');
+                    sb.append(front.val);
+                    if (front.left == null) {
+                        sb.append('l');
+                    } else {
+                        q.offer(front.left);
+                        hasNext = true;
+                    }
+                    if (front.right == null) {
+                        sb.append('r');
+                    } else {
+                        q.offer(front.right);
+                        hasNext = true;
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,65 @@
+// 1895. Largest Magic Square
+class Solution {
+    int m;
+    int n;
+    int[][] prefixSumByRow;
+    int[][] prefixSumByCol;
+
+    public int largestMagicSquare(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        prefixSumByRow = new int[m][n + 1];
+        prefixSumByCol = new int[m + 1][n];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                prefixSumByRow[i][j + 1] = prefixSumByRow[i][j] + grid[i][j];
+            }
+        }
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                prefixSumByCol[i + 1][j] = prefixSumByCol[i][j] + grid[i][j];
+            }
+        }
+        int ans = 1;
+        int k = 2;
+        while (k <= Math.min(m, n)) {
+            OUTER:
+            for (int i = 0; i + k <= m; ++i) {
+                for (int j = 0; j + k <= n; ++j) {
+                    if (isMagicCube(i, j, k, grid)) {
+                        ans = k;
+                        break OUTER;
+                    }
+                }
+            }
+            ++k;
+        }
+        return ans;
+    }
+
+    private boolean isMagicCube(int i, int j, int k, int[][] grid) {
+        int standard = prefixSumByRow[i][j + k] - prefixSumByRow[i][j];
+        for (int a = 0; a < k; ++a) {
+            if (prefixSumByRow[i + a][j + k] - prefixSumByRow[i + a][j] != standard) {
+                return false;
+            }
+        }
+        for (int a = 0; a < k; ++a) {
+            if (prefixSumByCol[i + k][j + a] - prefixSumByCol[i][j + a] != standard) {
+                return false;
+            }
+        }
+        int diagonal = 0;
+        for (int a = 0; a < k; ++a) {
+            diagonal += grid[i + a][j + a];
+        }
+        if (diagonal != standard) {
+            return false;
+        }
+        diagonal = 0;
+        for (int a = 0; a < k; ++a) {
+            diagonal += grid[i + k - 1 - a][j + a];
+        }
+        return diagonal == standard;
+    }
+}

@@ -1,0 +1,22 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0539. Minimum Time Difference
+class Solution {
+    public int findMinDifference(List<String> timePoints) {
+        ArrayList<Integer> timesByMinute = new ArrayList<>();
+        for (String timePoint : timePoints) {
+            int time = Integer.parseInt(timePoint.substring(0, 2)) * 60 + Integer.parseInt(timePoint.substring(3, 5));
+            timesByMinute.add(time);
+        }
+        timesByMinute.sort((t1, t2) -> t1 - t2);
+        timesByMinute.add(timesByMinute.get(0) + 1440);
+        int ans = 1440;
+        for (int i = 1; i < timesByMinute.size(); ++i) {
+            if (timesByMinute.get(i) - timesByMinute.get(i - 1) < ans) {
+                ans = timesByMinute.get(i) - timesByMinute.get(i - 1);
+            }
+        }
+        return ans;
+    }
+}

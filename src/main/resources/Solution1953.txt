@@ -1,0 +1,24 @@
+// 1953. Maximum Number of Weeks for Which You Can Work
+class Solution {
+    public long numberOfWeeks(int[] milestones) {
+        int length = milestones.length;
+        if (length == 1) {
+            return 1L;
+        } else {
+            long max = 0L;
+            long total = 0L;
+            for (int milestone : milestones) {
+                total += milestone;
+                if (milestone > max) max = milestone;
+            }
+            long other = total - max;
+            if (max > other) {
+                return other * 2 + 1;
+            } else if (max == other) {
+                return max * 2;
+            } else {
+                return total;
+            }
+        }
+    }
+}

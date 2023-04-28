@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+
+// 2306. Naming a Company
+class Solution {
+    public long distinctNames(String[] ideas) {
+        long ans = 0;
+        ArrayList<HashSet<String>> setFor26 = new ArrayList<>();
+        for (int i = 0; i < 26; ++i) {
+            setFor26.add(new HashSet<>());
+        }
+        for (String idea : ideas) {
+            setFor26.get(idea.charAt(0) - 'a').add(idea.substring(1));
+        }
+        for (int i = 0; i < 26; ++i) {
+            HashSet<String> hashSet1 = setFor26.get(i);
+            for (String idea1 : hashSet1) {
+                for (int j = i; j < 26; ++j) {
+                    HashSet<String> hashSet2 = setFor26.get(j);
+                    if (!hashSet2.contains(idea1)) {
+                        for (String idea2 : hashSet2) {
+                            if (!hashSet1.contains(idea2)) {
+                                ans += 2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}

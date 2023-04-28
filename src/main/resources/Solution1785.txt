@@ -1,0 +1,14 @@
+// 1785. Minimum Elements to Add to Form a Given Sum
+class Solution {
+    public int minElements(int[] nums, int limit, int goal) {
+        long sum = 0L;
+        for (int num : nums) {
+            sum += num;
+        }
+        long diff = Math.abs(sum - goal);
+        if (diff == 0) {
+            return 0;
+        }
+        return (int) ((diff - 1) / limit + 1);
+    }
+}

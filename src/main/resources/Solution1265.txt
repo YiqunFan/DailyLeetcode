@@ -1,0 +1,8 @@
+// 1265. Print Immutable Linked List in Reverse
+class Solution {
+    public void printLinkedListInReverse(ImmutableListNode head) {
+        if (null == head) return;
+        printLinkedListInReverse(head.getNext());
+        head.printValue();
+    }
+}

@@ -1,0 +1,75 @@
+import java.util.*;
+
+// 0864. Shortest Path to Get All Keys
+class Solution {
+    public int shortestPathAllKeys(String[] grid) {
+        int sx = -1;
+        int sy = -1;
+        int m = grid.length;
+        int n = grid[0].length();
+        int maxKey = -1;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                char c = grid[i].charAt(j);
+                if (c == '@') {
+                    sx = i;
+                    sy = j;
+                }
+                if (c >= 'a' && c <= 'f') {
+                    maxKey = Math.max(c - 'a' + 1, maxKey);
+                }
+            }
+        }
+        State start = new State(0, sx, sy);
+        Queue<State> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        visited.add(0 + " " + sx + " " + sy);
+        queue.offer(start);
+        int[][] directions = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int step = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; ++i) {
+                State cur = queue.poll();
+                if (cur.keys == (1 << maxKey) - 1) {
+                    return step;
+                }
+                for (int[] direction : directions) {
+                    int nx = cur.x + direction[0];
+                    int ny = cur.y + direction[1];
+                    int keys = cur.keys;
+                    if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
+                        char c = grid[nx].charAt(ny);
+                        if (c == '#') {
+                            continue;
+                        }
+                        if (c >= 'a' && c <= 'f') {
+                            keys |= 1 << (c - 'a');
+                        }
+                        if (c >= 'A' && c <= 'F' && ((keys >> (c - 'A')) & 1) == 0) {
+                            continue;
+                        }
+                        if (!visited.contains(keys + " " + nx + " " + ny)) {
+                            visited.add(keys + " " + nx + " " + ny);
+                            queue.offer(new State(keys, nx, ny));
+                        }
+                    }
+                }
+            }
+            ++step;
+        }
+        return -1;
+    }
+}
+
+class State {
+    int keys;
+    int x;
+    int y;
+
+    State(int keys, int x, int y) {
+        this.keys = keys;
+        this.x = x;
+        this.y = y;
+    }
+}

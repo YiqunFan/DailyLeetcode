@@ -1,0 +1,17 @@
+// 1827. Minimum Operations to Make the Array Increasing
+class Solution {
+    public int minOperations(int[] nums) {
+        int len = nums.length;
+        int ans = 0;
+        int current = nums[0];
+        for (int i = 1; i < len; ++i) {
+            ++current;
+            if (nums[i] < current) {
+                ans += current - nums[i];
+            } else {
+                current = nums[i];
+            }
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,23 @@
+// 1796. Second Largest Digit in a String
+class Solution {
+    public int secondHighest(String s) {
+        char[] charArray = s.toCharArray();
+        int len = charArray.length;
+        boolean[] digits = new boolean[10];
+        for (char c : charArray) {
+            if (c > 47 && c < 58) {
+                digits[c - 48] = true;
+            }
+        }
+        int kinds = 0;
+        for (int i = 9; i >= 0; --i) {
+            if (digits[i]) {
+                ++kinds;
+                if (kinds == 2) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+}

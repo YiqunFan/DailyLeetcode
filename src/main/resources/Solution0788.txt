@@ -1,0 +1,63 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+// 0788. Rotated Digits
+class Solution {
+    int[] check = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
+    int[][][] memo = new int[5][2][2];
+    List<Integer> digits = new ArrayList<Integer>();
+
+    public int rotatedDigits(int n) {
+        while (n != 0) {
+            digits.add(n % 10);
+            n /= 10;
+        }
+        Collections.reverse(digits);
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 2; ++j) {
+                for (int k = 0; k < 2; ++k) {
+                    memo[i][j][k] = -1;
+                }
+            }
+        }
+        return dfs(0, 1, 0);
+    }
+
+    public int dfs(int pos, int bound, int diff) {
+        if (pos == digits.size()) return diff;
+        if (memo[pos][bound][diff] != -1) return memo[pos][bound][diff];
+        int ret = 0;
+        if (bound == 0) {
+            for (int i = 0; i <= 9; ++i) {
+                if (check[i] != -1) {
+                    if (diff == 1 || check[i] == 1) {
+                        ret += dfs(pos + 1, 0, 1);
+                    } else {
+                        ret += dfs(pos + 1, 0, 0);
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i <= digits.get(pos); ++i) {
+                if (check[i] != -1) {
+                    if (digits.get(pos) == i) {
+                        if (diff == 1 || check[i] == 1) {
+                            ret += dfs(pos + 1, 1, 1);
+                        } else {
+                            ret += dfs(pos + 1, 1, 0);
+                        }
+                    } else {
+                        if (diff == 1 || check[i] == 1) {
+                            ret += dfs(pos + 1, 0, 1);
+                        } else {
+                            ret += dfs(pos + 1, 0, 0);
+                        }
+                    }
+                }
+            }
+        }
+        memo[pos][bound][diff] = ret;
+        return ret;
+    }
+}

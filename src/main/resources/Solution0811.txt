@@ -1,0 +1,39 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+// 0811. Subdomain Visit Count
+class Solution {
+    public List<String> subdomainVisits(String[] cpdomains) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for (String cpdomain : cpdomains) {
+            String[] splitted = cpdomain.split(" ");
+            int times = Integer.parseInt(splitted[0]);
+            String domain = splitted[1];
+            if (hashMap.containsKey(domain)) {
+                hashMap.put(domain, hashMap.get(domain) + times);
+            } else {
+                hashMap.put(domain, times);
+            }
+            int len = domain.length();
+            for (int i = 0; i < len; ++i) {
+                if ('.' == domain.charAt(i)) {
+                    String subdomain = domain.substring(i + 1, len);
+                    if (hashMap.containsKey(subdomain)) {
+                        hashMap.put(subdomain, hashMap.get(subdomain) + times);
+                    } else {
+                        hashMap.put(subdomain, times);
+                    }
+                }
+            }
+        }
+        List<String> ans = new LinkedList<>();
+        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(entry.getValue()).append(' ').append(entry.getKey());
+            ans.add(sb.toString());
+        }
+        return ans;
+    }
+}

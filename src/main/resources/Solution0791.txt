@@ -1,0 +1,24 @@
+// 0791. Custom Sort String
+class Solution {
+    public String customSortString(String order, String s) {
+        int[] lettersQuantity = new int[123];
+        for (char letter : s.toCharArray()) {
+            ++lettersQuantity[letter];
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char letter : order.toCharArray()) {
+            int quantity = lettersQuantity[letter];
+            lettersQuantity[letter] = 0;
+            for (int i = 0; i < quantity; ++i) {
+                sb.append(letter);
+            }
+        }
+        for (char c = 'a'; c <= 'z'; ++c) {
+            int quantity = lettersQuantity[c];
+            for (int i = 0; i < quantity; ++i) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}

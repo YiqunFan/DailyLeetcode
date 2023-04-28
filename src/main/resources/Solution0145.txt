@@ -1,0 +1,19 @@
+import java.util.LinkedList;
+import java.util.List;
+
+// 0145. Binary Tree Postorder Traversal
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        LinkedList<Integer> ans = new LinkedList<>();
+        postorder(root, ans);
+        return ans;
+    }
+
+    void postorder(TreeNode node, List<Integer> ans) {
+        if (node != null) {
+            postorder(node.left, ans);
+            postorder(node.right, ans);
+            ans.add(node.val);
+        }
+    }
+}

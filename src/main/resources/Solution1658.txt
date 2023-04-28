@@ -1,0 +1,32 @@
+// 1658. Minimum Operations to Reduce X to Zero
+class Solution {
+    public int minOperations(int[] nums, int x) {
+        int n = nums.length;
+        int left = -1;
+        int window = 0;
+        while (window < x) {
+            ++left;
+            if (left == n) {
+                return -1;
+            }
+            window += nums[left];
+        }
+        int minOp = 9999999;
+        if (window == x) minOp = left + 1;
+        int right = n;
+        while (left >= -1 && left < right) {
+            while (window > x && left >= 0) {
+                window -= nums[left];
+                --left;
+            }
+            if (window == x) {
+                int op = left + 1 + n - right;
+                minOp = Math.min(minOp, op);
+            }
+            --right;
+            if (right < 0) break;
+            window += nums[right];
+        }
+        return minOp == 9999999 ? -1 : minOp;
+    }
+}

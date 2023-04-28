@@ -1,0 +1,21 @@
+// 1700. Number of Students Unable to Eat Lunch
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        int circleStudents = 0;
+        int squareStudents = 0;
+        for (int student : students) {
+            if (student == 0) ++circleStudents;
+            else ++squareStudents;
+        }
+        for (int sandwich : sandwiches) {
+            if (sandwich == 0) {
+                if (circleStudents > 0) --circleStudents;
+                else return squareStudents;
+            } else {
+                if (squareStudents > 0) --squareStudents;
+                else return circleStudents;
+            }
+        }
+        return 0;
+    }
+}

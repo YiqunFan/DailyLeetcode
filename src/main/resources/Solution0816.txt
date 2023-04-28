@@ -1,0 +1,45 @@
+import java.util.LinkedList;
+import java.util.List;
+
+// 0816. Ambiguous Coordinates
+class Solution {
+    public List<String> ambiguousCoordinates(String s) {
+        List<String> ans = new LinkedList<>();
+        int len = s.length();
+        for (int mid = 2; mid < len - 1; ++mid) {
+            List<String> leftNumbers = generateValidNumbers(s.substring(1, mid));
+            List<String> rightNumbers = generateValidNumbers(s.substring(mid, len - 1));
+            for (String leftNumber : leftNumbers) {
+                for (String rightNumber : rightNumbers) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append('(').append(leftNumber).append(',').append(' ').append(rightNumber).append(')');
+                    ans.add(sb.toString());
+                }
+            }
+        }
+        return ans;
+    }
+
+    private List<String> generateValidNumbers(String number) {
+        int len = number.length();
+        List<String> ret = new LinkedList<>();
+        if (number.charAt(0) == '0') {
+            if (len == 1) {
+                ret.add("0");
+                return ret;
+            } else if (number.charAt(len - 1) != '0') {
+                ret.add("0." + number.substring(1, len));
+            }
+        } else {
+            ret.add(number);
+            if (number.charAt(len - 1) != '0') {
+                for (int i = 1; i < len; ++i) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(number.substring(0, i)).append('.').append(number.substring(i, len));
+                    ret.add(sb.toString());
+                }
+            }
+        }
+        return ret;
+    }
+}

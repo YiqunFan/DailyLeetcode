@@ -1,0 +1,7 @@
+-- 1495. Friendly Movies Streamed Last Month
+select distinct c.title
+from Content c
+         left outer join TVProgram t on t.content_id = c.content_id
+where t.program_date like '2020-06%'
+  and c.Kids_content = 'Y'
+  and c.content_type = 'Movies';

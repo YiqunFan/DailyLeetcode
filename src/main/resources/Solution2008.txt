@@ -1,0 +1,22 @@
+import java.util.Arrays;
+
+class Solution {
+    public long maxTaxiEarnings(int n, int[][] rides) {
+        Arrays.sort(rides, (int[] a, int[] b) -> a[1] - b[1]);
+        long[] maxEarnings = new long[n + 1];
+        int len = rides.length;
+        long ans = 0L;
+        for (int i = 0, j = 0; i <= n; ++i) {
+            maxEarnings[i] = ans;
+            while (j < len && i == rides[j][1]) {
+                long earn = rides[j][1] - rides[j][0] + rides[j][2] + +maxEarnings[rides[j][0]];
+                if (earn > maxEarnings[i]) {
+                    maxEarnings[i] = earn;
+                    ans = earn;
+                }
+                ++j;
+            }
+        }
+        return ans;
+    }
+}

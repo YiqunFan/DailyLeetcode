@@ -1,0 +1,22 @@
+// 0075. Sort Colors
+class Solution {
+    public void sortColors(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        int middle = 0;
+        while (middle <= right) {
+            if (nums[middle] == 0) {
+                nums[middle] = nums[left];
+                nums[left] = 0;
+                ++left;
+                ++middle;
+            } else if (nums[middle] == 2) {
+                nums[middle] = nums[right];
+                nums[right] = 2;
+                --right;
+            } else {
+                ++middle;
+            }
+        }
+    }
+}

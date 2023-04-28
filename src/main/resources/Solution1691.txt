@@ -1,0 +1,25 @@
+import java.util.Arrays;
+
+// 1691. Maximum Height by Stacking Cuboids
+class Solution {
+    public int maxHeight(int[][] cuboids) {
+        int n = cuboids.length;
+        for (int[] cuboid : cuboids) Arrays.sort(cuboid);
+        Arrays.sort(cuboids, (c1, c2) -> (c1[0] + c1[1] + c1[2]) - (c2[0] + c2[1] + c2[2]));
+        int ans = 0;
+        int[] maxHeights = new int[n];
+        for (int i = 0; i < n; ++i) {
+            maxHeights[i] = cuboids[i][2];
+            ans = Math.max(ans, maxHeights[i]);
+        }
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (cuboids[j][0] <= cuboids[i][0] && cuboids[j][1] <= cuboids[i][1] && cuboids[j][2] <= cuboids[i][2]) {
+                    maxHeights[i] = Math.max(maxHeights[i], maxHeights[j] + cuboids[i][2]);
+                }
+            }
+            ans = Math.max(ans, maxHeights[i]);
+        }
+        return ans;
+    }
+}

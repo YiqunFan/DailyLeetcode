@@ -1,0 +1,18 @@
+// 0915. Partition Array into Disjoint Intervals
+class Solution {
+    public int partitionDisjoint(int[] nums) {
+        int n = nums.length;
+        int leftMax = nums[0];
+        int alternate = nums[0];
+        int bound = 0;
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] < leftMax) {
+                leftMax = alternate;
+                bound = i;
+            } else {
+                alternate = Math.max(alternate, nums[i]);
+            }
+        }
+        return bound + 1;
+    }
+}

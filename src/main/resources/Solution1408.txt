@@ -1,0 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1408. String Matching in an Array
+class Solution {
+    public List<String> stringMatching(String[] words) {
+        List<String> ans = new ArrayList<>();
+        String allWords = String.join(",", words);
+        for (String word : words) {
+            if (allWords.indexOf(word) != allWords.lastIndexOf(word)) {
+                ans.add(word);
+            }
+        }
+        return ans;
+    }
+}

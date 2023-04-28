@@ -1,0 +1,20 @@
+// 0517. Super Washing Machines
+class Solution {
+    public int findMinMoves(int[] machines) {
+        int n = machines.length;
+        int sum = 0;
+        for (int machine : machines) {
+            sum += machine;
+        }
+        int avg = sum / n;
+        if (avg * n != sum) return -1;
+        int maxDiff = 0;
+        int leftSum = 0;
+        for (int machine : machines) {
+            machine = machine - avg;
+            leftSum += machine;
+            maxDiff = Math.max(maxDiff, Math.max(Math.abs(leftSum), machine));
+        }
+        return maxDiff;
+    }
+}

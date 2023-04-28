@@ -1,0 +1,35 @@
+import java.util.HashMap;
+import java.util.List;
+
+// 1807. Evaluate the Bracket Pairs of a String
+class Solution {
+    public String evaluate(String s, List<List<String>> knowledge) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (List<String> know : knowledge) {
+            hashMap.put(know.get(0), know.get(1));
+        }
+        StringBuilder sb = new StringBuilder();
+        char[] ca = s.toCharArray();
+        int len = ca.length;
+        int i = 0;
+        while (i < len) {
+            if (ca[i] == '(') {
+                ++i;
+                StringBuilder temp = new StringBuilder();
+                while (ca[i] != ')') {
+                    temp.append(ca[i]);
+                    ++i;
+                }
+                if (hashMap.containsKey(temp.toString())) {
+                    sb.append(hashMap.get(temp.toString()));
+                } else {
+                    sb.append('?');
+                }
+            } else {
+                sb.append(ca[i]);
+            }
+            ++i;
+        }
+        return sb.toString();
+    }
+}

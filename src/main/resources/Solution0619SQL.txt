@@ -1,0 +1,8 @@
+-- 0619. Biggest Single Number
+select max(num) as num
+from (
+         select num
+         from MyNumbers m
+         group by num
+         having count(num) < 2
+     ) temp;

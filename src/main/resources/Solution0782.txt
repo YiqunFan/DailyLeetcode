@@ -1,0 +1,81 @@
+// 0782. Transform to Chessboard
+class Solution {
+    public int movesToChessboard(int[][] board) {
+        int length = board.length;
+        int[] rawRow = new int[length];
+        int[] antiRow = new int[length];
+        int zeroInFirstRow = 0;
+        int oneInFirstRow = 0;
+        for (int i = 0; i < length; ++i) {
+            rawRow[i] = board[0][i];
+            antiRow[i] = 1 - rawRow[i];
+            if (rawRow[i] == 0) ++zeroInFirstRow;
+            else ++oneInFirstRow;
+        }
+        if (length % 2 == 0 && zeroInFirstRow != oneInFirstRow) return -1;
+        if (length % 2 == 1 && Math.abs(zeroInFirstRow - oneInFirstRow) != 1) return -1;
+        for (int i = 1; i < length; ++i) {
+            if (board[i][0] == rawRow[0]) {
+                for (int j = 0; j < length; ++j) {
+                    if (board[i][j] != rawRow[j]) return -1;
+                }
+            } else {
+                for (int j = 0; j < length; ++j) {
+                    if (board[i][j] != antiRow[j]) return -1;
+                }
+            }
+        }
+        int[] rawColumn = new int[length];
+        int[] antiColumn = new int[length];
+        int zeroInFirstColumn = 0;
+        int oneInFirstColumn = 0;
+        for (int i = 0; i < length; ++i) {
+            rawColumn[i] = board[i][0];
+            antiColumn[i] = 1 - rawColumn[i];
+            if (rawColumn[i] == 0) ++zeroInFirstColumn;
+            else ++oneInFirstColumn;
+        }
+        if (length % 2 == 0 && zeroInFirstColumn != oneInFirstColumn) return -1;
+        if (length % 2 == 1 && Math.abs(zeroInFirstColumn - oneInFirstColumn) != 1) return -1;
+        for (int i = 1; i < length; ++i) {
+            if (board[0][i] == rawColumn[0]) {
+                for (int j = 0; j < length; ++j) {
+                    if (board[j][i] != rawColumn[j]) return -1;
+                }
+            } else {
+                for (int j = 0; j < length; ++j) {
+                    if (board[j][i] != antiColumn[j]) return -1;
+                }
+            }
+        }
+        if (length % 2 == 1) {
+            int ans = 0;
+            int firstCell;
+            if (zeroInFirstRow - oneInFirstRow == 1) firstCell = 0;
+            else firstCell = 1;
+            for (int i = 0; i < length; i += 2) {
+                if (rawRow[i] != firstCell) ++ans;
+            }
+            if (zeroInFirstColumn - oneInFirstColumn == 1) firstCell = 0;
+            else firstCell = 1;
+            for (int i = 0; i < length; i += 2) {
+                if (rawColumn[i] != firstCell) ++ans;
+            }
+            return ans;
+        }
+        int ans0Stage1 = 0;
+        int ans1Stage1 = 0;
+        int ans0Stage2 = 0;
+        int ans1Stage2 = 0;
+        int firstCell = 0;
+        for (int i = 0; i < length; i += 2) {
+            if (rawRow[i] != firstCell) ++ans0Stage1;
+            else ++ans1Stage1;
+        }
+        for (int i = 0; i < length; i += 2) {
+            if (rawColumn[i] != firstCell) ++ans0Stage2;
+            else ++ans1Stage2;
+        }
+        return Math.min(ans0Stage1, ans1Stage1) + Math.min(ans0Stage2, ans1Stage2);
+    }
+}

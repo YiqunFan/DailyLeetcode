@@ -1,0 +1,25 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0039. Combination Sum
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> answers = new ArrayList<>();
+        List<Integer> answer = new ArrayList<>();
+        recursion(candidates, target, 0, answer, answers);
+        return answers;
+    }
+
+    private void recursion(int[] candidates, int target, int current, List<Integer> answer, List<List<Integer>> answers) {
+        if (target == current) {
+            answers.add(new ArrayList<>(answer));
+        }
+        for (int candidate : candidates) {
+            if (current + candidate <= target && (answer.isEmpty() || candidate >= answer.get(answer.size() - 1))) {
+                answer.add(candidate);
+                recursion(candidates, target, current + candidate, answer, answers);
+                answer.remove(answer.size() - 1);
+            }
+        }
+    }
+}

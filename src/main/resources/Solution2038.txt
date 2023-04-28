@@ -1,0 +1,27 @@
+// 2038. Remove Colored Pieces if Both Neighbors are the Same Color
+class Solution {
+    public boolean winnerOfGame(String colors) {
+        if (colors.length() <= 2) {
+            return false;
+        }
+        int[] triple = triplets(colors);
+        if (triple[0] > triple[1]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private int[] triplets(String colors) {
+        int tripleA = 0;
+        int tripleB = 0;
+        for (int i = 2; i < colors.length(); ++i) {
+            if (colors.charAt(i) == 'A' && colors.charAt(i - 1) == 'A' && colors.charAt(i - 2) == 'A') {
+                ++tripleA;
+            } else if (colors.charAt(i) == 'B' && colors.charAt(i - 1) == 'B' && colors.charAt(i - 2) == 'B') {
+                ++tripleB;
+            }
+        }
+        return new int[]{tripleA, tripleB};
+    }
+}

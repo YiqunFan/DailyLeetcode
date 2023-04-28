@@ -1,0 +1,23 @@
+// 0801. Minimum Swaps To Make Sequences Increasing
+class Solution {
+    public int minSwap(int[] nums1, int[] nums2) {
+        int n = nums1.length;
+        int currentNoSwap = 0;
+        int currentSwap = 1;
+        for (int i = 1; i < n; ++i) {
+            int previousNoSwap = currentNoSwap;
+            int previousSwap = currentSwap;
+            currentNoSwap = 131072;
+            currentSwap = 131072;
+            if (nums1[i] > nums1[i - 1] && nums2[i] > nums2[i - 1]) {
+                currentNoSwap = previousNoSwap;
+                currentSwap = previousSwap + 1;
+            }
+            if (nums1[i] > nums2[i - 1] && nums2[i] > nums1[i - 1]) {
+                currentNoSwap = Math.min(currentNoSwap, previousSwap);
+                currentSwap = Math.min(currentSwap, previousNoSwap + 1);
+            }
+        }
+        return Math.min(currentNoSwap, currentSwap);
+    }
+}

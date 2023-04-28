@@ -1,0 +1,31 @@
+// 0927. Three Equal Parts
+class Solution {
+    public int[] threeEqualParts(int[] arr) {
+        int sum = 0;
+        for (int d : arr) sum += d;
+        if (sum == 0) return new int[]{0, 2};
+        int[] ans = new int[]{-1, -1};
+        if (sum % 3 != 0) return ans;
+        int oneThird = sum / 3;
+        int first1Part3 = arr.length;
+        int count1 = 0;
+        while (count1 != oneThird) {
+            --first1Part3;
+            count1 += arr[first1Part3];
+        }
+        int lengthPart = arr.length - first1Part3;
+        int first1Part1 = 0;
+        while (arr[first1Part1] == 0) ++first1Part1;
+        for (int i = 0; i < lengthPart; ++i) {
+            if (arr[first1Part1 + i] != arr[first1Part3 + i]) return new int[]{-1, -1};
+        }
+        ans[0] = first1Part1 + lengthPart - 1;
+        int first1Part2 = first1Part1 + lengthPart;
+        while (arr[first1Part2] == 0) ++first1Part2;
+        for (int i = 0; i < lengthPart; ++i) {
+            if (arr[first1Part2 + i] != arr[first1Part3 + i]) return new int[]{-1, -1};
+        }
+        ans[1] = first1Part2 + lengthPart;
+        return ans;
+    }
+}

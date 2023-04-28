@@ -1,0 +1,66 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+// 0952. Largest Component Size by Common Factor
+class Solution {
+    public int largestComponentSize(int[] nums) {
+        int maxValue = 0;
+        for (int num : nums) {
+            if (num > maxValue) {
+                maxValue = num;
+            }
+        }
+        UnionFind unionFind = new UnionFind(maxValue + 1);
+        for (int num : nums) {
+            for (int i = 2; i * i <= num; ++i) {
+                if (num % i == 0) {
+                    unionFind.union(num, i);
+                    unionFind.union(num, num / i);
+                }
+            }
+        }
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (int num : nums) {
+            int parentOfNum = unionFind.find(num);
+//            if (hashMap.get(parentOfNum) == null) {
+//                hashMap.put(parentOfNum, 1);
+//            } else {
+//                hashMap.put(parentOfNum, hashMap.get(parentOfNum) + 1);
+//            }
+            hashMap.merge(parentOfNum, 1, Integer::sum);
+        }
+        int ans = 1;
+        for (Integer componentSize : hashMap.values()) {
+            if (componentSize > ans) {
+                ans = componentSize;
+            }
+        }
+        return ans;
+    }
+}
+
+class UnionFind {
+    private final ArrayList<Integer> parent = new ArrayList<>();
+
+    public UnionFind(int n) {
+        for (int i = 0; i < n; ++i) {
+            parent.add(i);
+        }
+    }
+
+    public int find(int son) {
+        if (parent.get(son) == son) {
+            return son;
+        }
+        parent.set(son, find(parent.get(son)));
+        return parent.get(son);
+    }
+
+    public void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parent.set(parentOfA, parentOfB);
+        }
+    }
+}

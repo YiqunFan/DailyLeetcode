@@ -1,0 +1,7 @@
+-- 1327. List the Products Ordered in a Period
+select p.product_name, sum(o.unit) as unit
+from Orders o
+         left outer join Products p on o.product_id = p.product_id
+where order_date like '2020-02-%'
+group by o.product_id
+having sum(o.unit) > 99;

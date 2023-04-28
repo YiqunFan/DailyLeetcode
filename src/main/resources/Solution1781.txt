@@ -1,0 +1,26 @@
+// 1781. Sum of Beauty of All Substrings
+class Solution {
+    public int beautySum(String s) {
+        char[] charArray = s.toCharArray();
+        int len = charArray.length;
+        int ans = 0;
+        for (int i = 0; i < len; ++i) {
+            int[] frequencies = new int[123];
+            int maxFrequency = 0;
+            for (int j = i; j < len; ++j) {
+                ++frequencies[charArray[j]];
+                if (frequencies[charArray[j]] > maxFrequency) {
+                    maxFrequency = frequencies[charArray[j]];
+                }
+                int minFrequency = len;
+                for (int k = 97; k < 123; ++k) {
+                    if (frequencies[k] != 0 && frequencies[k] < minFrequency) {
+                        minFrequency = frequencies[k];
+                    }
+                }
+                ans += maxFrequency - minFrequency;
+            }
+        }
+        return ans;
+    }
+}

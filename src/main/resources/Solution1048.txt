@@ -1,0 +1,46 @@
+import java.util.Arrays;
+
+// 1048. Longest String Chain
+class Solution {
+    public int longestStrChain(String[] words) {
+        Arrays.sort(words, (String w1, String w2) -> w1.length() - w2.length());
+        int[] maxPostdecessorQuantity = new int[words.length];
+        Arrays.fill(maxPostdecessorQuantity, 1);
+        for (int i = words.length - 2; i > -1; --i) {
+            int shortLength = words[i].length();
+            for (int j = i + 1; j < words.length; ++j) {
+                int longLength = words[j].length();
+                if (longLength - shortLength > 1) {
+                    break;
+                } else if (longLength - shortLength == 1) {
+                    if (maxPostdecessorQuantity[i] < maxPostdecessorQuantity[j] + 1 && isPredecessor(words[i], words[j])) {
+                        maxPostdecessorQuantity[i] = maxPostdecessorQuantity[j] + 1;
+                    }
+                }
+            }
+        }
+        int ans = maxPostdecessorQuantity[0];
+        for (int mpq : maxPostdecessorQuantity) {
+            if (mpq > ans) {
+                ans = mpq;
+            }
+        }
+        return ans;
+    }
+
+    private boolean isPredecessor(String shortWord, String longWord) {
+        int i = 0;
+        int j = 0;
+        while (i < shortWord.length()) {
+            if (shortWord.charAt(i) == longWord.charAt(j)) {
+                ++i;
+                ++j;
+            } else {
+                ++j;
+                if (j - i > 1) return false;
+            }
+        }
+        return true;
+    }
+
+}

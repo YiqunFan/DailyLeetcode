@@ -1,0 +1,19 @@
+// 0243. Shortest Word Distance
+class Solution {
+    public int shortestDistance(String[] wordsDict, String word1, String word2) {
+        int previous1 = -999999;
+        int previous2 = -999999;
+        int n = wordsDict.length;
+        int ans = 999999;
+        for (int i = 0; i < n; ++i) {
+            if (wordsDict[i].equals(word1)) {
+                ans = Math.min(ans, i - previous2);
+                previous1 = i;
+            } else if (wordsDict[i].equals(word2)) {
+                ans = Math.min(ans, i - previous1);
+                previous2 = i;
+            }
+        }
+        return ans;
+    }
+}

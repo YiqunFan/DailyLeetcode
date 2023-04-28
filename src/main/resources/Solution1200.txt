@@ -1,0 +1,29 @@
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+// 1200. Minimum Absolute Difference
+class Solution {
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        Arrays.sort(arr);
+        int minDistance = arr[1] - arr[0];
+        LinkedList<Integer> leftNumbers = new LinkedList<>();
+        for (int i = 0; i + 1 < arr.length; ++i) {
+            if (arr[i + 1] - arr[i] < minDistance) {
+                minDistance = arr[i + 1] - arr[i];
+                leftNumbers.clear();
+                leftNumbers.add(arr[i]);
+            } else if (arr[i + 1] - arr[i] == minDistance) {
+                leftNumbers.add(arr[i]);
+            }
+        }
+        List<List<Integer>> ans = new LinkedList<>();
+        for (Integer leftNumber : leftNumbers) {
+            LinkedList<Integer> pair = new LinkedList<>();
+            pair.add(leftNumber);
+            pair.add(leftNumber + minDistance);
+            ans.add(pair);
+        }
+        return ans;
+    }
+}

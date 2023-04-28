@@ -1,0 +1,19 @@
+import java.util.LinkedList;
+import java.util.List;
+
+// 0094.Binary Tree Inorder Traversal
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans = new LinkedList<>();
+        inorder(root, ans);
+        return ans;
+    }
+
+    void inorder(TreeNode node, List<Integer> ans) {
+        if (node != null) {
+            inorder(node.left, ans);
+            ans.add(node.val);
+            inorder(node.right, ans);
+        }
+    }
+}

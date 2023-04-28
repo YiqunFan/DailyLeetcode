@@ -1,0 +1,59 @@
+import java.util.Arrays;
+
+// 1697. Checking Existence of Edge Length Limited Paths
+class Solution {
+    public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) {
+        int edgeQuantity = edgeList.length;
+        int queryQuantity = queries.length;
+        Arrays.sort(edgeList, (int[] edge1, int[] edge2) -> (edge1[2] - edge2[2]));
+        int[][] queryList = new int[queryQuantity][4];
+        for (int i = 0; i < queryQuantity; ++i) {
+            queryList[i][0] = queries[i][0];
+            queryList[i][1] = queries[i][1];
+            queryList[i][2] = queries[i][2];
+            queryList[i][3] = i;
+        }
+        Arrays.sort(queryList, (int[] query1, int[] query2) -> (query1[2] - query2[2]));
+        UnionFind uf = new UnionFind(n);
+        int currentIndex = 0;
+        boolean[] ans = new boolean[queryQuantity];
+        for (int i = 0; i < queryQuantity; ++i) {
+            int target = queryList[i][2];
+            while (currentIndex < edgeQuantity && edgeList[currentIndex][2] < target) {
+                uf.union(edgeList[currentIndex][0], edgeList[currentIndex][1]);
+                ++currentIndex;
+            }
+            if (uf.find(queryList[i][0]) == uf.find(queryList[i][1])) {
+                ans[queryList[i][3]] = true;
+            }
+        }
+        return ans;
+    }
+}
+
+class UnionFind {
+    int[] parents;
+
+    public UnionFind(int n) {
+        parents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parents[i] = i;
+        }
+    }
+
+    public int find(int son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    public void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parents[parentOfA] = parentOfB;
+        }
+    }
+}

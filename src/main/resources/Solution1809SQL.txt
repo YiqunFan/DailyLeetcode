@@ -1,0 +1,6 @@
+-- 1809. Ad-Free Sessions
+select P.session_id
+from Playback P
+         left outer join Ads A
+                         on P.customer_id = A.customer_id and P.start_time <= A.timestamp and P.end_time >= A.timestamp
+where A.ad_id is null;

@@ -1,0 +1,28 @@
+import java.util.*;
+
+// 0582. Kill Process
+class Solution {
+    public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
+        Map<Integer, List<Integer>> childrenMap = new HashMap<>();
+        int n = pid.size();
+        for (int i = 0; i < n; ++i) {
+            if (childrenMap.containsKey(ppid.get(i))) {
+                List<Integer> children = childrenMap.get(ppid.get(i));
+                children.add(pid.get(i));
+            } else {
+                List<Integer> children = new ArrayList<>();
+                children.add(pid.get(i));
+                childrenMap.put(ppid.get(i), children);
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        ans.add(kill);
+        for (int i = 0; i < ans.size(); ++i) {
+            if (childrenMap.containsKey(ans.get(i))) {
+                List<Integer> children = childrenMap.get(ans.get(i));
+                ans.addAll(children);
+            }
+        }
+        return ans;
+    }
+}

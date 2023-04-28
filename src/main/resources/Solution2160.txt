@@ -1,0 +1,10 @@
+import java.util.Arrays;
+
+// 2160. Minimum Sum of Four Digit Number After Splitting Digits
+class Solution {
+    public int minimumSum(int num) {
+        int[] digits = new int[]{num % 10, num / 10 % 10, num / 100 % 10, num / 1000};
+        Arrays.sort(digits);
+        return digits[0] * 10 + digits[1] * 10 + digits[2] + digits[3];
+    }
+}

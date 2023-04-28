@@ -1,0 +1,39 @@
+import java.util.HashMap;
+
+// 0288. Unique Word Abbreviation
+class ValidWordAbbr {
+    HashMap<String, String> hashMap;
+
+    public ValidWordAbbr(String[] dictionary) {
+        hashMap = new HashMap<>(dictionary.length * 2);
+        for (String word : dictionary) {
+            String abbreviation = generateAbbreviation(word);
+            if (hashMap.containsKey(abbreviation)) {
+                if (!"2".equals(hashMap.get(abbreviation))) {
+                    if (!word.equals(hashMap.get(abbreviation))) {
+                        hashMap.put(abbreviation, "2");
+                    }
+                }
+            } else {
+                hashMap.put(abbreviation, word);
+            }
+        }
+    }
+
+    public boolean isUnique(String word) {
+        String abbreviation = generateAbbreviation(word);
+        if (hashMap.containsKey(abbreviation)) {
+            return word.equals(hashMap.get(abbreviation));
+        }
+        return true;
+    }
+
+    private String generateAbbreviation(String word) {
+        if (word.length() < 3) return word;
+        StringBuilder ret = new StringBuilder();
+        ret.append(word.charAt(0));
+        ret.append(word.length() - 2);
+        ret.append(word.charAt(word.length() - 1));
+        return ret.toString();
+    }
+}

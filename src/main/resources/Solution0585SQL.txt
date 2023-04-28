@@ -1,0 +1,10 @@
+-- 0585. Investments in 2016
+select round(sum(tiv_2016), 2) as tiv_2016
+from (
+         select tiv_2016,
+                count(*) over (partition by tiv_2015)         as cnt1,
+                count(*) over (partition by concat(lat, lon)) as cnt2
+         from Insurance) temp
+where cnt1 > 1
+  and cnt2 = 1;
+

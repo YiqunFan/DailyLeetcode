@@ -1,0 +1,29 @@
+import java.util.HashMap;
+
+// 0904. Fruit Into Baskets
+class Solution {
+    public int totalFruit(int[] fruits) {
+        int len = fruits.length;
+        HashMap<Integer, Integer> slidingWindow = new HashMap<>();
+        int left = 0;
+        int right = 0;
+        int ans = 0;
+        while (right < len) {
+            slidingWindow.put(fruits[right], slidingWindow.getOrDefault(fruits[right], 0) + 1);
+            if (slidingWindow.size() < 3) {
+                ans = Math.max(ans, right - left + 1);
+            } else {
+                while (slidingWindow.size() > 2) {
+                    if (slidingWindow.get(fruits[left]) == 1) {
+                        slidingWindow.remove(fruits[left]);
+                    } else {
+                        slidingWindow.put(fruits[left], slidingWindow.get(fruits[left]) - 1);
+                    }
+                    ++left;
+                }
+            }
+            ++right;
+        }
+        return ans;
+    }
+}

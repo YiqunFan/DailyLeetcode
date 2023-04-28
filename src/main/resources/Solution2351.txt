@@ -1,0 +1,14 @@
+// 2351. First Letter to Appear Twice
+class Solution {
+    public char repeatedCharacter(String s) {
+        boolean[] existed = new boolean[123];
+        for (char c : s.toCharArray()) {
+            if (existed[c]) {
+                return c;
+            } else {
+                existed[c] = true;
+            }
+        }
+        return ' ';
+    }
+}

@@ -1,0 +1,61 @@
+import java.util.*;
+
+// 1169. Invalid Transactions
+class Solution {
+    public List<String> invalidTransactions(String[] transactions) {
+        Set<Transaction> invalids = new HashSet<>();
+        Map<String, List<Transaction>> allTransactions = new HashMap<>();
+        for (String transaction : transactions) {
+            Transaction t = new Transaction(transaction);
+            if (t.amount > 1000) {
+                invalids.add(t);
+            }
+            if (allTransactions.containsKey(t.name)) {
+                List<Transaction> list = allTransactions.get(t.name);
+                list.add(t);
+            } else {
+                List<Transaction> list = new ArrayList<>();
+                list.add(t);
+                allTransactions.put(t.name, list);
+            }
+        }
+        for (Map.Entry<String, List<Transaction>> entry : allTransactions.entrySet()) {
+            List<Transaction> list = entry.getValue();
+            int n = list.size();
+            for (int i = 0; i < n; ++i) {
+                Transaction t1 = list.get(i);
+                for (int j = 0; j < n; ++j) {
+                    if (i != j) {
+                        Transaction t2 = list.get(j);
+                        if (!t1.city.equals(t2.city) && Math.abs(t1.time - t2.time) <= 60) {
+                            invalids.add(t1);
+                            invalids.add(t2);
+                        }
+                    }
+                }
+            }
+        }
+        List<String> ans = new ArrayList<>();
+        for (Transaction invalid : invalids) {
+            ans.add(invalid.str);
+        }
+        return ans;
+    }
+}
+
+class Transaction {
+    String str;
+    String name;
+    int time;
+    int amount;
+    String city;
+
+    public Transaction(String str) {
+        this.str = str;
+        String[] split = str.split(",");
+        this.name = split[0];
+        this.time = Integer.parseInt(split[1]);
+        this.amount = Integer.parseInt(split[2]);
+        this.city = split[3];
+    }
+}

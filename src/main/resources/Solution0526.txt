@@ -1,0 +1,29 @@
+// 0526. Beautiful Arrangement
+class Solution {
+    int ans = 0;
+
+    public int countArrangement(int n) {
+        boolean[] used = new boolean[n + 1];
+        used[0] = true;
+        int[] arr = new int[n + 1];
+        dfs(arr, used, 1);
+        return ans;
+    }
+
+    private void dfs(int[] arr, boolean[] used, int current) {
+        if (current == arr.length) {
+            ++ans;
+        } else {
+            for (int i = 1; i < used.length; ++i) {
+                if (!used[i]) {
+                    if (i % current == 0 || current % i == 0) {
+                        used[i] = true;
+                        arr[current] = i;
+                        dfs(arr, used, current + 1);
+                        used[i] = false;
+                    }
+                }
+            }
+        }
+    }
+}

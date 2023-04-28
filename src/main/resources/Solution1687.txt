@@ -1,0 +1,43 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+// 1687. Delivering Boxes from Storage to Ports
+class Solution {
+    public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
+        int n = boxes.length;
+        int[] ports = new int[n + 1];
+        int[] weight = new int[n + 1];
+        int[] neg = new int[n + 1];
+        long[] weightPrefixSums = new long[n + 1];
+        for (int i = 1; i <= n; ++i) {
+            ports[i] = boxes[i - 1][0];
+            weight[i] = boxes[i - 1][1];
+            if (i > 1) {
+                if (ports[i - 1] != ports[i]) {
+                    neg[i] = neg[i - 1] + 1;
+                } else {
+                    neg[i] = neg[i - 1];
+                }
+            }
+            weightPrefixSums[i] = weightPrefixSums[i - 1] + weight[i];
+        }
+        Deque<Integer> opt = new ArrayDeque<>();
+        opt.offerLast(0);
+        int[] minTrips = new int[n + 1];
+        int[] increment = new int[n + 1];
+        for (int i = 1; i <= n; ++i) {
+            while (i - opt.peekFirst() > maxBoxes || weightPrefixSums[i] - weightPrefixSums[opt.peekFirst()] > maxWeight) {
+                opt.pollFirst();
+            }
+            minTrips[i] = increment[opt.peekFirst()] + neg[i] + 2;
+            if (i != n) {
+                increment[i] = minTrips[i] - neg[i + 1];
+                while (!opt.isEmpty() && increment[i] <= increment[opt.peekLast()]) {
+                    opt.pollLast();
+                }
+                opt.offerLast(i);
+            }
+        }
+        return minTrips[n];
+    }
+}

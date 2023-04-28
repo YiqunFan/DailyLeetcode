@@ -1,0 +1,6 @@
+-- 1789. Primary Department for Each Employee
+select employee_id, department_id
+from (select employee_id, count(*) over (partition by employee_id) cnt, department_id, primary_flag
+      from Employee) t
+where cnt = 1
+   or primary_flag = 'Y';

@@ -1,0 +1,5 @@
+-- 1633. Percentage of Users Attended a Contest
+select contest_id, round(count(*) / (select count(*) from Users) * 100, 2) as percentage
+from Register R
+group by R.contest_id
+order by 2 desc, 1 asc;

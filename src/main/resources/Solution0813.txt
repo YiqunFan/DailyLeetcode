@@ -1,0 +1,22 @@
+// 0813. Largest Sum of Averages
+class Solution {
+    public double largestSumOfAverages(int[] nums, int k) {
+        int len = nums.length;
+        double[] prefixSum = new double[len + 1];
+        for (int i = 0; i < len; ++i) {
+            prefixSum[i + 1] = prefixSum[i] + nums[i];
+        }
+        double[][] largestSums = new double[len + 1][k + 1];
+        for (int i = 1; i <= len; ++i) {
+            largestSums[i][1] = prefixSum[i] / i;
+        }
+        for (int j = 2; j <= k; ++j) {
+            for (int i = j; i <= len; ++i) {
+                for (int mid = j - 1; mid < i; ++mid) {
+                    largestSums[i][j] = Math.max(largestSums[i][j], (prefixSum[i] - prefixSum[mid]) / (i - mid) + largestSums[mid][j - 1]);
+                }
+            }
+        }
+        return largestSums[len][k];
+    }
+}

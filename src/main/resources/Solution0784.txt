@@ -1,0 +1,45 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+// 0784. Letter Case Permutation
+class Solution {
+    public List<String> letterCasePermutation(String s) {
+        char[] charArray = s.toCharArray();
+        int n = charArray.length;
+        Queue<StringBuilder> queue = new LinkedList<>();
+        queue.offer(new StringBuilder());
+        for (char c : charArray) {
+            char fill1;
+            char fill2;
+            int size = queue.size();
+            if (c <= '9') {
+                fill1 = c;
+                for (int j = 0; j < size; ++j) {
+                    queue.offer(queue.poll().append(fill1));
+                }
+            } else {
+                if (c > 'Z') {
+                    fill1 = c;
+                    fill2 = (char) (c - 32);
+                } else {
+                    fill1 = (char) (c + 32);
+                    fill2 = c;
+                }
+                for (int j = 0; j < size; ++j) {
+                    StringBuilder sb1 = queue.poll();
+                    StringBuilder sb2 = new StringBuilder(sb1.toString());
+                    sb1.append(fill1);
+                    queue.offer(sb1);
+                    sb2.append(fill2);
+                    queue.offer(sb2);
+                }
+            }
+        }
+        List<String> ans = new LinkedList<>();
+        for (StringBuilder sb : queue) {
+            ans.add(sb.toString());
+        }
+        return ans;
+    }
+}

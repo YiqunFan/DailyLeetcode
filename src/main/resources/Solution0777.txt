@@ -1,0 +1,27 @@
+// 0777. Swap Adjacent in LR String
+class Solution {
+    public boolean canTransform(String start, String end) {
+        char[] s = start.toCharArray();
+        char[] e = end.toCharArray();
+        int len = s.length;
+        int xs = 0;
+        for (int i = 0; i < len; ++i) {
+            if (s[i] == 'X') ++xs;
+            if (e[i] == 'X') --xs;
+        }
+        if (xs != 0) return false;
+        for (int i = 0, j = 0; i < len; ++i) {
+            if (s[i] == 'L') {
+                while (j < len && e[j] != 'L') ++j;
+                if (j > i) return false;
+                ++j;
+            }
+            if (s[i] == 'R') {
+                while (j < len && e[j] != 'R') ++j;
+                if (j < i) return false;
+                ++j;
+            }
+        }
+        return true;
+    }
+}

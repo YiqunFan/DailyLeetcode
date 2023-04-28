@@ -1,0 +1,9 @@
+-- 0184. Department Highest Salary
+select department, employee, salary
+from (select D.name as     department,
+             E.name as     employee,
+             E.salary,
+             max(E.salary) over (partition by E.departmentId) as maxSalaryInDepartment
+      from Employee E
+               left outer join Department D on E.departmentId = D.id) temp
+where salary = maxSalaryInDepartment;

@@ -1,0 +1,53 @@
+import java.util.LinkedList;
+import java.util.List;
+
+// 0751. IP to CIDR
+class Solution {
+    public List<String> ipToCIDR(String ip, int n) {
+        long minNumber = ipToNumber(ip);
+        List<String> ans = new LinkedList<>();
+        while (n > 0) {
+            long step = minNumber & -minNumber;
+            if (step == 0) {
+                step = 1;
+                while (step < n) {
+                    step <<= 1;
+                }
+            }
+            while (step > n) {
+                step >>= 1;
+            }
+            ans.add(numberToIp(minNumber) + '/' + calculatePrefix(step));
+            n -= step;
+            minNumber += step;
+        }
+        return ans;
+    }
+
+    private long ipToNumber(String ip) {
+        String[] splitted = ip.split("\\.");
+        return Long.parseLong(splitted[3]) + 256L * Long.parseLong(splitted[2]) + 65536L * Long.parseLong(splitted[1]) + 16777216L * Long.parseLong(splitted[0]);
+    }
+
+    private String numberToIp(Long number) {
+        StringBuilder sb = new StringBuilder();
+        long section3 = number % 256;
+        number /= 256;
+        long section2 = number % 256;
+        number /= 256;
+        long section1 = number % 256;
+        number /= 256;
+        long section0 = number;
+        sb.append(section0).append('.').append(section1).append('.').append(section2).append('.').append(section3);
+        return sb.toString();
+    }
+
+    private long calculatePrefix(long step) {
+        long ret = 32;
+        while (step > 1) {
+            --ret;
+            step >>= 1;
+        }
+        return ret;
+    }
+}

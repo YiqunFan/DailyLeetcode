@@ -1,0 +1,83 @@
+import java.util.*;
+
+// 1129. Shortest Path with Alternating Colors
+class Solution {
+    public int[] shortestAlternatingPaths(int n, int[][] redEdges, int[][] blueEdges) {
+        Map<Integer, Set<Integer>> red = new HashMap<>();
+        Map<Integer, Set<Integer>> blue = new HashMap<>();
+        for (int[] redEdge : redEdges) {
+            if (red.containsKey(redEdge[0])) {
+                red.get(redEdge[0]).add(redEdge[1]);
+            } else {
+                Set<Integer> set = new HashSet<>();
+                set.add(redEdge[1]);
+                red.put(redEdge[0], set);
+            }
+        }
+        for (int[] blueEdge : blueEdges) {
+            if (blue.containsKey(blueEdge[0])) {
+                blue.get(blueEdge[0]).add(blueEdge[1]);
+            } else {
+                Set<Integer> set = new HashSet<>();
+                set.add(blueEdge[1]);
+                blue.put(blueEdge[0], set);
+            }
+        }
+        return bfs(n, red, blue);
+    }
+
+    private int[] bfs(int n, Map<Integer, Set<Integer>> red, Map<Integer, Set<Integer>> blue) {
+        int[] ret = new int[n];
+        Arrays.fill(ret, -1);
+        boolean[] redVisited = new boolean[n];
+        boolean[] blueVisited = new boolean[n];
+        ret[0] = 0;
+        redVisited[0] = true;
+        blueVisited[0] = true;
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(new Node(0, 0, 0));
+        queue.offer(new Node(0, 0, 1));
+        while (!queue.isEmpty()) {
+            Node poll = queue.poll();
+            if (ret[poll.position] == -1) {
+                ret[poll.position] = poll.distance;
+            } else {
+                ret[poll.position] = Math.min(ret[poll.position], poll.distance);
+            }
+            if (poll.color == 0) {
+                Set<Integer> to = blue.get(poll.position);
+                if (to != null) {
+                    for (Integer t : to) {
+                        if (!blueVisited[t]) {
+                            blueVisited[t] = true;
+                            queue.offer(new Node(t, poll.distance + 1, 1));
+                        }
+                    }
+                }
+            } else {
+                Set<Integer> to = red.get(poll.position);
+                if (to != null) {
+                    for (Integer t : to) {
+                        if (!redVisited[t]) {
+                            redVisited[t] = true;
+                            queue.offer(new Node(t, poll.distance + 1, 0));
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+}
+
+class Node {
+    int position;
+    int distance;
+    int color;
+
+    public Node(int position, int distance, int color) {
+        this.position = position;
+        this.distance = distance;
+        this.color = color;
+    }
+}

@@ -1,0 +1,21 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 119. Pascal's Triangle II
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> oldRow = new ArrayList<>();
+        for (int i = 0; i <= rowIndex; ++i) {
+            List<Integer> newRow = new ArrayList<>();
+            for (int j = 0; j <= i; ++j) {
+                if (j ==0 || j == i) {
+                    newRow.add(1);
+                } else {
+                    newRow.add(oldRow.get(j - 1) + oldRow.get(j));
+                }
+            }
+            oldRow = newRow;
+        }
+        return oldRow;
+    }
+}

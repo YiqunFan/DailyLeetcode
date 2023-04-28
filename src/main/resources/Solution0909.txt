@@ -1,0 +1,50 @@
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Queue;
+import java.util.LinkedList;
+
+// 0909. Snakes and Ladders
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int n = board.length;
+        int nSquare = n * n;
+        int[] line = new int[nSquare + 1];
+        int row = n - 1;
+        int col = 0;
+        int direction = 1;
+        for (int i = 1; i <= nSquare; ++i) {
+            line[i] = board[row][col];
+            if (i % n == 0) {
+                --row;
+                direction *= -1;
+            } else {
+                col += direction;
+            }
+        }
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(1);
+        Set<Integer> past = new HashSet<>();
+        past.add(1);
+        int ans = 1;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            for (int i = 0; i < size; ++i) {
+                Integer poll = q.poll();
+                for (int j = 1; j <= 6; ++j) {
+                    int target = poll + j;
+                    if (target > nSquare) continue;
+                    if (line[target] != -1) {
+                        target = line[target];
+                    }
+                    if (target == nSquare) return ans;
+                    if (!past.contains(target)) {
+                        q.offer(target);
+                        past.add(target);
+                    }
+                }
+            }
+            ++ans;
+        }
+        return -1;
+    }
+}

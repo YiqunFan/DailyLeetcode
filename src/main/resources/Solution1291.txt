@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1291. Sequential Digits
+class Solution {
+    public List<Integer> sequentialDigits(int low, int high) {
+        int len = 2;
+        List<Integer> nums = new ArrayList<>();
+        while (len < 10) {
+            for (int i = 1; i + len < 11; ++i) {
+                int num = 0;
+                for (int j = i; j < i + len; ++j) {
+                    num *= 10;
+                    num += j;
+                }
+                nums.add(num);
+            }
+            ++len;
+        }
+        List<Integer> ans = new ArrayList<>();
+        int i = 0;
+        while (i < nums.size() && nums.get(i) < low) {
+            ++i;
+        }
+        while (i < nums.size() && nums.get(i) <= high) {
+            ans.add(nums.get(i));
+            ++i;
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+// 0886. Possible Bipartition
+class Solution {
+    public boolean possibleBipartition(int n, int[][] dislikes) {
+        UnionFind unionFind = new UnionFind(n + 1);
+        ArrayList<LinkedList<Integer>> enemiesByNumber = new ArrayList<>();
+        for (int i = 0; i <= n; ++i) enemiesByNumber.add(new LinkedList<>());
+        for (int[] dislike : dislikes) {
+            enemiesByNumber.get(dislike[0]).add(dislike[1]);
+            enemiesByNumber.get(dislike[1]).add(dislike[0]);
+        }
+        for (int i = 1; i <= n; ++i) {
+            LinkedList<Integer> enemies = enemiesByNumber.get(i);
+            if (!enemies.isEmpty()) {
+                Integer enemiesFirst = enemies.getFirst();
+                for (Integer enemy : enemies) {
+                    if (unionFind.find(i) == unionFind.find(enemy)) {
+                        return false;
+                    }
+                    unionFind.union(enemiesFirst, enemy);
+                }
+            }
+        }
+        return true;
+    }
+}
+
+class UnionFind {
+    int[] parent;
+
+    public UnionFind(int n) {
+        parent = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+    }
+
+    public int find(int son) {
+        if (parent[son] == son) {
+            return son;
+        }
+        parent[son] = find(parent[son]);
+        return parent[son];
+    }
+
+    public void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parent[parentOfA] = parentOfB;
+        }
+    }
+}

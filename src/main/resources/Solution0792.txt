@@ -1,0 +1,52 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0792. Number of Matching Subsequences
+class Solution {
+    public int numMatchingSubseq(String s, String[] words) {
+        char[] charArray = s.toCharArray();
+        int len = charArray.length;
+        List<List<Integer>> charsIndexes = new ArrayList<>();
+        for (int i = 0; i < 123; ++i) {
+            charsIndexes.add(new ArrayList<>());
+        }
+        for (int i = 0; i < len; ++i) {
+            charsIndexes.get(charArray[i]).add(i);
+        }
+        int ans = 0;
+        for (String word : words) {
+            ans += isMatching(word, charsIndexes);
+        }
+        return ans;
+    }
+
+    private int isMatching(String word, List<List<Integer>> charsIndexes) {
+        int preIndex = -1;
+        for (char c : word.toCharArray()) {
+            List<Integer> charIndexes = charsIndexes.get(c);
+            if (charIndexes.size() == 0) {
+                return 0;
+            }
+            int currentIndex = binarySearch(preIndex, charIndexes);
+            if (currentIndex <= preIndex) {
+                return 0;
+            }
+            preIndex = currentIndex;
+        }
+        return 1;
+    }
+
+    private int binarySearch(int preIndex, List<Integer> charIndexes) {
+        int left = 0;
+        int right = charIndexes.size() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (charIndexes.get(mid) <= preIndex) {
+                left = mid + 1;
+            } else{
+                right = mid;
+            }
+        }
+        return charIndexes.get(left);
+    }
+}

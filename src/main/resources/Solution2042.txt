@@ -1,0 +1,20 @@
+// 2042. Check if Numbers Are Ascending in a Sentence
+class Solution {
+    public boolean areNumbersAscending(String s) {
+        String[] words = s.split(" ");
+        int previous = 0;
+        for (String word : words) {
+            try {
+                int current = Integer.parseInt(word);
+                if (current <= previous) {
+                    return false;
+                } else {
+                    previous = current;
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return true;
+    }
+}

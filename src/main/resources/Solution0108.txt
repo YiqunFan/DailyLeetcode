@@ -1,0 +1,21 @@
+// 0108. Convert Sorted Array to Binary Search Tree
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        TreeNode top = new TreeNode();
+        divide(top, nums, 0, nums.length);
+        return top;
+    }
+
+    private void divide(TreeNode node, int[] nums, int left, int right) {
+        int mid = left + (right - left) / 2;
+        node.val = nums[mid];
+        if (mid - left > 0) {
+            node.left = new TreeNode();
+            divide(node.left, nums, left, mid);
+        }
+        if (right - mid > 1) {
+            node.right = new TreeNode();
+            divide(node.right, nums, mid + 1, right);
+        }
+    }
+}

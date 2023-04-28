@@ -1,0 +1,21 @@
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+// 1817. Finding the Users Active Minutes
+class Solution {
+    public int[] findingUsersActiveMinutes(int[][] logs, int k) {
+        HashMap<Integer, HashSet<Integer>> usersAndActions = new HashMap<>();
+        for (int[] log : logs) {
+            if (!usersAndActions.containsKey(log[0])) {
+                usersAndActions.put(log[0], new HashSet<>());
+            }
+            usersAndActions.get(log[0]).add(log[1]);
+        }
+        int[] ans = new int[k];
+        for (Map.Entry<Integer, HashSet<Integer>> entry : usersAndActions.entrySet()) {
+            ++ans[entry.getValue().size() - 1];
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,61 @@
+import java.util.ArrayList;
+
+// 0809. Expressive Words
+class Solution {
+    public int expressiveWords(String s, String[] words) {
+        ArrayList<CharAndQuantity> charAndQuantities = new ArrayList<>();
+        char[] sArray = s.toCharArray();
+        int len = sArray.length;
+        charAndQuantities.add(new CharAndQuantity(sArray[0], 1));
+        for (int i = 1; i < len; ++i) {
+            if (sArray[i] != sArray[i - 1]) {
+                charAndQuantities.add(new CharAndQuantity(sArray[i], 1));
+            } else {
+                ++charAndQuantities.get(charAndQuantities.size() - 1).q;
+            }
+        }
+        int ans = 0;
+        for (String word : words) {
+            ans += isStretchy(word, charAndQuantities);
+        }
+        return ans;
+    }
+
+    private int isStretchy(String word, ArrayList<CharAndQuantity> charAndQuantities) {
+        char[] charArray = word.toCharArray();
+        int len = charArray.length;
+        char currentChar;
+        int currentQuantity;
+        int j = 0;
+        for (int i = 0; i < len; ) {
+            currentChar = charArray[i];
+            currentQuantity = 0;
+            while (i < len && charArray[i] == currentChar) {
+                ++currentQuantity;
+                ++i;
+            }
+            if (j < charAndQuantities.size()) {
+                CharAndQuantity charAndQuantity = charAndQuantities.get(j);
+                if (charAndQuantity.c == currentChar && (charAndQuantity.q > 2 || charAndQuantity.q == currentQuantity) && charAndQuantity.q >= currentQuantity) {
+                    ++j;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+        if (j == charAndQuantities.size()) return 1;
+        return 0;
+    }
+}
+
+class CharAndQuantity {
+    char c;
+    int q;
+
+    public CharAndQuantity(char c, int q) {
+        this.c = c;
+        this.q = q;
+    }
+}

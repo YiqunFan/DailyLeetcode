@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+
+// 1592. Rearrange Spaces Between Words
+class Solution {
+    public String reorderSpaces(String text) {
+        int spaceQuantity = 0;
+        char[] chars = text.toCharArray();
+        for (char c : chars) {
+            if (c == ' ') {
+                ++spaceQuantity;
+            }
+        }
+        String[] strings = text.split("\\s+");
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (String s : strings) {
+            if (!s.equals("")) {
+                arrayList.add(s);
+            }
+        }
+        int wordQuantity = arrayList.size();
+        StringBuilder spaces = new StringBuilder();
+        StringBuilder ans = new StringBuilder();
+        if (wordQuantity == 1) {
+            ans.append(arrayList.get(0));
+            for (int i = 0; i < spaceQuantity; ++i) {
+                ans.append(' ');
+            }
+        } else {
+            for (int i = 0; i < spaceQuantity / (wordQuantity - 1); ++i) {
+                spaces.append(' ');
+            }
+            for (int i = 0; i < arrayList.size() - 1; ++i) {
+                ans.append(arrayList.get(i));
+                ans.append(spaces);
+            }
+            ans.append(arrayList.get(arrayList.size() - 1));
+            for (int i = 0; i < spaceQuantity % (wordQuantity - 1); ++i) {
+                ans.append(' ');
+            }
+        }
+        return ans.toString();
+    }
+}

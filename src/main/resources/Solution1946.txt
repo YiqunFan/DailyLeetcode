@@ -1,0 +1,16 @@
+// 1946. Largest Number After Mutating Substring
+class Solution {
+    public String maximumNumber(String num, int[] change) {
+        char[] charArray = num.toCharArray();
+        for (int i = 0; i < charArray.length; ++i) {
+            if (charArray[i] - 48 < change[charArray[i] - 48]) {
+                while (i < charArray.length && charArray[i] - 48 <= change[charArray[i] - 48]) {
+                    charArray[i] = (char) (change[charArray[i] - 48] + 48);
+                    ++i;
+                }
+                break;
+            }
+        }
+        return new String(charArray);
+    }
+}

@@ -1,0 +1,22 @@
+// 1945. Sum of Digits of String After Convert
+class Solution {
+    public int getLucky(String s, int k) {
+        char[] charArray = s.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (char c : charArray) {
+            sb.append((c - 96));
+        }
+        char[] chars = sb.toString().toCharArray();
+        int sum = 0;
+        while (k != 0) {
+            --k;
+            sum = 0;
+            for (char c : chars) {
+                sum += c - 48;
+            }
+            if (sum < 10) return sum;
+            chars = String.valueOf(sum).toCharArray();
+        }
+        return sum;
+    }
+}

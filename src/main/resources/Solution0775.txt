@@ -1,0 +1,12 @@
+// 0775. Global and Local Inversions
+class Solution {
+    public boolean isIdealPermutation(int[] nums) {
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (Math.abs(i - nums[i]) > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

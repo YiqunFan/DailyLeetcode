@@ -1,0 +1,31 @@
+// 1185. Day of the Week
+class Solution {
+    public String dayOfTheWeek(int day, int month, int year) {
+        int days = (year - 1971) * 365 + (year - 1969) / 4;
+        int[] daysPerMonth = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        for (int i = 0; i < month - 1; ++i) days += daysPerMonth[i];
+        if (month > 2 && is_leap(year)) ++days;
+        days += day;
+        int dayOfWeek = (days + 4) % 7;
+        switch (dayOfWeek) {
+            case 0:
+                return "Sunday";
+            case 1:
+                return "Monday";
+            case 2:
+                return "Tuesday";
+            case 3:
+                return "Wednesday";
+            case 4:
+                return "Thursday";
+            case 5:
+                return "Friday";
+            default:
+                return "Saturday";
+        }
+    }
+
+    boolean is_leap(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+    }
+}

@@ -1,0 +1,42 @@
+import java.util.HashMap;
+
+// 0418. Sentence Screen Fitting
+class Solution {
+    public int wordsTyping(String[] sentence, int rows, int cols) {
+        int n = sentence.length;
+        int[] lengths = new int[n];
+        for (int i = 0; i < n; ++i) {
+            lengths[i] = sentence[i].length();
+        }
+        int totalLength = n;
+        for (int length : lengths) {
+            totalLength += length;
+        }
+        HashMap<Integer, Integer> canPutWordsStartsWithI = new HashMap<>();
+        int start = 0;
+        int i = 0;
+        while (!canPutWordsStartsWithI.containsKey(start)) {
+            int index = 0;
+            int wordsInRow = 0;
+            if (totalLength >= cols) {
+                int loopsInRow = cols / totalLength;
+                index += loopsInRow * totalLength;
+                wordsInRow += loopsInRow * n;
+            }
+            while (index + lengths[i] <= cols) {
+                index = index + lengths[i] + 1;
+                i = (i + 1) % n;
+                ++wordsInRow;
+            }
+            canPutWordsStartsWithI.put(start, wordsInRow);
+            start = i;
+        }
+        int totalWords = 0;
+        i = 0;
+        for (int j = 0; j < rows; ++j) {
+            totalWords += canPutWordsStartsWithI.get(i);
+            i = (i + canPutWordsStartsWithI.get(i)) % n;
+        }
+        return totalWords / n;
+    }
+}

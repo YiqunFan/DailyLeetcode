@@ -1,0 +1,27 @@
+import java.util.HashMap;
+
+// 1640. Check Array Formation Through Concatenation
+class Solution {
+    public boolean canFormArray(int[] arr, int[][] pieces) {
+        HashMap<Integer, Integer> headIndex = new HashMap<>();
+        for (int i = 0; i < pieces.length; ++i) {
+            headIndex.put(pieces[i][0], i);
+        }
+        for (int i = 0; i < arr.length; ) {
+            if (headIndex.containsKey(arr[i])) {
+                Integer index = headIndex.get(arr[i]);
+                headIndex.remove(arr[i]);
+                for (int j = 0; j < pieces[index].length && i < arr.length; ++j) {
+                    if (arr[i] == pieces[index][j]) {
+                        ++i;
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+}

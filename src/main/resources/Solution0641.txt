@@ -1,0 +1,65 @@
+// 0641. Design Circular Deque
+class MyCircularDeque {
+
+    private final int[] values;
+    private final int capacity;
+    private int size;
+    private int f;
+    private int r;
+
+    public MyCircularDeque(int k) {
+        values = new int[k];
+        capacity = k;
+        size = 0;
+        f = 0;
+        r = 0;
+    }
+
+    public boolean insertFront(int value) {
+        if (size == capacity) return false;
+        if (size != 0) f = (f + 1) % capacity;
+        values[f] = value;
+        ++size;
+        return true;
+    }
+
+    public boolean insertLast(int value) {
+        if (size == capacity) return false;
+        if (size != 0) r = (r + capacity - 1) % capacity;
+        values[r] = value;
+        ++size;
+        return true;
+    }
+
+    public boolean deleteFront() {
+        if (size == 0) return false;
+        if (size != 1) f = (f + capacity - 1) % capacity;
+        --size;
+        return true;
+    }
+
+    public boolean deleteLast() {
+        if (size == 0) return false;
+        if (size != 1) r = (r + 1) % capacity;
+        --size;
+        return true;
+    }
+
+    public int getFront() {
+        if (size == 0) return -1;
+        return values[f];
+    }
+
+    public int getRear() {
+        if (size == 0) return -1;
+        return values[r];
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == capacity;
+    }
+}

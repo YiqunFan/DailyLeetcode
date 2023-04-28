@@ -1,0 +1,21 @@
+// 2180. Count Integers With Even Digit Sum
+class Solution {
+    public int countEven(int num) {
+        int ans = 0;
+        for (int i = 1; i <= num; ++i) {
+            if (isEvenDigitsSum(i)) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+
+    private boolean isEvenDigitsSum(int n) {
+        int oddEven = 0;
+        while (n > 0) {
+            if (n % 10 % 2 == 1) ++oddEven;
+            n /= 10;
+        }
+        return oddEven % 2 == 0;
+    }
+}

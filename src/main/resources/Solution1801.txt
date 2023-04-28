@@ -1,0 +1,57 @@
+import java.util.PriorityQueue;
+
+// 1801. Number of Orders in the Backlog
+class Solution {
+    public int getNumberOfBacklogOrders(int[][] orders) {
+        final long MOD = 1000000007L;
+        PriorityQueue<Order> backlog0 = new PriorityQueue<>(((o1, o2) -> (o2.price - o1.price)));
+        PriorityQueue<Order> backlog1 = new PriorityQueue<>(((o1, o2) -> (o1.price - o2.price)));
+        for (int[] order : orders) {
+            int price = order[0];
+            int amount = order[1];
+            if (order[2] == 0) {
+                while (amount > 0 && !backlog1.isEmpty() && price >= backlog1.peek().price) {
+                    if (amount >= backlog1.peek().amount) {
+                        amount -= backlog1.poll().amount;
+                    } else {
+                        backlog1.peek().amount -= amount;
+                        amount = 0;
+                    }
+                }
+                if (amount > 0) {
+                    backlog0.offer(new Order(price, amount));
+                }
+            } else {
+                while (amount > 0 && !backlog0.isEmpty() && price <= backlog0.peek().price) {
+                    if (amount >= backlog0.peek().amount) {
+                        amount -= backlog0.poll().amount;
+                    } else {
+                        backlog0.peek().amount -= amount;
+                        amount = 0;
+                    }
+                }
+                if (amount > 0) {
+                    backlog1.offer(new Order(price, amount));
+                }
+            }
+        }
+        long ans = 0L;
+        while (!backlog0.isEmpty()) {
+            ans = (ans + backlog0.poll().amount) % MOD;
+        }
+        while (!backlog1.isEmpty()) {
+            ans = (ans + backlog1.poll().amount) % MOD;
+        }
+        return (int) ans;
+    }
+}
+
+class Order {
+    int price;
+    int amount;
+
+    public Order(int price, int amount) {
+        this.price = price;
+        this.amount = amount;
+    }
+}

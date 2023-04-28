@@ -1,0 +1,18 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 2178. Maximum Split of Positive Even Integers
+class Solution {
+    public List<Long> maximumEvenSplit(long finalSum) {
+        List<Long> ans = new ArrayList<>();
+        if ((finalSum & 1) == 1) return ans;
+        Long element = 2L;
+        while (finalSum > element * 2) {
+            ans.add(element);
+            finalSum -= element;
+            element += 2;
+        }
+        ans.add(finalSum);
+        return ans;
+    }
+}

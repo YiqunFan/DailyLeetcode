@@ -1,0 +1,33 @@
+import java.util.HashSet;
+
+// 1805. Number of Different Integers in a String
+class Solution {
+    public int numDifferentIntegers(String word) {
+        HashSet<String> hashSet = new HashSet<>();
+        char[] charArray = word.toCharArray();
+        int len = charArray.length;
+        int i = 0;
+        int j = i;
+        OUTER:
+        while (i < len) {
+            while (charArray[i] > 57) {
+                ++i;
+                if (i == len) {
+                    break OUTER;
+                }
+            }
+            j = i;
+            while (charArray[i] < 58) {
+                ++i;
+                if (i == len) {
+                    break;
+                }
+            }
+            while (charArray[j] == '0' && j < i - 1) {
+                ++j;
+            }
+            hashSet.add(word.substring(j, i));
+        }
+        return hashSet.size();
+    }
+}

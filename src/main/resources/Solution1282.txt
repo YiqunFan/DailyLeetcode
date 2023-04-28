@@ -1,0 +1,29 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+// 1282. Group the People Given the Group Size They Belong To
+class Solution {
+    public List<List<Integer>> groupThePeople(int[] groupSizes) {
+        HashMap<Integer, ArrayList<Integer>> hashMap = new HashMap<>();
+        for (int i = 0; i < groupSizes.length; ++i) {
+            if (!hashMap.containsKey(groupSizes[i])) {
+                hashMap.put(groupSizes[i], new ArrayList<>());
+            }
+            hashMap.get(groupSizes[i]).add(i);
+        }
+        List<List<Integer>> ans = new ArrayList<>();
+        for (Map.Entry<Integer, ArrayList<Integer>> e : hashMap.entrySet()) {
+            int i = 0;
+            int listSize = e.getValue().size();
+            while (i < listSize) {
+                ans.add(new ArrayList<>());
+                for (int j = 0; j < e.getKey(); ++i, ++j) {
+                    ans.get(ans.size() - 1).add(e.getValue().get(i));
+                }
+            }
+        }
+        return ans;
+    }
+}

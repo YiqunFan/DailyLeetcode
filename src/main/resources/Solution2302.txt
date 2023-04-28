@@ -1,0 +1,26 @@
+// 2302. Count Subarrays With Score Less Than K
+class Solution {
+    public long countSubarrays(int[] nums, long k) {
+        int left = 0;
+        int right = 0;
+        long sum = nums[0];
+        long size = 1;
+        long ans = 0;
+        while (true) {
+            if (sum * size < k) {
+                ans += size;
+                ++right;
+                if (right == nums.length) {
+                    break;
+                }
+                ++size;
+                sum += nums[right];
+            } else {
+                sum -= nums[left];
+                ++left;
+                --size;
+            }
+        }
+        return ans;
+    }
+}
