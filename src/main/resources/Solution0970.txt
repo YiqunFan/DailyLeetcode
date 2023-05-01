@@ -1,0 +1,35 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+// 0970. Powerful Integers
+class Solution {
+    public List<Integer> powerfulIntegers(int x, int y, int bound) {
+        List<Integer> powerSetOfX = getPowerSetLowerThanBound(x, bound);
+        List<Integer> powerSetOfY = getPowerSetLowerThanBound(y, bound);
+        HashSet<Integer> differentSum = new HashSet<>();
+        for (int px : powerSetOfX) {
+            for (int py : powerSetOfY) {
+                if (px + py > bound) {
+                    break;
+                } else {
+                    differentSum.add(px + py);
+                }
+            }
+        }
+        return new ArrayList<>(differentSum);
+    }
+
+    private List<Integer> getPowerSetLowerThanBound(int z, int bound) {
+        List<Integer> ret = new ArrayList<>();
+        ret.add(1);
+        int powerResult = z;
+        if (z > 1) {
+            while (powerResult <= bound) {
+                ret.add(powerResult);
+                powerResult *= z;
+            }
+        }
+        return ret;
+    }
+}
