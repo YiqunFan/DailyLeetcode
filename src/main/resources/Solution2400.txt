@@ -1,0 +1,19 @@
+// 2400. Number of Ways to Reach a Position After Exactly k Steps
+class Solution {
+    public int numberOfWays(int startPos, int endPos, int k) {
+        int distance = endPos - startPos;
+        if (distance == k) return 1;
+        if (distance > k) return 0;
+        final int MOD = 1000000007;
+        int offset = k + 1;
+        int width = offset * 2 + 1;
+        int[][] costXtoY = new int[offset][width];
+        costXtoY[0][offset] = 1;
+        for (int cost = 1; cost <= k; ++cost) {
+            for (int target = 1; target < width - 1; ++target) {
+                costXtoY[cost][target] = (costXtoY[cost - 1][target - 1] + costXtoY[cost - 1][target + 1]) % MOD;
+            }
+        }
+        return costXtoY[k][offset + distance];
+    }
+}

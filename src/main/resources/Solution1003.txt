@@ -1,0 +1,16 @@
+// 1003. Check If Word Is Valid After Substitutions
+class Solution {
+    public boolean isValid(String s) {
+        char[] stack = new char[s.length()];
+        int index = 0;
+        for (char c : s.toCharArray()) {
+            if ('c' == c && index > 1 && 'b' == stack[index - 1] && 'a' == stack[index - 2]) {
+                index -= 2;
+            } else {
+                stack[index] = c;
+                ++index;
+            }
+        }
+        return index == 0;
+    }
+}

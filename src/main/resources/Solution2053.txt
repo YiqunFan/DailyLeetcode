@@ -1,0 +1,21 @@
+import java.util.HashMap;
+
+// 2053. Kth Distinct String in an Array
+class Solution {
+    public String kthDistinct(String[] arr, int k) {
+        HashMap<String, Integer> stringCount = new HashMap<>();
+        for (String s : arr) {
+            stringCount.putIfAbsent(s, 0);
+            stringCount.put(s, stringCount.get(s) + 1);
+        }
+        for (String s : arr) {
+            if (stringCount.get(s) == 1) {
+                if (k == 1) {
+                    return s;
+                }
+                --k;
+            }
+        }
+        return "";
+    }
+}
