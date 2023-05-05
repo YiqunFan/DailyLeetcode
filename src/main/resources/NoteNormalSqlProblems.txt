@@ -65,12 +65,21 @@ lag(哪个字段向上，向上几格，如果为空则按什么来算)
 具体的逻辑并不是很困难，就是要先判断啥，然后再怎么判断，最后可以用else省略。
 把细节都掌握好了，写出来的效率就会比较可观了。
 
+0612. Shortest Distance in a Plane
+一道特别简单的考察两点平面几何距离的题目。
 
+0614. Second Degree Follower
+也算是简单题吧。
+使用group by和count函数求每组的数量，where语句当筛选条件，最后order by来对结果排序。
 
+0626. Exchange Seats
+这道题其实玩法有很多，最高效率，代码也最牛的就是用窗口函数lag和lead。
+因为最后一个奇数的人需要保留自己的id，所以可以使用lead函数的第三个参数设置一个默认值。
+这道题真的是特别巧妙的sql题，我超喜欢。
 
-
-
-
+1045. Customers Who Bought All Products
+这道题用到了外键的性质，既然是外键了，那肯定会在第二张表里面出现的。
+然后不要遇到判断和筛选就想到where，这道题用的就是group by + having的组合。
 
 
 

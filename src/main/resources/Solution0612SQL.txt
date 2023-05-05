@@ -1,0 +1,4 @@
+-- 0612. Shortest Distance in a Plane
+select round(min(sqrt((P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y) * (P1.y - P2.y))), 2) as shortest
+from Point2D P1, Point2D P2
+where P1.x != P2.x or P1.y != P2.y;
