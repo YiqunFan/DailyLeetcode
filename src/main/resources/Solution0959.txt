@@ -1,0 +1,74 @@
+// 0959. Regions Cut By Slashes
+class Solution {
+    public int regionsBySlashes(String[] grid) {
+        int n = grid.length;
+        int pieces = n * n * 4;
+        UnionFind uf = new UnionFind(pieces);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n - 1; ++j) {
+                int left = i * n * 4 + j * 4 + 1;
+                int right = left + 6;
+                uf.union(left, right);
+            }
+        }
+        for (int i = 0; i < n - 1; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int up = i * n * 4 + j * 4 + 2;
+                int down = up + n * 4 - 2;
+                uf.union(up, down);
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                char c = grid[i].charAt(j);
+                int base = i * n * 4 + j * 4;
+                if (c == ' ') {
+                    uf.union(base, base + 1);
+                    uf.union(base + 2, base + 3);
+                    uf.union(base, base + 2);
+                } else if (c == '/') {
+                    uf.union(base, base + 3);
+                    uf.union(base + 1, base + 2);
+                } else {
+                    uf.union(base, base + 1);
+                    uf.union(base + 2, base + 3);
+                }
+            }
+        }
+        return uf.getConnectedComponent();
+    }
+}
+
+class UnionFind {
+    int[] parents;
+    int connectedComponent;
+
+    public UnionFind(int n) {
+        parents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parents[i] = i;
+        }
+        connectedComponent = n;
+    }
+
+    int find(int son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parents[parentOfA] = parentOfB;
+            --connectedComponent;
+        }
+    }
+
+    int getConnectedComponent() {
+        return connectedComponent;
+    }
+}
