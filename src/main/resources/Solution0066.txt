@@ -1,0 +1,18 @@
+// 0066. Plus One
+class Solution {
+    public int[] plusOne(int[] digits) {
+        int len = digits.length;
+        int notCarry = len - 1;
+        while (notCarry >= 0 && digits[notCarry] == 9) {
+            digits[notCarry] = 0;
+            --notCarry;
+        }
+        if (notCarry == -1) {
+            int[] ans = new int[len + 1];
+            ans[0] = 1;
+            return ans;
+        }
+        ++digits[notCarry];
+        return digits;
+    }
+}

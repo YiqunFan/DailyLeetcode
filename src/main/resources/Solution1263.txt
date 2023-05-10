@@ -1,0 +1,98 @@
+import java.util.*;
+
+// 1263. Minimum Moves to Move a Box to Their Target Location
+class Solution {
+    int height;
+    int width;
+    int[][][][] minMoves;
+
+    public int minPushBox(char[][] grid) {
+        height = grid.length;
+        width = grid[0].length;
+        minMoves = new int[height][width][height][width];
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                for (int k = 0; k < height; ++k) {
+                    for (int l = 0; l < width; ++l) {
+                        minMoves[i][j][k][l] = -1;
+                    }
+                }
+            }
+        }
+        int targetX = 0;
+        int targetY = 0;
+        Case start = new Case(0, 0, 0, 0);
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                if (grid[i][j] == 'B') {
+                    start.bx = i;
+                    start.by = j;
+                } else if (grid[i][j] == 'S') {
+                    start.px = i;
+                    start.py = j;
+                } else if (grid[i][j] == 'T') {
+                    targetX = i;
+                    targetY = j;
+                }
+            }
+        }
+        minMoves[start.bx][start.by][start.px][start.py] = 0;
+        Deque<Case> dq = new ArrayDeque<>();
+        dq.addFirst(start);
+        int[][] delta = new int[][]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+        while (!dq.isEmpty()) {
+            Case front = dq.pollFirst();
+            for (int i = 0; i < 4; ++i) {
+                int npx = front.px + delta[i][0];
+                int npy = front.py + delta[i][1];
+                if (canMoveTo(front.bx, front.by, npx, npy, grid)) {
+                    minMoves[front.bx][front.by][npx][npy] = minMoves[front.bx][front.by][front.px][front.py];
+                    dq.addFirst(new Case(front.bx, front.by, npx, npy));
+                }
+            }
+            if (isAdjacent(front)) {
+                int nbx = front.bx * 2 - front.px;
+                int nby = front.by * 2 - front.py;
+                if (canPushBox(nbx, nby, front.px, front.py, grid)) {
+                    minMoves[nbx][nby][front.px][front.py] = minMoves[front.bx][front.by][front.px][front.py] + 1;
+                    if (nbx == targetX && nby == targetY) {
+                        return minMoves[nbx][nby][front.px][front.py];
+                    }
+                    dq.addLast(new Case(nbx, nby, front.px, front.py));
+                }
+            }
+        }
+        return -1;
+    }
+
+    private boolean canMoveTo(int bx, int by, int nx, int ny, char[][] grid) {
+        if (nx < 0 || ny < 0 || nx >= height || ny >= width) return false;
+        if (grid[nx][ny] == '#') return false;
+        if (bx == nx && by == ny) return false;
+        return minMoves[bx][by][nx][ny] == -1;
+    }
+
+    private boolean isAdjacent(Case front) {
+        return Math.abs(front.bx - front.px) + Math.abs(front.by - front.py) == 1;
+    }
+
+    private boolean canPushBox(int bx, int by, int nx, int ny, char[][] grid) {
+        if (bx < 0 || by < 0 || bx >= height || by >= width) return false;
+        if (grid[bx][by] == '#') return false;
+        return minMoves[bx][by][nx][ny] == -1;
+    }
+}
+
+class Case {
+    int bx;
+    int by;
+    int px;
+    int py;
+
+    public Case(int bx, int by, int px, int py) {
+        this.bx = bx;
+        this.by = by;
+        this.px = px;
+        this.py = py;
+    }
+}
