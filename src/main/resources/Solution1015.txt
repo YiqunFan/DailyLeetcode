@@ -1,0 +1,15 @@
+// 1015. Smallest Integer Divisible by K
+class Solution {
+    public int smallestRepunitDivByK(int k) {
+        if (k % 2 == 0 || k % 5 == 0) {
+            return -1;
+        }
+        int ans = 0;
+        int remainder = 0;
+        do {
+            ++ans;
+            remainder = (remainder * 10 + 1) % k;
+        } while (remainder != 0);
+        return ans;
+    }
+}
