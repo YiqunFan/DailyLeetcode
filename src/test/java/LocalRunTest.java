@@ -44,7 +44,9 @@ public class LocalRunTest {
         int from = 0;
         int to = 0;
         for (int i = 1; i < arrayList.size(); ++i) {
-            System.out.println("From:\t" + arrayList.get(i - 1) + "\tTo:\t" + arrayList.get(i) + "\tDistance:\t" + (arrayList.get(i) - arrayList.get(i - 1) - 1));
+            System.out.println("From:\t" + String.format("%04d", arrayList.get(i - 1)) +
+                    "\tTo:\t" + String.format("%04d", arrayList.get(i)) +
+                    "\tDistance:\t" + (arrayList.get(i) - arrayList.get(i - 1) - 1));
             if (arrayList.get(i) - arrayList.get(i - 1) > maxDistance) {
                 maxDistance = arrayList.get(i) - arrayList.get(i - 1);
                 from = arrayList.get(i - 1);
@@ -53,8 +55,8 @@ public class LocalRunTest {
         }
         // 打印最大距离区间
         System.out.println("LargestDistance: " + maxDistance);
-        System.out.println("From: " + from);
-        System.out.println("To: " + to);
+        System.out.println("From: " + String.format("%04d", from));
+        System.out.println("To: " + String.format("%04d", to));
     }
 
 }
