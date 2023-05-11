@@ -1,0 +1,15 @@
+// 1010. Pairs of Songs With Total Durations Divisible by 60
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        long[] remainders = new long[60];
+        for (int t : time) {
+            ++remainders[t % 60];
+        }
+        long ans = remainders[0] * (remainders[0] - 1) / 2;
+        ans += remainders[30] * (remainders[30] - 1) / 2;
+        for (int i = 1; i < 30; ++i) {
+            ans += remainders[i] * remainders[60 - i];
+        }
+        return (int) ans;
+    }
+}

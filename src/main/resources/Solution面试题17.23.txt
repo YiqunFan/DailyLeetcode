@@ -1,0 +1,63 @@
+// 面试题 17.23. Max Black Square LCCI
+class Solution {
+    public int[] findSquare(int[][] matrix) {
+        int height = matrix.length;
+        int width = matrix[0].length;
+        int[][] up = new int[width][height];
+        int[][] down = new int[width][height];
+        int[][] left = new int[width][height];
+        int[][] right = new int[width][height];
+        for (int j = 0; j < width; ++j) {
+            up[0][j] = matrix[0][j] == 1 ? 0 : 1;
+        }
+        for (int i = 1; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                up[i][j] = matrix[i][j] == 1 ? 0 : up[i - 1][j] + 1;
+            }
+        }
+        for (int j = 0; j < width; ++j) {
+            down[height - 1][j] = matrix[height - 1][j] == 1 ? 0 : 1;
+        }
+        for (int i = height - 2; i >= 0; --i) {
+            for (int j = 0; j < width; ++j) {
+                down[i][j] = matrix[i][j] == 1 ? 0 : down[i + 1][j] + 1;
+            }
+        }
+        for (int i = 0; i < height; ++i) {
+            left[i][0] = matrix[i][0] == 1 ? 0 : 1;
+        }
+        for (int i = 0; i < height; ++i) {
+            for (int j = 1; j < width; ++j) {
+                left[i][j] = matrix[i][j] == 1 ? 0 : left[i][j - 1] + 1;
+            }
+        }
+        for (int i = 0; i < height; ++i) {
+            right[i][width - 1] = matrix[i][width - 1] == 1 ? 0 : 1;
+        }
+        for (int i = 0; i < height; ++i) {
+            for (int j = width - 2; j >= 0; --j) {
+                right[i][j] = matrix[i][j] == 1 ? 0 : right[i][j + 1] + 1;
+            }
+        }
+        int r = 0;
+        int c = 0;
+        int lowerLimit = 0;
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                if (matrix[i][j] == 0) {
+                    int upperLimit = Math.min(down[i][j], right[i][j]);
+                    while (upperLimit > lowerLimit) {
+                        if (up[i + upperLimit - 1][j + upperLimit - 1] >= upperLimit && left[i + upperLimit - 1][j + upperLimit - 1] >= upperLimit) {
+                            r = i;
+                            c = j;
+                            lowerLimit = upperLimit;
+                        }
+                        --upperLimit;
+                    }
+                }
+            }
+        }
+        if (lowerLimit == 0) return new int[]{};
+        return new int[]{r, c, lowerLimit};
+    }
+}

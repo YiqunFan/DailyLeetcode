@@ -1,0 +1,42 @@
+// 0079. Word Search
+class Solution {
+    boolean isExist;
+    boolean[][] isVisited;
+    int[][] delta = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+    public boolean exist(char[][] board, String word) {
+        char[] charArray = word.toCharArray();
+        int m = board.length;
+        int n = board[0].length;
+        isExist = false;
+        isVisited = new boolean[m][n];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (board[i][j] == charArray[0]) {
+                    isVisited[i][j] = true;
+                    dfs(board, charArray, i, j, m, n, 1);
+                    isVisited[i][j] = false;
+                }
+                if (isExist) return true;
+            }
+        }
+        return false;
+    }
+
+    private void dfs(char[][] board, char[] charArray, int x, int y, int m, int n, int depth) {
+        if (depth == charArray.length) {
+            isExist = true;
+            return;
+        }
+        for (int i = 0; i < 4; ++i) {
+            int nx = x + delta[i][0];
+            int ny = y + delta[i][1];
+            if (nx >= 0 && ny >= 0 && nx < m && ny < n && !isVisited[nx][ny] && board[nx][ny] == charArray[depth]) {
+                isVisited[nx][ny] = true;
+                dfs(board, charArray, nx, ny, m, n, depth + 1);
+                isVisited[nx][ny] = false;
+            }
+
+        }
+    }
+}

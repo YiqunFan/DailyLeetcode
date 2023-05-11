@@ -1,0 +1,28 @@
+import java.util.TreeSet;
+
+// 0379. Design Phone Directory
+class PhoneDirectory {
+
+    TreeSet<Integer> pd = new TreeSet<>();
+
+    public PhoneDirectory(int maxNumbers) {
+        for (int i = 0; i < maxNumbers; ++i) {
+            pd.add(i);
+        }
+    }
+
+    public int get() {
+        if (pd.isEmpty()) {
+            return -1;
+        }
+        return pd.pollFirst();
+    }
+
+    public boolean check(int number) {
+        return pd.contains(number);
+    }
+
+    public void release(int number) {
+        pd.add(number);
+    }
+}
