@@ -44,7 +44,7 @@ public class LocalRunTest {
         int from = 0;
         int to = 0;
         for (int i = 1; i < arrayList.size(); ++i) {
-            System.out.println("From:\t" + arrayList.get(i - 1) + "\tTo:\t" + arrayList.get(i) + "\tDistance:\t" + (arrayList.get(i) - arrayList.get(i - 1)));
+            System.out.println("From:\t" + arrayList.get(i - 1) + "\tTo:\t" + arrayList.get(i) + "\tDistance:\t" + (arrayList.get(i) - arrayList.get(i - 1) - 1));
             if (arrayList.get(i) - arrayList.get(i - 1) > maxDistance) {
                 maxDistance = arrayList.get(i) - arrayList.get(i - 1);
                 from = arrayList.get(i - 1);
