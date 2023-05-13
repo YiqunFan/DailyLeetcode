@@ -1,0 +1,45 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+
+// 1054. Distant Barcodes
+class Solution {
+    public int[] rearrangeBarcodes(int[] barcodes) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int barcode : barcodes) {
+            map.put(barcode, map.getOrDefault(barcode, 0) + 1);
+        }
+        PriorityQueue<BarcodeFrequency> pq = new PriorityQueue<>((bf1, bf2) -> (bf2.frequency - bf1.frequency));
+        for (Map.Entry<Integer, Integer> e : map.entrySet()) {
+            pq.offer(new BarcodeFrequency(e.getKey(), e.getValue()));
+        }
+        int len = barcodes.length;
+        int[] ans = new int[len];
+        ans[0] = pq.peek().barcode;
+        --pq.peek().frequency;
+        for (int i = 1; i < len; ++i) {
+            BarcodeFrequency top1 = pq.poll();
+            BarcodeFrequency top2 = pq.poll();
+            if (ans[i - 1] == top1.barcode) {
+                ans[i] = top2.barcode;
+                --top2.frequency;
+            } else {
+                ans[i] = top1.barcode;
+                --top1.frequency;
+            }
+            pq.offer(top2);
+            pq.offer(top1);
+        }
+        return ans;
+    }
+}
+
+class BarcodeFrequency {
+    int barcode;
+    int frequency;
+
+    public BarcodeFrequency(int barcode, int frequency) {
+        this.barcode = barcode;
+        this.frequency = frequency;
+    }
+}

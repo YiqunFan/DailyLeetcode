@@ -1,0 +1,11 @@
+// 0495. Teemo Attacking
+class Solution {
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+        int len = timeSeries.length;
+        int ans = duration;
+        for (int i = 1; i < len; ++i) {
+            ans += Math.min(duration, timeSeries[i] - timeSeries[i - 1]);
+        }
+        return ans;
+    }
+}
