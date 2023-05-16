@@ -1,0 +1,25 @@
+// 1335. Minimum Difficulty of a Job Schedule
+class Solution {
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        int len = jobDifficulty.length;
+        if (d > len) {
+            return -1;
+        }
+        int[][] minTotalDifficulty = new int[d][len];
+        minTotalDifficulty[0][0] = jobDifficulty[0];
+        for (int j = 1; j < len; ++j) {
+            minTotalDifficulty[0][j] = Math.max(minTotalDifficulty[0][j - 1], jobDifficulty[j]);
+        }
+        for (int i = 1; i < d; ++i) {
+            for (int j = i; j < len; ++j) {
+                minTotalDifficulty[i][j] = Integer.MAX_VALUE;
+                int maxDifficulty = 0;
+                for (int k = j; k >= i; --k) {
+                    maxDifficulty = Math.max(maxDifficulty, jobDifficulty[k]);
+                    minTotalDifficulty[i][j] = Math.min(minTotalDifficulty[i][j], minTotalDifficulty[i - 1][k - 1] + maxDifficulty);
+                }
+            }
+        }
+        return minTotalDifficulty[d - 1][len - 1];
+    }
+}
