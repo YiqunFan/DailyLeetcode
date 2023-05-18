@@ -1,0 +1,23 @@
+// 1079. Letter Tile Possibilities
+class Solution {
+    int[] letterCount = new int[123];
+
+    public int numTilePossibilities(String tiles) {
+        for (char c : tiles.toCharArray()) {
+            ++letterCount[c];
+        }
+        return formLonger() - 1;
+    }
+
+    private int formLonger() {
+        int possibilities = 1;
+        for (char c = 'A'; c <= 'Z'; ++c) {
+            if (letterCount[c] > 0) {
+                --letterCount[c];
+                possibilities += formLonger();
+                ++letterCount[c];
+            }
+        }
+        return possibilities;
+    }
+}

@@ -1,0 +1,33 @@
+// 1073. Adding Two Negabinary Numbers
+class Solution {
+    public int[] addNegabinary(int[] arr1, int[] arr2) {
+        int bit1 = arr1.length - 1;
+        int bit2 = arr2.length - 1;
+        int[] preAns = new int[Math.max(bit1, bit2) + 3];
+        int preAnsLen = preAns.length;
+        int index = preAnsLen - 1;
+        int carry = 0;
+        while (bit1 >= 0 || bit2 >= 0 || carry != 0) {
+            int a = bit1 >= 0 ? arr1[bit1] : 0;
+            int b = bit2 >= 0 ? arr2[bit2] : 0;
+            int sum = a + b + carry;
+            int remainder = sum % -2;
+            carry = sum / -2;
+            if (remainder < 0) {
+                ++carry;
+                remainder += 2;
+            }
+            preAns[index] = remainder;
+            --index;
+            --bit1;
+            --bit2;
+        }
+        index = 0;
+        while (index < preAnsLen - 1 && preAns[index] == 0) {
+            ++index;
+        }
+        int[] ans = new int[preAnsLen - index];
+        System.arraycopy(preAns, index, ans, 0, ans.length);
+        return ans;
+    }
+}
