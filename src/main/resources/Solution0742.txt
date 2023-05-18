@@ -1,0 +1,53 @@
+import java.util.*;
+
+// 0742. Closest Leaf in a Binary Tree
+class Solution {
+    public int findClosestLeaf(TreeNode root, int k) {
+        Map<Integer, List<Integer>> connect = new HashMap<>();
+        Set<Integer> leaves = new HashSet<>();
+        connect.put(root.val, new ArrayList<>());
+        buildMap(root, connect, leaves);
+        return bfs(connect, leaves, k);
+    }
+
+    private void buildMap(TreeNode node, Map<Integer, List<Integer>> connect, Set<Integer> leaves) {
+        if (node.left != null) {
+            connect.get(node.val).add(node.left.val);
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(node.val);
+            connect.put(node.left.val, list);
+            buildMap(node.left, connect, leaves);
+        }
+        if (node.right != null) {
+            connect.get(node.val).add(node.right.val);
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(node.val);
+            connect.put(node.right.val, list);
+            buildMap(node.right, connect, leaves);
+        }
+        if (node.left == null && node.right == null) {
+            leaves.add(node.val);
+        }
+    }
+
+    private int bfs(Map<Integer, List<Integer>> connect, Set<Integer> leaves, int k) {
+        HashSet<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(k);
+        visited.add(k);
+        while (!queue.isEmpty()) {
+            Integer front = queue.poll();
+            if (leaves.contains(front)) {
+                return front;
+            }
+            List<Integer> list = connect.get(front);
+            for (Integer a : list) {
+                if (!visited.contains(a)) {
+                    visited.add(a);
+                    queue.offer(a);
+                }
+            }
+        }
+        return -1;
+    }
+}
