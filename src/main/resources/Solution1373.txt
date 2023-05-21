@@ -1,0 +1,24 @@
+// 1373. Maximum Sum BST in Binary Tree
+class Solution {
+    int ans = 0;
+
+    public int maxSumBST(TreeNode root) {
+        postorderTraversal(root);
+        return ans;
+    }
+
+    public int[] postorderTraversal(TreeNode root) {
+        if (root == null) return new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE, 0};
+        int[] left = postorderTraversal(root.left);
+        int[] right = postorderTraversal(root.right);
+        if (root.val > left[1] && root.val < right[0]) {
+            int[] res = new int[3];
+            res[0] = Math.min(left[0], root.val);
+            res[1] = Math.max(right[1], root.val);
+            res[2] = root.val + left[2] + right[2];
+            ans = Math.max(ans, res[2]);
+            return res;
+        }
+        return new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE, 0};
+    }
+}

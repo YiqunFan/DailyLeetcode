@@ -28,7 +28,7 @@ public class LocalRunTest {
         for (File f : files) {
             String filename = f.getName();
             // 去除面试题，保留Solution和.txt的文件名的题号
-            if (filename.contains(".txt") && filename.contains("Solution") && !filename.contains("面试题")) {
+            if (filename.contains(".txt") && filename.contains("Solution") && !filename.contains("面试题") && !filename.contains("LC")) {
                 String substring = filename.substring(8, 12);
                 problemNumbers.add(substring);
             }
