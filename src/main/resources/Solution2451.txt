@@ -1,0 +1,26 @@
+// 2451. Odd String Difference
+class Solution {
+    public String oddString(String[] words) {
+        int n = words.length;
+        int len = words[0].length();
+        for (int i = 1; i < len; ++i) {
+            int difference0 = ((words[0].charAt(i) - words[0].charAt(i - 1)) + 26) % 26;
+            int difference1 = ((words[1].charAt(i) - words[1].charAt(i - 1)) + 26) % 26;
+            if (difference0 == difference1) {
+                for (int j = 2; j < n; ++j) {
+                    if (((words[j].charAt(i) - words[j].charAt(i - 1)) + 26) % 26 != difference0) {
+                        return words[j];
+                    }
+                }
+            } else {
+                int difference2 = ((words[2].charAt(i) - words[2].charAt(i - 1)) + 26) % 26;
+                if (difference0 == difference2) {
+                    return words[1];
+                } else {
+                    return words[0];
+                }
+            }
+        }
+        return null;
+    }
+}
