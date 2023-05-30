@@ -1,0 +1,48 @@
+import java.util.*;
+
+// 1377. Frog Position After T Seconds
+class Solution {
+    public double frogPosition(int n, int[][] edges, int t, int target) {
+        List<List<Integer>> neighbors = new ArrayList<>();
+        for (int i = 0; i <= n; ++i) {
+            neighbors.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            neighbors.get(edge[0]).add(edge[1]);
+            neighbors.get(edge[1]).add(edge[0]);
+        }
+        double[] probabilities = new double[n + 1];
+        boolean[] isVisited = new boolean[n + 1];
+        probabilities[1] = 1.0;
+        isVisited[1] = true;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(1);
+        while (t > 0 && !queue.isEmpty()) {
+            int size = queue.size();
+            while (size > 0) {
+                Integer front = queue.poll();
+                int childrenQuantity = 0;
+                List<Integer> children = neighbors.get(front);
+                for (Integer child : children) {
+                    if (!isVisited[child]) {
+                        ++childrenQuantity;
+                    }
+                }
+                if (childrenQuantity > 0) {
+                    double splittedProbability = probabilities[front] / childrenQuantity;
+                    for (Integer child : children) {
+                        if (!isVisited[child]) {
+                            probabilities[child] = splittedProbability;
+                            isVisited[child] = true;
+                            queue.offer(child);
+                        }
+                    }
+                    probabilities[front] = 0.0;
+                }
+                --size;
+            }
+            --t;
+        }
+        return probabilities[target];
+    }
+}

@@ -1,0 +1,20 @@
+// 0427. Construct Quad Tree
+class Solution {
+    public Node construct(int[][] grid) {
+        return buildTree(grid, 0, 0, grid.length);
+    }
+
+    private Node buildTree(int[][] grid, int row, int col, int n) {
+        if (n == 1) return new Node(grid[row][col] == 1, true);
+        Node topLeft = buildTree(grid, row, col, n / 2);
+        Node topRight = buildTree(grid, row, col + (n / 2), n / 2);
+        Node bottomLeft = buildTree(grid, row + (n / 2), col, n / 2);
+        Node bottomRight = buildTree(grid, row + (n / 2), col + (n / 2), n / 2);
+        boolean allLeafs = topLeft.isLeaf && topRight.isLeaf && bottomLeft.isLeaf && bottomRight.isLeaf;
+        boolean allEquals = topLeft.val == topRight.val && topLeft.val == bottomLeft.val && topLeft.val == bottomRight.val;
+        if (allLeafs && allEquals) {
+            return new Node(topLeft.val, true);
+        }
+        return new Node(topLeft.val, false, topLeft, topRight, bottomLeft, bottomRight);
+    }
+}

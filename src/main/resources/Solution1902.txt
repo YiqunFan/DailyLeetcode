@@ -1,0 +1,19 @@
+import java.util.TreeMap;
+
+// 1902. Depth of BST Given Insertion Order
+class Solution {
+    public int maxDepthBST(int[] order) {
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+        treeMap.put(0, 0);
+        treeMap.put(Integer.MAX_VALUE, 0);
+        int ans = 0;
+        for (int e : order) {
+            Integer lowerValue = treeMap.lowerEntry(e).getValue();
+            Integer higherValue = treeMap.higherEntry(e).getValue();
+            int value = Math.max(lowerValue, higherValue) + 1;
+            ans = Math.max(ans, value);
+            treeMap.put(e, value);
+        }
+        return ans;
+    }
+}

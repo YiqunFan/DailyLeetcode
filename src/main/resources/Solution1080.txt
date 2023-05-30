@@ -1,0 +1,27 @@
+// 1080. Insufficient Nodes in Root to Leaf Paths
+class Solution {
+    public TreeNode sufficientSubset(TreeNode root, int limit) {
+        return dfs(root, limit, 0);
+    }
+
+    private TreeNode dfs(TreeNode node, int limit, int prefixSum) {
+        int sum = prefixSum + node.val;
+        if (node.left == null && node.right == null) {
+            if (sum < limit) {
+                return null;
+            } else {
+                return node;
+            }
+        }
+        if (node.left != null) {
+            node.left = dfs(node.left, limit, sum);
+        }
+        if (node.right != null) {
+            node.right = dfs(node.right, limit, sum);
+        }
+        if (node.left == null && node.right == null) {
+            return null;
+        }
+        return node;
+    }
+}
