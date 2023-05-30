@@ -1,0 +1,35 @@
+import java.util.*;
+
+// 1110. Delete Nodes And Return Forest
+class Solution {
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        boolean[] needDelete = new boolean[1001];
+        for (int d : to_delete) {
+            needDelete[d] = true;
+        }
+        List<TreeNode> ans = new ArrayList<>();
+        root = postorderTraversal(root, needDelete, ans);
+        if (root != null) {
+            ans.add(root);
+        }
+        return ans;
+    }
+
+    private TreeNode postorderTraversal(TreeNode node, boolean[] needDelete, List<TreeNode> ans) {
+        if (node == null) {
+            return null;
+        }
+        node.left = postorderTraversal(node.left, needDelete, ans);
+        node.right = postorderTraversal(node.right, needDelete, ans);
+        if (needDelete[node.val]) {
+            if (node.left != null) {
+                ans.add(node.left);
+            }
+            if (node.right != null) {
+                ans.add(node.right);
+            }
+            return null;
+        }
+        return node;
+    }
+}
