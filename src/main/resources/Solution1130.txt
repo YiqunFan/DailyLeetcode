@@ -1,0 +1,22 @@
+import java.util.Stack;
+
+// 1130. Minimum Cost Tree From Leaf Values
+class Solution {
+    public int mctFromLeafValues(int[] arr) {
+        int ans = 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        stack.push(Integer.MAX_VALUE);
+        for (int right : arr) {
+            while (stack.peek() <= right) {
+                int valley = stack.pop();
+                int left = stack.peek();
+                ans += valley * Math.min(left, right);
+            }
+            stack.push(right);
+        }
+        while (stack.size() > 2) {
+            ans += stack.pop() * stack.peek();
+        }
+        return ans;
+    }
+}
