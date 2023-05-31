@@ -1,0 +1,51 @@
+// 1093. Statistics from a Large Sample
+class Solution {
+    public double[] sampleStats(int[] count) {
+        int len = count.length;
+        int min = 0;
+        int max = 0;
+        for (int i = 0; i < len; ++i) {
+            if (count[i] != 0) {
+                min = i;
+                break;
+            }
+        }
+        for (int i = len - 1; i >= 0; --i) {
+            if (count[i] != 0) {
+                max = i;
+                break;
+            }
+        }
+        double totalSum = 0;
+        int totalCount = 0;
+        for (int i = 0; i < len; ++i) {
+            totalCount += count[i];
+            totalSum += (long) count[i] * i;
+        }
+        double mean = totalSum / totalCount;
+        int median1 = 0;
+        int median2 = 0;
+        int left = 0;
+        int half = totalCount / 2;
+        for (int i = 0; i < len; ++i) {
+            left += count[i];
+            if (left >= half) {
+                median1 = i;
+                while (left == half) {
+                    ++i;
+                    left += count[i];
+                }
+                median2 = i;
+                break;
+            }
+        }
+        double median = (totalCount & 1) == 0 ? (median1 + median2) / 2.0 : median2;
+        int mode = 0;
+        for (int i = 0; i < len; ++i) {
+            if (count[i] > count[mode]) {
+                mode = i;
+            }
+        }
+        return new double[]{min, max, mean, median, mode};
+    }
+}
