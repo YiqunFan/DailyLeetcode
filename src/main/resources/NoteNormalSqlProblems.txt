@@ -81,7 +81,13 @@ lag(哪个字段向上，向上几格，如果为空则按什么来算)
 这道题用到了外键的性质，既然是外键了，那肯定会在第二张表里面出现的。
 然后不要遇到判断和筛选就想到where，这道题用的就是group by + having的组合。
 
+1070. Product Sales Analysis III
 
+
+1077. Project Employees III
+
+
+1098. Unpopular Books
 
 
 
