@@ -1,0 +1,6 @@
+// 2629. Function Composition
+var compose = function (functions) {
+    return function (x) {
+        return functions.reduceRight((target, fn) => fn(target), x);
+    }
+};

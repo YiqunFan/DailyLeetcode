@@ -1,0 +1,8 @@
+// 2626. Array Reduce Transformation
+var reduce = function (nums, fn, init) {
+    let ret = init;
+    for (let i = 0; i < nums.length; ++i) {
+        ret = fn(ret, nums[i]);
+    }
+    return ret;
+};
