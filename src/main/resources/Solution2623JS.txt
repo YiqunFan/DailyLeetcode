@@ -1,0 +1,11 @@
+// 2623. Memoize
+function memoize(fn) {
+    const hashMap = new Map();
+    return function (...args) {
+        let argString = args.join('-');
+        if (!hashMap.has(argString)) {
+            hashMap.set(argString, fn(...args));
+        }
+        return hashMap.get(argString);
+    }
+}

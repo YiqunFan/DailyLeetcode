@@ -1,0 +1,21 @@
+import java.util.Arrays;
+
+// 2500. Delete Greatest Value in Each Row
+class Solution {
+    public int deleteGreatestValue(int[][] grid) {
+        int height = grid.length;
+        int width = grid[0].length;
+        for (int[] row : grid) {
+            Arrays.sort(row);
+        }
+        int ans = 0;
+        for (int j = width - 1; j >= 0; --j) {
+            int maxCell = 0;
+            for (int[] row : grid) {
+                maxCell = Math.max(maxCell, row[j]);
+            }
+            ans += maxCell;
+        }
+        return ans;
+    }
+}
