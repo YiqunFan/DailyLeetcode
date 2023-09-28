@@ -1,0 +1,54 @@
+import java.util.*;
+
+// 2597. The Number of Beautiful Subsets
+class Solution {
+    public int beautifulSubsets(int[] nums, int k) {
+        int[] numberFrequencyMap = new int[1001];
+        for (int num : nums) {
+            ++numberFrequencyMap[num];
+        }
+        HashMap<Integer, HashSet<Integer>> congruenceMap = new HashMap<>();
+        for (int num : nums) {
+            int remainder = num % k;
+            if (congruenceMap.containsKey(remainder)) {
+                congruenceMap.get(remainder).add(num);
+            } else {
+                HashSet<Integer> newSet = new HashSet<>();
+                newSet.add(num);
+                congruenceMap.put(remainder, newSet);
+            }
+        }
+        int ans = 1;
+        for (Map.Entry<Integer, HashSet<Integer>> entry : congruenceMap.entrySet()) {
+            ans = ans * combinationCount(entry.getValue(), numberFrequencyMap, k);
+        }
+        return ans - 1;
+    }
+
+    private int combinationCount(HashSet<Integer> congruenceSet, int[] numberFrequencyMap, int k) {
+        Integer[] congruenceArray = congruenceSet.toArray(new Integer[0]);
+        Arrays.sort(congruenceArray);
+        int size = congruenceArray.length;
+        int[] chosen = new int[size];
+        int[] unChosen = new int[size];
+        chosen[0] = twoPower(numberFrequencyMap[congruenceArray[0]]) - 1;
+        unChosen[0] = 1;
+        for (int i = 1; i < size; ++i) {
+            if (congruenceArray[i] == congruenceArray[i - 1] + k) {
+                chosen[i] = unChosen[i - 1] * (twoPower(numberFrequencyMap[congruenceArray[i]]) - 1);
+            } else {
+                chosen[i] = (chosen[i - 1] + unChosen[i - 1]) * (twoPower(numberFrequencyMap[congruenceArray[i]]) - 1);
+            }
+            unChosen[i] = chosen[i - 1] + unChosen[i - 1];
+        }
+        return chosen[size - 1] + unChosen[size - 1];
+    }
+
+    private int twoPower(int x) {
+        int ret = 1;
+        for (int i = 0; i < x; ++i) {
+            ret *= 2;
+        }
+        return ret;
+    }
+}
