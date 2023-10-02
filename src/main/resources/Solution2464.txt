@@ -1,0 +1,43 @@
+// 2464. Minimum Subarrays in a Valid Split
+class Solution {
+    public int validSubarraySplit(int[] nums) {
+        int len = nums.length;
+        if (nums[0] == 1 || nums[len - 1] == 1) {
+            return -1;
+        }
+        int[] minSplit = new int[len];
+        for (int i = 1; i < len; ++i) {
+            minSplit[i] = Integer.MAX_VALUE;
+        }
+        minSplit[0] = 1;
+        for (int right = 1; right < len; ++right) {
+            if (nums[right] == 1) {
+                minSplit[right] = -1;
+                continue;
+            }
+            if (GCDLargeThan1(nums[0], nums[right])) {
+                minSplit[right] = 1;
+                continue;
+            }
+            for (int left = 1; left <= right; ++left) {
+                if (minSplit[left - 1] != -1 && GCDLargeThan1(nums[left], nums[right])) {
+                    minSplit[right] = Math.min(minSplit[right], minSplit[left - 1] + 1);
+                }
+            }
+            if (minSplit[right] == Integer.MAX_VALUE) {
+                minSplit[right] = -1;
+            }
+        }
+        return minSplit[len - 1];
+    }
+
+    private boolean GCDLargeThan1(int num0, int num1) {
+        if (num0 == 1 || num1 == 1) {
+            return false;
+        }
+        if (num0 % num1 == 0) {
+            return true;
+        }
+        return GCDLargeThan1(num1, num0 % num1);
+    }
+}

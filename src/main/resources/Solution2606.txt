@@ -1,0 +1,27 @@
+// 2606. Find the Substring With Maximum Cost
+class Solution {
+    public int maximumCostSubstring(String s, String chars, int[] vals) {
+        int[] charValue = new int[123];
+        for (int i = 1; i < 27; ++i) {
+            charValue[i + 96] = i;
+        }
+        for (int i = 0; i < chars.length(); ++i) {
+            charValue[chars.charAt(i)] = vals[i];
+        }
+        int len = s.length();
+        int[] maxValues = new int[len];
+        maxValues[0] = charValue[s.charAt(0)];
+        for (int i = 1; i < len; ++i) {
+            if (maxValues[i - 1] > 0) {
+                maxValues[i] = maxValues[i - 1] + charValue[s.charAt(i)];
+            } else {
+                maxValues[i] = charValue[s.charAt(i)];
+            }
+        }
+        int ans = 0;
+        for (int maxValue : maxValues) {
+            ans = Math.max(ans, maxValue);
+        }
+        return ans;
+    }
+}

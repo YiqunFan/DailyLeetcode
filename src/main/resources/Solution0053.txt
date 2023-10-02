@@ -1,0 +1,20 @@
+// 0053. Maximum Subarray
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int len = nums.length;
+        int[] maxValues = new int[len];
+        maxValues[0] = nums[0];
+        for (int i = 1; i < len; ++i) {
+            if (maxValues[i - 1] > 0) {
+                maxValues[i] = nums[i] + maxValues[i - 1];
+            } else {
+                maxValues[i] = nums[i];
+            }
+        }
+        int ans = 0;
+        for (int maxValue : maxValues) {
+            ans = Math.max(ans, maxValue);
+        }
+        return ans;
+    }
+}

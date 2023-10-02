@@ -1,0 +1,79 @@
+import java.util.PriorityQueue;
+
+// 2532. Time to Cross a Bridge
+class Solution {
+    public int findCrossingTime(int n, int k, int[][] time) {
+        PriorityQueue<Worker> bridgeLeft = new PriorityQueue<>((o1, o2) -> {
+            if (o1.roundTrip == o2.roundTrip) {
+                return o2.index - o1.index;
+            }
+            return o2.roundTrip - o1.roundTrip;
+        });
+        PriorityQueue<Worker> bridgeRight = new PriorityQueue<>((o1, o2) -> {
+            if (o1.roundTrip == o2.roundTrip) {
+                return o2.index - o1.index;
+            }
+            return o2.roundTrip - o1.roundTrip;
+        });
+        PriorityQueue<Worker> pickers = new PriorityQueue<>((o1, o2) -> o1.freeTime - o2.freeTime);
+        PriorityQueue<Worker> putters = new PriorityQueue<>((o1, o2) -> o1.freeTime - o2.freeTime);
+        for (int i = 0; i < time.length; ++i) {
+            Worker worker = new Worker(time[i][0], time[i][1], time[i][2], time[i][3], time[i][0] + time[i][2], i, 0);
+            bridgeLeft.offer(worker);
+        }
+        int timestamp = 0;
+        while (n != 0 || !bridgeRight.isEmpty() || !pickers.isEmpty()) {
+            while (!pickers.isEmpty() && pickers.peek().freeTime <= timestamp) {
+                bridgeRight.offer(pickers.poll());
+            }
+            while (!putters.isEmpty() && putters.peek().freeTime <= timestamp) {
+                bridgeLeft.offer(putters.poll());
+            }
+            if (!bridgeRight.isEmpty()) {
+                Worker moveToLeftWorker = bridgeRight.poll();
+                timestamp += moveToLeftWorker.rightToLeft;
+                moveToLeftWorker.freeTime = timestamp + moveToLeftWorker.putNew;
+                putters.offer(moveToLeftWorker);
+            } else if (!bridgeLeft.isEmpty() && n != 0) {
+                Worker moveToRightWorker = bridgeLeft.poll();
+                timestamp += moveToRightWorker.leftToRight;
+                moveToRightWorker.freeTime = timestamp + moveToRightWorker.pickOld;
+                pickers.offer(moveToRightWorker);
+                --n;
+            } else {
+                if (pickers.isEmpty() && !putters.isEmpty()) {
+                    timestamp = putters.peek().freeTime;
+                } else if (!pickers.isEmpty() && putters.isEmpty()) {
+                    timestamp = pickers.peek().freeTime;
+                } else {
+                    if (pickers.peek().freeTime < putters.peek().freeTime) {
+                        timestamp = pickers.peek().freeTime;
+                    } else {
+                        timestamp = putters.peek().freeTime;
+                    }
+                }
+            }
+        }
+        return timestamp;
+    }
+}
+
+class Worker {
+    public Worker(int leftToRight, int pickOld, int rightToLeft, int putNew, int roundTrip, int index, int freeTime) {
+        this.leftToRight = leftToRight;
+        this.pickOld = pickOld;
+        this.rightToLeft = rightToLeft;
+        this.putNew = putNew;
+        this.roundTrip = roundTrip;
+        this.index = index;
+        this.freeTime = freeTime;
+    }
+
+    int leftToRight;
+    int pickOld;
+    int rightToLeft;
+    int putNew;
+    int roundTrip;
+    int index;
+    int freeTime;
+}

@@ -1,0 +1,52 @@
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
+
+// 2071. Maximum Number of Tasks You Can Assign
+class Solution {
+    public int maxTaskAssign(int[] tasks, int[] workers, int pills, int strength) {
+        Arrays.sort(tasks);
+        int left = 0;
+        int right = tasks.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (canAssign(tasks, workers, pills, strength, mid)) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return (left + 1) - 1;
+    }
+
+    private boolean canAssign(int[] tasks, int[] workers, int pills, int strength, int mid) {
+        if (mid + 1 > workers.length) {
+            return false;
+        }
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+        for (int worker : workers) {
+            treeMap.put(worker, treeMap.getOrDefault(worker, 0) + 1);
+        }
+        for (int i = mid; i >= 0; --i) {
+            Map.Entry<Integer, Integer> lastEntry = treeMap.lastEntry();
+            if (lastEntry.getKey() >= tasks[i]) {
+                if (lastEntry.getValue() == 1) {
+                    treeMap.remove(lastEntry.getKey());
+                } else {
+                    treeMap.put(lastEntry.getKey(), lastEntry.getValue() - 1);
+                }
+            } else if (pills != 0 && lastEntry.getKey() + strength >= tasks[i]) {
+                Map.Entry<Integer, Integer> ceilingEntry = treeMap.ceilingEntry(tasks[i] - strength);
+                if (ceilingEntry.getValue() == 1) {
+                    treeMap.remove(ceilingEntry.getKey());
+                } else {
+                    treeMap.put(ceilingEntry.getKey(), ceilingEntry.getValue() - 1);
+                }
+                --pills;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+}
