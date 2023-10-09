@@ -1,0 +1,16 @@
+// 2721. Execute Asynchronous Functions in Parallel
+var promiseAll = function (functions) {
+    return new Promise((resolve, reject) => {
+        const result = new Array(functions.length);
+        let finish = 0;
+        functions.forEach((fn, i) => {
+            fn().then(value => {
+                result[i] = value;
+                ++finish;
+                if (finish === functions.length) {
+                    resolve(result);
+                }
+            }).catch(reason => reject(reason));
+        });
+    });
+};

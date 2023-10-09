@@ -1,0 +1,21 @@
+// 1987. Number of Unique Good Subsequences
+class Solution {
+    public int numberOfUniqueGoodSubsequences(String binary) {
+        final int MOD = 1000000007;
+        char[] charArray = binary.toCharArray();
+        int endWith0 = 0;
+        int endWith1 = 0;
+        for (char ch : charArray) {
+            if (ch == '0') {
+                endWith0 = (endWith0 + endWith1) % MOD;
+            } else {
+                endWith1 = (endWith0 + endWith1 + 1) % MOD;
+            }
+        }
+        int ans = (endWith0 + endWith1);
+        if (binary.contains("0")) {
+            ++ans;
+        }
+        return ans % MOD;
+    }
+}

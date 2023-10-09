@@ -1,0 +1,40 @@
+import java.util.*;
+
+// 1719. Number Of Ways To Reconstruct A Tree
+class Solution {
+    public int checkWays(int[][] pairs) {
+        HashMap<Integer, HashSet<Integer>> immediateFamilies = new HashMap<>();
+        for (int[] pair : pairs) {
+            immediateFamilies.putIfAbsent(pair[0], new HashSet<>());
+            immediateFamilies.putIfAbsent(pair[1], new HashSet<>());
+            immediateFamilies.get(pair[0]).add(pair[1]);
+            immediateFamilies.get(pair[1]).add(pair[0]);
+        }
+        ArrayList<Integer> nodeList = new ArrayList<>(immediateFamilies.keySet());
+        nodeList.sort((a, b) -> immediateFamilies.get(a).size() - immediateFamilies.get(b).size());
+        int size = nodeList.size();
+        int ans = 1;
+        for (int i = 0; i < size - 1; ++i) {
+            Integer nodeI = nodeList.get(i);
+            int j = i + 1;
+            while (j != size && !immediateFamilies.get(nodeI).contains(nodeList.get(j))) {
+                ++j;
+            }
+            if (j == size) {
+                return 0;
+            }
+            Integer nodeJ = nodeList.get(j);
+            for (Integer familyI : immediateFamilies.get(nodeI)) {
+                if (!immediateFamilies.get(nodeJ).contains(familyI) && !familyI.equals(nodeJ)) {
+                    return 0;
+                }
+            }
+            if (ans == 1) {
+                if (immediateFamilies.get(nodeI).size() == immediateFamilies.get(nodeJ).size()) {
+                    ans = 2;
+                }
+            }
+        }
+        return ans;
+    }
+}

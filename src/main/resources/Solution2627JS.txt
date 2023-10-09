@@ -1,0 +1,8 @@
+// 2627. Debounce
+var debounce = function (fn, t) {
+    let timeId = null;
+    return function (...args) {
+        if (timeId) clearTimeout(timeId);
+        timeId = setTimeout(() => fn(...args), t);
+    }
+};

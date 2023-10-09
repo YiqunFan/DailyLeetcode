@@ -1,0 +1,43 @@
+import java.util.*;
+
+class Solution {
+    public boolean areSentencesSimilar(String[] sentence1, String[] sentence2, List<List<String>> similarPairs) {
+        if (sentence1.length != sentence2.length) {
+            return false;
+        }
+        HashMap<String, Set<String>> similarDict = new HashMap<>();
+        for (List<String> similarPair : similarPairs) {
+            if (similarDict.containsKey(similarPair.get(0))) {
+                Set<String> set = similarDict.get(similarPair.get(0));
+                set.add(similarPair.get(1));
+            } else {
+                Set<String> set = new HashSet<>();
+                set.add(similarPair.get(1));
+                similarDict.put(similarPair.get(0), set);
+            }
+            if (similarDict.containsKey(similarPair.get(1))) {
+                Set<String> set = similarDict.get(similarPair.get(1));
+                set.add(similarPair.get(0));
+            } else {
+                Set<String> set = new HashSet<>();
+                set.add(similarPair.get(0));
+                similarDict.put(similarPair.get(1), set);
+            }
+        }
+        int len = sentence1.length;
+        for (int i = 0; i < len; ++i) {
+            if (sentence1[i].equals(sentence2[i])) {
+                continue;
+            } else if (similarDict.containsKey(sentence1[i])) {
+                Set<String> set = similarDict.get(sentence1[i]);
+                if (set.contains(sentence2[i])) {
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+}

@@ -1,0 +1,32 @@
+import java.util.Map;
+import java.util.TreeMap;
+
+// 0975. Odd Even Jump
+class Solution {
+    public int oddEvenJumps(int[] arr) {
+        int len = arr.length;
+        boolean[] oddJumpReach = new boolean[len];
+        boolean[] evenJumpReach = new boolean[len];
+        oddJumpReach[len - 1] = true;
+        evenJumpReach[len - 1] = true;
+        TreeMap<Integer, Integer> valueIndexMap = new TreeMap<>();
+        for (int i = len - 2; i >= 0; --i) {
+            valueIndexMap.put(arr[i + 1], i + 1);
+            Map.Entry<Integer, Integer> ceilingEntry = valueIndexMap.ceilingEntry(arr[i]);
+            Map.Entry<Integer, Integer> floorEntry = valueIndexMap.floorEntry(arr[i]);
+            if (ceilingEntry != null) {
+                oddJumpReach[i] = evenJumpReach[ceilingEntry.getValue()];
+            }
+            if (floorEntry != null) {
+                evenJumpReach[i] = oddJumpReach[floorEntry.getValue()];
+            }
+        }
+        int ans = 0;
+        for (boolean o : oddJumpReach) {
+            if (o) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}

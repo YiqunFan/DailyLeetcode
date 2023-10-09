@@ -1,0 +1,42 @@
+import java.util.HashMap;
+
+// 1396. Design Underground System
+class UndergroundSystem {
+    HashMap<Integer, Trip> unLeave;
+    HashMap<String, Trip> siteToSite;
+
+    public UndergroundSystem() {
+        unLeave = new HashMap<>();
+        siteToSite = new HashMap<>();
+    }
+
+    public void checkIn(int id, String stationName, int t) {
+        Trip trip = new Trip();
+        trip.checkInTime = t;
+        trip.startStation = stationName;
+        unLeave.put(id, trip);
+    }
+
+    public void checkOut(int id, String stationName, int t) {
+        Trip remove = unLeave.remove(id);
+        String fullName = remove.startStation + "-" + stationName;
+        if (!siteToSite.containsKey(fullName)) {
+            siteToSite.put(fullName, new Trip());
+        }
+        Trip trip = siteToSite.get(fullName);
+        ++trip.finishTimes;
+        trip.costTime += t - remove.checkInTime;
+    }
+
+    public double getAverageTime(String startStation, String endStation) {
+        Trip trip = siteToSite.get(startStation + "-" + endStation);
+        return trip.costTime / trip.finishTimes;
+    }
+}
+
+class Trip {
+    int finishTimes;
+    double costTime;
+    int checkInTime;
+    String startStation;
+}
