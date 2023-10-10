@@ -1,0 +1,26 @@
+// 2578. Split With Minimum Sum
+class Solution {
+    public int splitNum(int num) {
+        if (num == 0) {
+            return 0;
+        }
+        int[] digits = new int[10];
+        while (num != 0) {
+            ++digits[num % 10];
+            num /= 10;
+        }
+        int part1 = 0;
+        int part2 = 0;
+        for (int i = 1; i < 10; ++i) {
+            while (digits[i] > 0) {
+                --digits[i];
+                if (part1 < part2) {
+                    part1 = part1 * 10 + i;
+                } else {
+                    part2 = part2 * 10 + i;
+                }
+            }
+        }
+        return part1 + part2;
+    }
+}

@@ -1,0 +1,42 @@
+import java.util.PriorityQueue;
+
+// 2021. Brightest Position on Street
+class Solution {
+    public int brightestPosition(int[][] lights) {
+        PriorityQueue<Lamp> startFirst = new PriorityQueue<>((l1, l2) -> l1.start - l2.start);
+        PriorityQueue<Lamp> endFirst = new PriorityQueue<>((l1, l2) -> l1.end - l2.end);
+        for (int[] light : lights) {
+            Lamp lamp = new Lamp(light[0] - light[1], light[0] + light[1]);
+            startFirst.offer(lamp);
+        }
+        int position;
+        int brightness = 0;
+        int brightest = 0;
+        int brightestPosition = 0;
+        while (!startFirst.isEmpty()) {
+            Lamp entryPoint = startFirst.poll();
+            endFirst.offer(entryPoint);
+            position = entryPoint.start;
+            ++brightness;
+            while (!endFirst.isEmpty() && endFirst.peek().end < position) {
+                endFirst.poll();
+                --brightness;
+            }
+            if (brightness > brightest) {
+                brightest = brightness;
+                brightestPosition = position;
+            }
+        }
+        return brightestPosition;
+    }
+}
+
+class Lamp {
+    public Lamp(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    int start;
+    int end;
+}
