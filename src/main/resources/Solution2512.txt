@@ -1,0 +1,44 @@
+import java.util.*;
+
+// 2512. Reward Top K Students
+class Solution {
+    public List<Integer> topStudents(String[] positive_feedback, String[] negative_feedback, String[] report, int[] student_id, int k) {
+        HashSet<String> positiveWords = new HashSet<>();
+        Collections.addAll(positiveWords, positive_feedback);
+        HashSet<String> negativeWords = new HashSet<>();
+        Collections.addAll(negativeWords, negative_feedback);
+        int len = student_id.length;
+        List<Evaluation> evaluations = new ArrayList<>();
+        for (int i = 0; i < len; ++i) {
+            int score = 0;
+            String[] words = report[i].split(" ");
+            for (String word : words) {
+                if (positiveWords.contains(word)) {
+                    score += 3;
+                } else if (negativeWords.contains(word)) {
+                    --score;
+                }
+            }
+            Evaluation evaluation = new Evaluation();
+            evaluation.id = student_id[i];
+            evaluation.score = score;
+            evaluations.add(evaluation);
+        }
+        evaluations.sort((e1, e2) -> {
+            if (e1.score == e2.score) {
+                return e1.id - e2.id;
+            }
+            return e2.score - e1.score;
+        });
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < k; ++i) {
+            ans.add(evaluations.get(i).id);
+        }
+        return ans;
+    }
+}
+
+class Evaluation {
+    int id;
+    int score;
+}

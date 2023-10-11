@@ -1,0 +1,24 @@
+import java.util.Arrays;
+
+// 2731. Movement of Robots
+class Solution {
+    public int sumDistance(int[] nums, String s, int d) {
+        final long MOD = 1000000007;
+        int len = nums.length;
+        long[] stops = new long[len];
+        char[] directions = s.toCharArray();
+        for (int i = 0; i < len; ++i) {
+            if (directions[i] == 'L') {
+                stops[i] = (long) nums[i] - d;
+            } else {
+                stops[i] = (long) nums[i] + d;
+            }
+        }
+        Arrays.sort(stops);
+        long ans = 0;
+        for (int i = 1; i < len; ++i) {
+            ans = (ans + (stops[i] - stops[i - 1]) * i % MOD * (len - i)) % MOD;
+        }
+        return (int) ans;
+    }
+}

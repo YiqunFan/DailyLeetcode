@@ -1,0 +1,29 @@
+// 1231. Divide Chocolate
+class Solution {
+    public int maximizeSweetness(int[] sweetness, int k) {
+        int left = 1;
+        int right = Integer.MAX_VALUE;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (cuttingComplete(sweetness, k, mid)) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left - 1;
+    }
+
+    private boolean cuttingComplete(int[] sweetness, int k, int expected) {
+        int piece = 0;
+        int cut = 0;
+        for (int i = 0; i < sweetness.length && cut <= k; ++i) {
+            piece += sweetness[i];
+            if (piece >= expected) {
+                piece = 0;
+                ++cut;
+            }
+        }
+        return cut > k;
+    }
+}
