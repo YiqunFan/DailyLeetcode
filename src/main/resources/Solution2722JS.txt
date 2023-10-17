@@ -1,0 +1,17 @@
+// 2722. Join Two Arrays by ID
+var join = function (arr1, arr2) {
+    const ans = {};
+    for (let i = 0; i < arr1.length; ++i) {
+        ans[arr1[i].id] = arr1[i];
+    }
+    for (let j = 0; j < arr2.length; ++j) {
+        if (ans[arr2[j].id]) {
+            for (let key in arr2[j]) {
+                ans[arr2[j].id][key] = arr2[j][key];
+            }
+        } else {
+            ans[arr2[j].id] = arr2[j];
+        }
+    }
+    return Object.values(ans);
+};

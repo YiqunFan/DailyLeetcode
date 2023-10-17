@@ -1,0 +1,16 @@
+// 2625. Flatten Deeply Nested Array
+var flat = function (arr, n) {
+    if (n === 0) {
+        return arr.slice();
+    }
+    let flattend = [];
+    for (let i = 0; i < arr.length; ++i) {
+        if (arr[i] instanceof Array) {
+            const nested = flat(arr[i], n - 1);
+            flattend.push(...nested);
+        } else {
+            flattend.push(arr[i]);
+        }
+    }
+    return flattend;
+};
