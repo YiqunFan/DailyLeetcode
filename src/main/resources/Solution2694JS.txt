@@ -1,0 +1,32 @@
+// 2694. Event Emitter
+class EventEmitter {
+    constructor() {
+        this.eventList = {};
+    }
+
+    subscribe(eventName, callback) {
+        if (!this.eventList[eventName]) {
+            this.eventList[eventName] = [];
+        }
+        this.eventList[eventName].push(callback);
+        let index = this.eventList[eventName].length - 1;
+        return {
+            unsubscribe: () => {
+                if (this.eventList[eventName]) {
+                    this.eventList[eventName].splice(index, 1);
+                    return undefined;
+                }
+            }
+        };
+    }
+
+    emit(eventName, args = []) {
+        let res = [];
+        if (this.eventList[eventName]) {
+            this.eventList[eventName].forEach(fn => {
+                res.push(fn(...args));
+            })
+        }
+        return res;
+    }
+}
