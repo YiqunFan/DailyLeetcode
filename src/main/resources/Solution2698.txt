@@ -1,0 +1,28 @@
+// 2698. Find the Punishment Number of an Integer
+class Solution {
+    public int punishmentNumber(int n) {
+        int ans = 0;
+        for (int i = 1; i <= n; ++i) {
+            String number = String.valueOf(i * i);
+            if (dfs(number, 0, 0, i)) {
+                ans += i * i;
+            }
+        }
+        return ans;
+    }
+
+    private boolean dfs(String number, int splitted, int sum, int target) {
+        if (splitted == number.length()) {
+            return sum == target;
+        }
+        for (int len = 1; splitted + len <= number.length(); ++len) {
+            int part = Integer.parseInt(number.substring(splitted, splitted + len));
+            sum += part;
+            if (dfs(number, splitted + len, sum, target)) {
+                return true;
+            }
+            sum -= part;
+        }
+        return false;
+    }
+}

@@ -1,0 +1,20 @@
+import java.util.PriorityQueue;
+
+// 2558. Take Gifts From the Richest Pile
+class Solution {
+    public long pickGifts(int[] gifts, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        for (int gift : gifts) {
+            pq.offer(gift);
+        }
+        while (k > 0) {
+            --k;
+            pq.offer((int) Math.sqrt(pq.poll()));
+        }
+        long ans = 0;
+        for (Integer gift : pq) {
+            ans += (long) gift;
+        }
+        return ans;
+    }
+}

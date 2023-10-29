@@ -1,0 +1,18 @@
+// 1155. Number of Dice Rolls With Target Sum
+class Solution {
+    public int numRollsToTarget(int n, int k, int target) {
+        final int MOD = 1000000007;
+        int[][] throwToPoint = new int[n + 1][target + 1];
+        throwToPoint[0][0] = 1;
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 0; j <= target; ++j) {
+                for (int dice = 1; dice <= k; ++dice) {
+                    if (j >= dice) {
+                        throwToPoint[i][j] = (throwToPoint[i][j] + throwToPoint[i - 1][j - dice]) % MOD;
+                    }
+                }
+            }
+        }
+        return throwToPoint[n][target];
+    }
+}

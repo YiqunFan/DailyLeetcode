@@ -1,0 +1,22 @@
+// 0702. Search in a Sorted Array of Unknown Size
+class Solution {
+    public int search(ArrayReader reader, int target) {
+        int left = 0;
+        int right = 10000;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int secret = reader.get(mid);
+            if (secret == target) {
+                return mid;
+            } else if (secret > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        if (reader.get(left) == target) {
+            return left;
+        }
+        return -1;
+    }
+}

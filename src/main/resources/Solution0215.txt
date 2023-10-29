@@ -1,0 +1,50 @@
+// 0215. Kth Largest Element in an Array
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    private int quickSelect(int[] nums, int left, int right, int kPosition) {
+        if (left == right) {
+            return nums[kPosition];
+        }
+        int index = partition(nums, left, right);
+        if (index == kPosition) {
+            return nums[index];
+        } else if (index < kPosition) {
+            return quickSelect(nums, index + 1, right, kPosition);
+        } else {
+            return quickSelect(nums, left, index - 1, kPosition);
+        }
+    }
+
+    private int partition(int[] nums, int low, int high) {
+        if (low == high) return low;
+        int pivot = nums[low];
+        int i = low;
+        int j = high + 1;
+        while (true) {
+            while (nums[++i] < pivot) {
+                if (i == high) {
+                    break;
+                }
+            }
+            while (nums[--j] > pivot) {
+                if (j == low) {
+                    break;
+                }
+            }
+            if (i < j) {
+                int t = nums[i];
+                nums[i] = nums[j];
+                nums[j] = t;
+            } else {
+                break;
+            }
+        }
+        int t = nums[low];
+        nums[low] = nums[j];
+        nums[j] = t;
+        return j;
+    }
+}

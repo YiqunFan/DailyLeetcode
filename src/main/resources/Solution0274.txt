@@ -1,0 +1,18 @@
+import java.util.Arrays;
+
+// 0274. H-Index
+class Solution {
+    public int hIndex(int[] citations) {
+        int len = citations.length;
+        Arrays.sort(citations);
+        int ans = 0;
+        for (int i = 1; i <= citations.length; ++i) {
+            if (citations[len - i] >= i) {
+                ans = i;
+            } else {
+                break;
+            }
+        }
+        return ans;
+    }
+}
