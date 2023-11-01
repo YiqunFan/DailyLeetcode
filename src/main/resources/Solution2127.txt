@@ -1,0 +1,54 @@
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 2127. Maximum Employees to Be Invited to a Meeting
+class Solution {
+    public int maximumInvitations(int[] favorite) {
+        int n = favorite.length;
+        int[] inDegree = new int[n];
+        for (int f : favorite) {
+            ++inDegree[f];
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[n];
+        int[] externalLink = new int[n];
+        Arrays.fill(externalLink, 1);
+        for (int i = 0; i < n; ++i) {
+            if (inDegree[i] == 0) {
+                visited[i] = true;
+                queue.offer(i);
+                externalLink[i] = 1;
+            }
+        }
+        while (!queue.isEmpty()) {
+            int front = queue.poll();
+            int next = favorite[front];
+            --inDegree[next];
+            if (inDegree[next] == 0) {
+                queue.offer(next);
+                visited[next] = true;
+            }
+            externalLink[next] = externalLink[front] + 1;
+        }
+        int max_multi_ring = 0;
+        int max_link = 0;
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                int current = i;
+                int ring = 0;
+                while (!visited[current]) {
+                    ++ring;
+                    visited[current] = true;
+                    current = favorite[current];
+                }
+                if (ring > 2) {
+                    max_multi_ring = Math.max(max_multi_ring, ring);
+                } else if (ring == 2) {
+                    max_link += externalLink[i] + externalLink[favorite[i]];
+                }
+            }
+        }
+        return Math.max(max_multi_ring, max_link);
+    }
+}
