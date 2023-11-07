@@ -1,0 +1,22 @@
+import java.util.HashMap;
+
+// 0117. Populating Next Right Pointers in Each Node II
+class Solution {
+    public Node connect(Node root) {
+        HashMap<Integer, Node> layerLastNode = new HashMap<>();
+        preorderTraversal(root, 0, layerLastNode);
+        return root;
+    }
+
+    private void preorderTraversal(Node current, int layer, HashMap<Integer, Node> layerLastNode) {
+        if (current == null) {
+            return;
+        }
+        if (layerLastNode.containsKey(layer)) {
+            layerLastNode.get(layer).next = current;
+        }
+        layerLastNode.put(layer, current);
+        preorderTraversal(current.left, layer + 1, layerLastNode);
+        preorderTraversal(current.right, layer + 1, layerLastNode);
+    }
+}

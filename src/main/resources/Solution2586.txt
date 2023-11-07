@@ -1,0 +1,16 @@
+// 2586. Count the Number of Vowel Strings in Range
+class Solution {
+    public int vowelStrings(String[] words, int left, int right) {
+        int ans = 0;
+        for (int i = left; i <= right; ++i) {
+            char initial = words[i].charAt(0);
+            char last = words[i].charAt(words[i].length() - 1);
+            if (initial == 'a' || initial == 'e' || initial == 'i' || initial == 'o' || initial == 'u') {
+                if (last == 'a' || last == 'e' || last == 'i' || last == 'o' || last == 'u') {
+                    ++ans;
+                }
+            }
+        }
+        return ans;
+    }
+}

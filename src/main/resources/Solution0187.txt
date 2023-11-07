@@ -1,0 +1,20 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+// 0187. Repeated DNA Sequences
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        HashSet<String> len10 = new HashSet<>();
+        HashSet<String> repeated = new HashSet<>();
+        int rightest = s.length() - 10;
+        for (int i = 0; i <= rightest; ++i) {
+            String substring = s.substring(i, i + 10);
+            if (len10.contains(substring)) {
+                repeated.add(substring);
+            }
+            len10.add(substring);
+        }
+        return new ArrayList<>(repeated);
+    }
+}

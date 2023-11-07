@@ -1,0 +1,22 @@
+import java.util.Arrays;
+
+// 2548. Maximum Price to Fill a Bag
+class Solution {
+    public double maxPrice(int[][] items, int capacity) {
+        Arrays.sort(items, (a, b) -> b[0] * a[1] - a[0] * b[1]);
+        double ans = 0.0;
+        for (int[] item : items) {
+            if (item[1] < capacity) {
+                ans += item[0];
+                capacity -= item[1];
+            } else if (item[1] == capacity) {
+                ans += item[0];
+                return ans;
+            } else {
+                ans += item[0] * 1.0 / item[1] * capacity;
+                return ans;
+            }
+        }
+        return -1.0;
+    }
+}
