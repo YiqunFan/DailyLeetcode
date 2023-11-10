@@ -1,0 +1,84 @@
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 2258. Escape the Spreading Fire
+class Solution {
+    public int maximumMinutes(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] arrivalPerson = new int[m][n];
+        int[][] arrivalFire = new int[m][n];
+        for (int i = 0; i < m; ++i) {
+            Arrays.fill(arrivalPerson[i], Integer.MAX_VALUE);
+            Arrays.fill(arrivalFire[i], Integer.MAX_VALUE);
+        }
+        Queue<Position> queue = new LinkedList<>();
+        queue.offer(new Position(0, 0));
+        arrivalPerson[0][0] = 0;
+        breadthFirstSearch(grid, m, n, arrivalPerson, queue);
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == 1) {
+                    arrivalFire[i][j] = 0;
+                    queue.offer(new Position(i, j));
+                }
+            }
+        }
+        breadthFirstSearch(grid, m, n, arrivalFire, queue);
+        if (arrivalPerson[m - 1][n - 1] == Integer.MAX_VALUE) {
+            return -1;
+        } else if (arrivalFire[m - 1][n - 1] == Integer.MAX_VALUE) {
+            return 1000000000;
+        } else if (arrivalFire[m - 1][n - 1] < arrivalPerson[m - 1][n - 1]) {
+            return -1;
+        } else if (arrivalFire[m - 1][n - 2] == arrivalFire[m - 2][n - 1]) {
+            return arrivalFire[m - 1][n - 1] - arrivalPerson[m - 1][n - 1] - 1;
+        } else if (arrivalFire[m - 1][n - 2] < arrivalFire[m - 2][n - 1]) {
+            if (arrivalPerson[m - 2][n - 1] == arrivalPerson[m - 1][n - 1] - 1) {
+                return arrivalFire[m - 1][n - 1] - arrivalPerson[m - 1][n - 1];
+            } else {
+                return arrivalFire[m - 1][n - 1] - arrivalPerson[m - 1][n - 1] - 1;
+            }
+        } else {
+            if (arrivalPerson[m - 1][n - 2] == arrivalPerson[m - 1][n - 1] - 1) {
+                return arrivalFire[m - 1][n - 1] - arrivalPerson[m - 1][n - 1];
+            } else {
+                return arrivalFire[m - 1][n - 1] - arrivalPerson[m - 1][n - 1] - 1;
+            }
+        }
+
+    }
+
+    private void breadthFirstSearch(int[][] grid, int m, int n, int[][] arrivalFire, Queue<Position> queue) {
+        int[] dx = new int[]{-1, 0, 1, 0};
+        int[] dy = new int[]{0, 1, 0, -1};
+        int step = 1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size > 0) {
+                --size;
+                Position front = queue.poll();
+                for (int i = 0; i < 4; ++i) {
+                    int nx = front.x + dx[i];
+                    int ny = front.y + dy[i];
+                    if (nx >= 0 && ny >= 0 && nx < m && ny < n && grid[nx][ny] != 2 && arrivalFire[nx][ny] == Integer.MAX_VALUE) {
+                        arrivalFire[nx][ny] = step;
+                        queue.offer(new Position(nx, ny));
+                    }
+                }
+            }
+            ++step;
+        }
+    }
+}
+
+class Position {
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    int x;
+    int y;
+}
