@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1168. Optimize Water Distribution in a Village
+class Solution {
+    public int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
+        List<Pipe> pipeList = new ArrayList<>();
+        for (int i = 0; i < wells.length; ++i) {
+            pipeList.add(new Pipe(0, i + 1, wells[i]));
+        }
+        for (int[] pipe : pipes) {
+            pipeList.add(new Pipe(pipe[0], pipe[1], pipe[2]));
+        }
+        pipeList.sort((p1, p2) -> p1.cost - p2.cost);
+        UnionFind unionFind = new UnionFind(n + 1);
+        int ans = 0;
+        for (Pipe pipe : pipeList) {
+            if (unionFind.find(pipe.house1) != unionFind.find(pipe.house2)) {
+                unionFind.union(pipe.house1, pipe.house2);
+                ans += pipe.cost;
+            }
+        }
+        return ans;
+    }
+}
+
+class Pipe {
+    public Pipe(int house1, int house2, int cost) {
+        this.house1 = house1;
+        this.house2 = house2;
+        this.cost = cost;
+    }
+
+    int house1;
+    int house2;
+    int cost;
+}
+
+class UnionFind {
+    int[] parents;
+
+    public UnionFind(int n) {
+        parents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parents[i] = i;
+        }
+    }
+
+    int find(int son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    void union(int a, int b) {
+        int parentOfA = find(a);
+        int parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parents[parentOfA] = parentOfB;
+        }
+    }
+}

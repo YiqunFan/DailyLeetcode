@@ -1,0 +1,54 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
+// 2473. Minimum Cost to Buy Apples
+class Solution {
+    public long[] minCost(int n, int[][] roads, int[] appleCost, int k) {
+        List<List<Destination>> graphs = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            graphs.add(new ArrayList<>());
+        }
+        for (int[] road : roads) {
+            graphs.get(road[0] - 1).add(new Destination(road[1] - 1, road[2]));
+            graphs.get(road[1] - 1).add(new Destination(road[0] - 1, road[2]));
+        }
+        long[] ans = new long[n];
+        int[] distances = new int[n];
+        long k2 = k + 1;
+        for (int i = 0; i < n; ++i) {
+            ans[i] = dijkstra(i, distances, appleCost, k2, graphs);
+        }
+        return ans;
+    }
+
+    private long dijkstra(int i, int[] distances, int[] appleCost, long k2, List<List<Destination>> graphs) {
+        PriorityQueue<Destination> priorityQueue = new PriorityQueue<>((d1, d2) -> d1.cost - d2.cost);
+        priorityQueue.offer(new Destination(i, 0));
+        Arrays.fill(distances, 10000000);
+        distances[i] = 0;
+        long ret = Long.MAX_VALUE;
+        while (!priorityQueue.isEmpty()) {
+            Destination poll = priorityQueue.poll();
+            ret = Math.min(ret, appleCost[poll.num] + k2 * poll.cost);
+            for (Destination des : graphs.get(poll.num)) {
+                if (distances[des.num] > distances[poll.num] + des.cost) {
+                    distances[des.num] = distances[poll.num] + des.cost;
+                    priorityQueue.offer(new Destination(des.num, distances[des.num]));
+                }
+            }
+        }
+        return ret;
+    }
+}
+
+class Destination {
+    public Destination(int num, int cost) {
+        this.num = num;
+        this.cost = cost;
+    }
+
+    int num;
+    int cost;
+}

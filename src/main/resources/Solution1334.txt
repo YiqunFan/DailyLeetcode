@@ -1,0 +1,42 @@
+// 1334. Find the City With the Smallest Number of Neighbors at a Threshold Distance
+class Solution {
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int[][] minDistances = new int[n][n];
+        final int INFINITY = 1000000000;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (i == j) {
+                    minDistances[i][j] = 0;
+                } else {
+                    minDistances[i][j] = INFINITY;
+                }
+            }
+        }
+        for (int[] edge : edges) {
+            minDistances[edge[0]][edge[1]] = edge[2];
+            minDistances[edge[1]][edge[0]] = edge[2];
+        }
+        for (int mid = 0; mid < n; ++mid) {
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < n; ++j) {
+                    minDistances[i][j] = Math.min(minDistances[i][j], minDistances[i][mid] + minDistances[mid][j]);
+                }
+            }
+        }
+        int minReachable = INFINITY;
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int reachable = 0;
+            for (int j = 0; j < n; ++j) {
+                if (minDistances[i][j] <= distanceThreshold) {
+                    ++reachable;
+                }
+            }
+            if (reachable <= minReachable) {
+                minReachable = reachable;
+                ans = i;
+            }
+        }
+        return ans;
+    }
+}
