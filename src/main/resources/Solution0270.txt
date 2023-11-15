@@ -1,0 +1,26 @@
+// 0270. Closest Binary Search Tree Value
+class Solution {
+
+    int ans = Integer.MAX_VALUE;
+    double minDistance = Double.MAX_VALUE;
+
+    public int closestValue(TreeNode root, double target) {
+        preorderTraversal(root, target);
+        return ans;
+    }
+
+    private void preorderTraversal(TreeNode node, double target) {
+        if (node == null) {
+            return;
+        }
+        if (Math.abs(node.val - target) < minDistance) {
+            minDistance = Math.abs(node.val - target);
+            ans = node.val;
+        } else if (Math.abs(node.val - target) == minDistance && node.val < ans) {
+            minDistance = Math.abs(node.val - target);
+            ans = node.val;
+        }
+        preorderTraversal(node.left, target);
+        preorderTraversal(node.right, target);
+    }
+}

@@ -1,0 +1,25 @@
+import java.util.PriorityQueue;
+
+// 0264. Ugly Number II
+class Solution {
+    public int nthUglyNumber(int n) {
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+        pq.offer(1L);
+        long last = 0;
+        int valid = 0;
+        while (!pq.isEmpty()) {
+            Long current = pq.poll();
+            if (current != last) {
+                last = current;
+                ++valid;
+                if (valid == n) {
+                    return (int) last;
+                }
+                pq.offer(current * 2);
+                pq.offer(current * 3);
+                pq.offer(current * 5);
+            }
+        }
+        return -1;
+    }
+}

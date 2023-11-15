@@ -1,0 +1,10 @@
+// 2656. Maximum Sum With Exactly K Elements
+class Solution {
+    public int maximizeSum(int[] nums, int k) {
+        int maxNum = 0;
+        for (int num : nums) {
+            maxNum = Math.max(maxNum, num);
+        }
+        return (maxNum + maxNum + k - 1) * k / 2;
+    }
+}

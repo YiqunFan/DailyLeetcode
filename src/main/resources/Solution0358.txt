@@ -1,0 +1,57 @@
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+// 0358. Rearrange String k Distance Apart
+class Solution {
+    public String rearrangeString(String s, int k) {
+        int len = s.length();
+        int[] count = new int[123];
+        for (char c : s.toCharArray()) {
+            ++count[c];
+        }
+        PriorityQueue<Letter> pq = new PriorityQueue<>((l1, l2) -> l2.quantity - l1.quantity);
+        for (int i = 97; i < 123; ++i) {
+            if (count[i] > 0) {
+                pq.offer(new Letter((char) i, count[i], 0));
+            }
+        }
+        int index = 0;
+        StringBuilder sb = new StringBuilder();
+        Queue<Letter> buffer = new LinkedList<>();
+        while (index < len) {
+            Letter top = pq.poll();
+            while (top.nextValidPosition > index) {
+                buffer.offer(top);
+                if (pq.isEmpty()) {
+                    return "";
+                }
+                top = pq.poll();
+            }
+            sb.append(top.letter);
+            --top.quantity;
+            top.nextValidPosition = index + k;
+            ++index;
+            if (top.quantity > 0) {
+                pq.offer(top);
+            }
+            while (!buffer.isEmpty()) {
+                pq.offer(buffer.poll());
+            }
+        }
+        return sb.toString();
+    }
+}
+
+class Letter {
+    public Letter(char letter, int quantity, int nextValidPosition) {
+        this.letter = letter;
+        this.quantity = quantity;
+        this.nextValidPosition = nextValidPosition;
+    }
+
+    char letter;
+    int quantity;
+    int nextValidPosition;
+}
+
