@@ -1,0 +1,36 @@
+import java.util.NoSuchElementException;
+
+// 0251. Flatten 2D Vector
+class Vector2D {
+
+    int[][] vec;
+    int in;
+    int out;
+
+    public Vector2D(int[][] vec) {
+        this.vec = vec;
+        this.in = 0;
+        this.out = 0;
+    }
+
+    public int next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        int ret = vec[out][in];
+        ++in;
+        return ret;
+    }
+
+    public boolean hasNext() {
+        moveToNext();
+        return out < vec.length;
+    }
+
+    private void moveToNext() {
+        while (out < vec.length && in == vec[out].length) {
+            ++out;
+            in = 0;
+        }
+    }
+}
