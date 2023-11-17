@@ -1,0 +1,21 @@
+// 2743. Count Substrings Without Repeating Character
+class Solution {
+    public int numberOfSpecialSubstrings(String s) {
+        char[] charArray = s.toCharArray();
+        int len = charArray.length;
+        boolean[] letters = new boolean[123];
+        int ans = 0;
+        int left = 0;
+        int right = 0;
+        while (right < len) {
+            while (letters[charArray[right]]) {
+                letters[charArray[left]] = false;
+                ++left;
+            }
+            letters[charArray[right]] = true;
+            ans += right - left + 1;
+            ++right;
+        }
+        return ans;
+    }
+}
