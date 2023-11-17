@@ -1,0 +1,89 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0681. Next Closest Time
+class Solution {
+    public String nextClosestTime(String time) {
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(3, 5));
+        boolean[] validDigits = new boolean[10];
+        validDigits[time.charAt(0) - '0'] = true;
+        validDigits[time.charAt(1) - '0'] = true;
+        validDigits[time.charAt(3) - '0'] = true;
+        validDigits[time.charAt(4) - '0'] = true;
+        List<Time> times = new ArrayList<>();
+        dfs(1, null, times, validDigits);
+        times.sort((t1, t2) -> {
+            if (t1.hour == t2.hour) {
+                return t1.minute - t2.minute;
+            }
+            return t1.hour - t2.hour;
+        });
+        Time last = times.get(times.size() - 1);
+        if (last.hour == hour && last.minute == minute) {
+            return times.get(0).generateString();
+        }
+        for (int i = 0; i < times.size(); ++i) {
+            if (times.get(i).hour == hour && times.get(i).minute == minute) {
+                return times.get(i + 1).generateString();
+            }
+        }
+        return null;
+    }
+
+    private void dfs(int index, Time current, List<Time> times, boolean[] validDigits) {
+        if (index == 1) {
+            for (int i = 0; i < 3; ++i) {
+                if (validDigits[i]) {
+                    dfs(2, new Time(i * 10, 0), times, validDigits);
+                }
+            }
+        } else if (index == 2) {
+            for (int i = 0; i < 10; ++i) {
+                if (validDigits[i] && (current.hour < 20 || i < 4)) {
+                    dfs(3, new Time(current.hour + i, 0), times, validDigits);
+                }
+            }
+        } else if (index == 3) {
+            for (int i = 0; i < 6; ++i) {
+                if (validDigits[i]) {
+                    dfs(4, new Time(current.hour, i * 10), times, validDigits);
+                }
+            }
+        } else if (index == 4) {
+            for (int i = 0; i < 10; ++i) {
+                if (validDigits[i]) {
+                    dfs(5, new Time(current.hour, current.minute + i), times, validDigits);
+                }
+            }
+        } else if (index == 5) {
+            times.add(current);
+        }
+    }
+}
+
+class Time {
+    public Time(int hour, int minute) {
+        this.hour = hour;
+        this.minute = minute;
+    }
+
+    int hour;
+    int minute;
+
+    String generateString() {
+        StringBuilder sb = new StringBuilder();
+        if (hour < 10) {
+            sb.append(0).append(hour);
+        } else {
+            sb.append(hour);
+        }
+        sb.append(':');
+        if (minute < 10) {
+            sb.append(0).append(minute);
+        } else {
+            sb.append(minute);
+        }
+        return sb.toString();
+    }
+}
