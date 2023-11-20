@@ -1,0 +1,23 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 0325. Maximum Size Subarray Sum Equals k
+class Solution {
+    public int maxSubArrayLen(int[] nums, int k) {
+        int maxLength = 0;
+        int n = nums.length;
+        int preSum = 0;
+        Map<Integer, Integer> preSumToIndex = new HashMap<>();
+        preSumToIndex.put(0, -1);
+        for (int i = 0; i < n; i++) {
+            preSum += nums[i];
+            preSumToIndex.putIfAbsent(preSum, i);
+            int target = preSum - k;
+            if (preSumToIndex.containsKey(target)) {
+                int j = preSumToIndex.get(target);
+                maxLength = Math.max(maxLength, i - j);
+            }
+        }
+        return maxLength;
+    }
+}
