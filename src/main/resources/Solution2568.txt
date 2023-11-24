@@ -1,0 +1,20 @@
+// 2568. Minimum Impossible OR
+class Solution {
+    public int minImpossibleOR(int[] nums) {
+        int target = 1;
+        boolean found = true;
+        while (found) {
+            found = false;
+            for (int num : nums) {
+                if (num == target) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                target <<= 1;
+            }
+        }
+        return target;
+    }
+}
