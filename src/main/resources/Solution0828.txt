@@ -1,24 +1,29 @@
 import java.util.ArrayList;
+import java.util.List;
 
 // 0828. Count Unique Characters of All Substrings of a Given String
 class Solution {
     public int uniqueLetterString(String s) {
-        ArrayList<ArrayList<Integer>> lettersPositions = new ArrayList<>();
-        for (int i = 0; i < 26; ++i) lettersPositions.add(new ArrayList<>());
         char[] charArray = s.toCharArray();
-        int length = charArray.length;
-        for (int i = 0; i < length; ++i) lettersPositions.get(charArray[i] - 65).add(i);
+        int len = charArray.length;
+        List<List<Integer>> lettersPositions = new ArrayList<>();
+        for (int i = 0; i < 26; ++i) {
+            lettersPositions.add(new ArrayList<>());
+        }
+        for (int i = 0; i < 26; ++i) {
+            lettersPositions.get(i).add(-1);
+        }
+        for (int i = 0; i < len; ++i) {
+            lettersPositions.get(charArray[i] - 'A').add(i);
+        }
+        for (int i = 0; i < 26; ++i) {
+            lettersPositions.get(i).add(len);
+        }
         int ans = 0;
-        for (ArrayList<Integer> letterPositions : lettersPositions) {
-            int size = letterPositions.size();
-            if (size != 0) {
-                if (size == 1) {
-                    ans += (letterPositions.get(0) + 1) * (length - letterPositions.get(0));
-                } else {
-                    ans += (letterPositions.get(0) + 1) * (letterPositions.get(1) - letterPositions.get(0));
-                    for (int i = 1; i < size - 1; ++i) ans += (letterPositions.get(i) - letterPositions.get(i - 1)) * (letterPositions.get(i + 1) - letterPositions.get(i));
-                    ans += (letterPositions.get(size - 1) - letterPositions.get(size - 2)) * (length - letterPositions.get(size - 1));
-                }
+        for (int i = 0; i < 26; ++i) {
+            List<Integer> subList = lettersPositions.get(i);
+            for (int j = 2; j < subList.size(); ++j) {
+                ans += (subList.get(j - 1) - subList.get(j - 2)) * (subList.get(j) - subList.get(j - 1));
             }
         }
         return ans;
