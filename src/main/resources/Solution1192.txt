@@ -1,0 +1,48 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1192. Critical Connections in a Network
+class Solution {
+
+    int[] time;
+    int[] low;
+    int timestamp = 0;
+    List<List<Integer>> adjacent;
+    List<List<Integer>> ans = new ArrayList<>();
+
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        adjacent = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            adjacent.add(new ArrayList<>());
+        }
+        for (List<Integer> connection : connections) {
+            adjacent.get(connection.get(0)).add(connection.get(1));
+            adjacent.get(connection.get(1)).add(connection.get(0));
+        }
+        time = new int[n];
+        low = new int[n];
+        dfs(0, 0, n);
+        return ans;
+    }
+
+    private void dfs(int node, int father, int n) {
+        ++timestamp;
+        time[node] = timestamp;
+        low[node] = timestamp;
+        List<Integer> neighbors = adjacent.get(node);
+        for (Integer i : neighbors) {
+            if (time[i] == 0) {
+                dfs(i, node, n);
+                low[node] = Math.min(low[node], low[i]);
+                if (low[i] > time[node]) {
+                    ArrayList<Integer> bridge = new ArrayList<>();
+                    bridge.add(node);
+                    bridge.add(i);
+                    ans.add(bridge);
+                }
+            } else if (time[i] < time[node] && i != father) {
+                low[node] = Math.min(low[node], time[i]);
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+// 1457. Pseudo-Palindromic Paths in a Binary Tree
+class Solution {
+    public int pseudoPalindromicPaths(TreeNode root) {
+        return dfs(root, 0);
+    }
+
+    private int dfs(TreeNode node, int count) {
+        if (node == null) return 0;
+        count ^= 1 << (node.val - 1);
+        int ret = dfs(node.left, count) + dfs(node.right, count);
+        if (node.left == node.right && (count & (count - 1)) == 0) {
+            ++ret;
+        }
+        return ret;
+    }
+}
