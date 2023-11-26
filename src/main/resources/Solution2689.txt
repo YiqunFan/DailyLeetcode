@@ -1,0 +1,21 @@
+// 2689. Extract Kth Character From The Rope Tree
+class Solution {
+    public char getKthCharacter(RopeTreeNode root, int k) {
+        StringBuilder fullCharacters = new StringBuilder();
+        preorderTraversal(root, fullCharacters);
+        return fullCharacters.toString().charAt(k - 1);
+    }
+
+    private void preorderTraversal(RopeTreeNode node, StringBuilder fullCharacters) {
+        if (node.len == 0) {
+            fullCharacters.append(node.val);
+        } else {
+            if (node.left != null) {
+                preorderTraversal(node.left, fullCharacters);
+            }
+            if (node.right != null) {
+                preorderTraversal(node.right, fullCharacters);
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0300. Longest Increasing Subsequence
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int len = nums.length;
+        List<Integer> list = new ArrayList<>();
+        list.add(nums[0]);
+        int ans = 1;
+        for (int i = 1; i < len; ++i) {
+            if (nums[i] > list.get(ans - 1)) {
+                list.add(nums[i]);
+                ++ans;
+            } else {
+                binarySearchAndInsert(list, nums[i]);
+            }
+        }
+        return ans;
+    }
+
+    private void binarySearchAndInsert(List<Integer> list, int insertNum) {
+        int left = 0;
+        int right = list.size();
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (list.get(mid) == insertNum) {
+                return;
+            } else if (list.get(mid) > insertNum) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        list.set(left, insertNum);
+    }
+}

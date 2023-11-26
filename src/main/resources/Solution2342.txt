@@ -1,0 +1,46 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+// 2342. Max Sum of a Pair With Equal Sum of Digits
+class Solution {
+    public int maximumSum(int[] nums) {
+        HashMap<Integer, List<Integer>> digitsSumMap = new HashMap<>();
+        for (int origin : nums) {
+            int num = origin;
+            int digitsSum = 0;
+            while (num != 0) {
+                digitsSum += num % 10;
+                num /= 10;
+            }
+            digitsSumMap.putIfAbsent(digitsSum, new ArrayList<>());
+            List<Integer> list = digitsSumMap.get(digitsSum);
+            if (list.isEmpty()) {
+                list.add(origin);
+            } else if (list.size() == 1) {
+                if (list.get(0) < origin) {
+                    list.add(list.get(0));
+                    list.set(0, origin);
+                } else {
+                    list.add(origin);
+                }
+            } else {
+                if (list.get(0) < origin) {
+                    list.set(1, list.get(0));
+                    list.set(0, origin);
+                } else if (list.get(1) < origin) {
+                    list.set(1, origin);
+                }
+            }
+        }
+        int ans = -1;
+        for (Map.Entry<Integer, List<Integer>> entry : digitsSumMap.entrySet()) {
+            List<Integer> list = entry.getValue();
+            if (list.size() == 2) {
+                ans = Math.max(ans, list.get(0) + list.get(1));
+            }
+        }
+        return ans;
+    }
+}

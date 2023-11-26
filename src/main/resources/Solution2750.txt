@@ -1,0 +1,23 @@
+// 2750. Ways to Split Array Into Good Subarrays
+class Solution {
+    public int numberOfGoodSubarraySplits(int[] nums) {
+        long MOD = 1000000007;
+        int len = nums.length;
+        long ans = 0;
+        int i = 0;
+        while (i < len && nums[i] != 1) {
+            ++i;
+        }
+        if (i < len) {
+            ans = 1;
+        }
+        int last = i;
+        while (++i < len) {
+            if (nums[i] == 1) {
+                ans = ans * (i - last) % MOD;
+                last = i;
+            }
+        }
+        return (int) ans;
+    }
+}

@@ -1,0 +1,25 @@
+// 2609. Find the Longest Balanced Substring of a Binary String
+class Solution {
+    public int findTheLongestBalancedSubstring(String s) {
+        char[] charArray = s.toCharArray();
+        int validZeroes = 0;
+        int validOnes = 0;
+        int maxValidOnes = 0;
+        for (char c : charArray) {
+            if (c == '0') {
+                if (validOnes == 0) {
+                    ++validZeroes;
+                } else {
+                    validOnes = 0;
+                    validZeroes = 1;
+                }
+            } else {
+                ++validOnes;
+                if (validOnes <= validZeroes) {
+                    maxValidOnes = Math.max(maxValidOnes, validOnes << 1);
+                }
+            }
+        }
+        return maxValidOnes;
+    }
+}

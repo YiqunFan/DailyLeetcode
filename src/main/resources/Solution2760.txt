@@ -1,0 +1,25 @@
+// 2760. Longest Even Odd Subarray With Threshold
+class Solution {
+    public int longestAlternatingSubarray(int[] nums, int threshold) {
+        int len = nums.length;
+        int currentLength = 0;
+        int ans = 0;
+        int index = 0;
+        while (index < len) {
+            while (index < len && (nums[index] % 2 == 1 || nums[index] > threshold)) {
+                ++index;
+            }
+            if (index < len) {
+                ++currentLength;
+                ++index;
+                while (index < len && nums[index] % 2 != nums[index - 1] % 2 && nums[index] <= threshold) {
+                    ++currentLength;
+                    ++index;
+                }
+                ans = Math.max(ans, currentLength);
+                currentLength = 0;
+            }
+        }
+        return ans;
+    }
+}

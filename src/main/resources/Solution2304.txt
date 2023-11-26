@@ -1,0 +1,27 @@
+import java.util.Arrays;
+
+// 2304. Minimum Path Cost in a Grid
+class Solution {
+    public int minPathCost(int[][] grid, int[][] moveCost) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] minCostTo = new int[m][n];
+        System.arraycopy(grid[0], 0, minCostTo[0], 0, n);
+        for (int i = 1; i < m; ++i) {
+            Arrays.fill(minCostTo[i], Integer.MAX_VALUE);
+        }
+        for (int i = 0; i < m - 1; ++i) {
+            for (int j = 0; j < n; ++j) {
+                for (int k = 0; k < n; ++k) {
+                    minCostTo[i + 1][k] =
+                            Math.min(minCostTo[i + 1][k], minCostTo[i][j] + moveCost[grid[i][j]][k] + grid[i + 1][k]);
+                }
+            }
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int j = 0; j < n; ++j) {
+            ans = Math.min(ans, minCostTo[m - 1][j]);
+        }
+        return ans;
+    }
+}

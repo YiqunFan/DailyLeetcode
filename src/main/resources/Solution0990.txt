@@ -1,0 +1,48 @@
+// 0990. Satisfiability of Equality Equations
+class Solution {
+    public boolean equationsPossible(String[] equations) {
+        UnionFind unionFind = new UnionFind();
+        for (String equation : equations) {
+            if (equation.charAt(1) == '=') {
+                unionFind.union(equation.charAt(0), equation.charAt(3));
+            }
+        }
+        for (String equation : equations) {
+            if (equation.charAt(1) == '!') {
+                char parent0 = unionFind.find(equation.charAt(0));
+                char parent3 = unionFind.find(equation.charAt(3));
+                if (parent0 == parent3) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+class UnionFind {
+    char[] parents;
+
+    public UnionFind() {
+        this.parents = new char[123];
+        for (char c = 'a'; c <= 'z'; ++c) {
+            parents[c] = c;
+        }
+    }
+
+    char find(char son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    void union(char a, char b) {
+        char parentOfA = find(a);
+        char parentOfB = find(b);
+        if (parentOfA != parentOfB) {
+            parents[parentOfA] = parentOfB;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+import java.util.TreeMap;
+
+// 0715. Range Module
+class RangeModule {
+
+    TreeMap<Integer, Integer> intervals;
+
+    public RangeModule() {
+        intervals = new TreeMap<>();
+    }
+
+    public void addRange(int left, int right) {
+        Integer floorL = intervals.floorKey(left);
+        Integer floorR = intervals.floorKey(right);
+        if (floorL == null && floorR == null) {
+            intervals.put(left, right);
+        } else if (floorL != null && intervals.get(floorL) >= left) {
+            intervals.put(floorL, Math.max(right, intervals.get(floorR)));
+        } else {
+            intervals.put(left, Math.max(right, intervals.get(floorR)));
+        }
+        intervals.subMap(left, false, right, true).clear();
+    }
+
+    public boolean queryRange(int left, int right) {
+        Integer floor1 = intervals.floorKey(left);
+        return floor1 != null && intervals.get(floor1) >= right;
+    }
+
+    public void removeRange(int left, int right) {
+        Integer lowerL = intervals.floorKey(left);
+        Integer lowerR = intervals.lowerKey(right);
+        if (lowerR != null && intervals.get(lowerR) > right) {
+            intervals.put(right, intervals.get(lowerR));
+        }
+        if (lowerL != null && intervals.get(lowerL) > left) {
+            intervals.put(lowerL, left);
+        }
+        intervals.subMap(left, true, right, false).clear();
+    }
+}

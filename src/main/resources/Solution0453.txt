@@ -1,0 +1,14 @@
+// 0453. Minimum Moves to Equal Array Elements
+class Solution {
+    public int minMoves(int[] nums) {
+        int minNum = Integer.MAX_VALUE;
+        for (int num : nums) {
+            minNum = Math.min(minNum, num);
+        }
+        int ans = 0;
+        for (int num : nums) {
+            ans = ans + num - minNum;
+        }
+        return ans;
+    }
+}

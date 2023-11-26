@@ -1,0 +1,81 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+// 2736. Maximum Sum Queries
+class Solution {
+    public int[] maximumSumQueries(int[] nums1, int[] nums2, int[][] queries) {
+        int len = nums1.length;
+        Num[] nums = new Num[len];
+        for (int i = 0; i < len; ++i) {
+            nums[i] = new Num(i, nums1[i], nums2[i], nums1[i] + nums2[i]);
+        }
+        Arrays.sort(nums, (n1, n2) -> n2.x - n1.x);
+        int n = queries.length;
+        Query[] sortedQueries = new Query[n];
+        for (int i = 0; i < n; ++i) {
+            sortedQueries[i] = new Query(i, queries[i][0], queries[i][1]);
+        }
+        Arrays.sort(sortedQueries, (q1, q2) -> q2.x - q1.x);
+        List<Num> validNums = new ArrayList<>();
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        int cur = 0;
+        for (Query q : sortedQueries) {
+            while (cur < len && nums[cur].x >= q.x) {
+                while (!validNums.isEmpty() && validNums.get(validNums.size() - 1).sum <= nums[cur].sum) {
+                    validNums.remove(validNums.size() - 1);
+                }
+                if (validNums.isEmpty() || validNums.get(validNums.size() - 1).y < nums[cur].y) {
+                    validNums.add(nums[cur]);
+                }
+                ++cur;
+            }
+            int maxSumIndex = binarySearch(validNums, q.y);
+            if (maxSumIndex < validNums.size()) {
+                ans[q.index] = validNums.get(maxSumIndex).sum;
+            }
+        }
+        return ans;
+    }
+
+    public int binarySearch(List<Num> validNums, int target) {
+        int left = 0;
+        int right = validNums.size();
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (validNums.get(mid).y >= target) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+
+class Num {
+    public Num(int index, int x, int y, int sum) {
+        this.index = index;
+        this.x = x;
+        this.y = y;
+        this.sum = sum;
+    }
+
+    int index;
+    int x;
+    int y;
+    int sum;
+}
+
+class Query {
+    public Query(int index, int x, int y) {
+        this.index = index;
+        this.x = x;
+        this.y = y;
+    }
+
+    int index;
+    int x;
+    int y;
+}

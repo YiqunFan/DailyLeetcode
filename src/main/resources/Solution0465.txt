@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0465. Optimal Account Balancing
+class Solution {
+    public int minTransfers(int[][] transactions) {
+        int[] accounts = new int[12];
+        for (int[] transaction : transactions) {
+            accounts[transaction[0]] -= transaction[2];
+            accounts[transaction[1]] += transaction[2];
+        }
+        List<Integer> accountsList = new ArrayList<>();
+        for (int account : accounts) {
+            if (account != 0) {
+                accountsList.add(account);
+            }
+        }
+        int[] unbalancedAccounts = accountsList.stream().mapToInt(i -> i).toArray();
+        return dfs(0, unbalancedAccounts);
+    }
+
+    private int dfs(int currentAccount, int[] accounts) {
+        if (currentAccount == accounts.length) {
+            return 0;
+        }
+        int currentBalance = accounts[currentAccount];
+        if (currentBalance == 0) {
+            return dfs(currentAccount + 1, accounts);
+        }
+        int minSwaps = Integer.MAX_VALUE;
+        for (int swapAccount = currentAccount + 1; swapAccount < accounts.length; ++swapAccount) {
+            int swapBalance = accounts[swapAccount];
+            if (swapBalance * currentBalance < 0) {
+                accounts[swapAccount] += currentBalance;
+                minSwaps = Math.min(minSwaps, dfs(currentAccount + 1, accounts) + 1);
+                accounts[swapAccount] = swapBalance;
+                if (swapBalance + currentBalance == 0) {
+                    break;
+                }
+            }
+        }
+        return minSwaps;
+    }
+}
