@@ -1,0 +1,36 @@
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 1273. Delete Tree Nodes
+class Solution {
+    public int deleteTreeNodes(int nodes, int[] parent, int[] value) {
+        int[] inDegrees = new int[nodes];
+        for (int i = 1; i < nodes; ++i) {
+            ++inDegrees[parent[i]];
+        }
+        int[] validSons = new int[nodes];
+        Arrays.fill(validSons, 1);
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < nodes; ++i) {
+            if (inDegrees[i] == 0) {
+                queue.add(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            Integer front = queue.poll();
+            if (front == 0) {
+                return value[0] == 0 ? 0 : validSons[0];
+            }
+            --inDegrees[parent[front]];
+            if (inDegrees[parent[front]] == 0) {
+                queue.offer(parent[front]);
+            }
+            if (value[front] != 0) {
+                validSons[parent[front]] += validSons[front];
+                value[parent[front]] += value[front];
+            }
+        }
+        return 314981718;
+    }
+}

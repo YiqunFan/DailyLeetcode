@@ -1,0 +1,79 @@
+import java.util.Deque;
+import java.util.LinkedList;
+
+// 1670. Design Front Middle Back Queue
+class FrontMiddleBackQueue {
+    Deque<Integer> deque1;
+    Deque<Integer> deque2;
+
+    public FrontMiddleBackQueue() {
+        deque1 = new LinkedList<>();
+        deque2 = new LinkedList<>();
+    }
+
+    public void pushFront(int val) {
+        deque1.addFirst(val);
+    }
+
+    public void pushMiddle(int val) {
+        if (deque1.size() > deque2.size()) {
+            int move = (deque1.size() - deque2.size() + 1) / 2;
+            while (move != 0) {
+                deque2.addFirst(deque1.pollLast());
+                --move;
+            }
+        } else {
+            int move = (deque2.size() - deque1.size()) / 2;
+            while (move != 0) {
+                deque1.addLast(deque2.pollFirst());
+                --move;
+            }
+        }
+        deque1.addLast(val);
+    }
+
+    public void pushBack(int val) {
+        deque2.addLast(val);
+    }
+
+    public int popFront() {
+        if (deque1.isEmpty()) {
+            if (deque2.isEmpty()) {
+                return -1;
+            }
+            return deque2.pollFirst();
+        }
+        return deque1.pollFirst();
+    }
+
+    public int popMiddle() {
+        if (deque1.size() > deque2.size()) {
+            int move = (deque1.size() - deque2.size()) / 2;
+            while (move != 0) {
+                deque2.addFirst(deque1.pollLast());
+                --move;
+            }
+        } else {
+            int move = (deque2.size() - deque1.size() + 1) / 2;
+            while (move != 0) {
+                deque1.addLast(deque2.pollFirst());
+                --move;
+            }
+        }
+        Integer middle = deque1.pollLast();
+        if (middle == null) {
+            return -1;
+        }
+        return middle;
+    }
+
+    public int popBack() {
+        if (deque2.isEmpty()) {
+            if (deque1.isEmpty()) {
+                return -1;
+            }
+            return deque1.pollLast();
+        }
+        return deque2.pollLast();
+    }
+}

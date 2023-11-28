@@ -1,0 +1,54 @@
+// 2382. Maximum Segment Sum After Removals
+class Solution {
+    public long[] maximumSegmentSum(int[] nums, int[] removeQueries) {
+        int n = nums.length;
+        UnionFind unionFind = new UnionFind(n);
+        long maxSegmentSum = 0;
+        long[] ans = new long[n];
+        for (int i = n - 1; i >= 0; --i) {
+            ans[i] = maxSegmentSum;
+            unionFind.connect(removeQueries[i], nums[removeQueries[i]], n);
+            maxSegmentSum = Math.max(maxSegmentSum, unionFind.segmentSums[removeQueries[i]]);
+        }
+        return ans;
+    }
+}
+
+class UnionFind {
+    long[] segmentSums;
+    int[] parents;
+
+    public UnionFind(int n) {
+        segmentSums = new long[n];
+        parents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            parents[i] = i;
+        }
+    }
+
+    int find(int son) {
+        if (parents[son] == son) {
+            return son;
+        }
+        parents[son] = find(parents[son]);
+        return parents[son];
+    }
+
+    void connect(int mid, int val, int n) {
+        segmentSums[mid] = val;
+        if (mid != 0) {
+            if (segmentSums[mid - 1] != 0) {
+                int leftParent = find(mid - 1);
+                segmentSums[mid] += segmentSums[leftParent];
+                parents[leftParent] = mid;
+            }
+        }
+        if (mid != n - 1) {
+            if (segmentSums[mid + 1] != 0) {
+                int rightParent = find(mid + 1);
+                segmentSums[mid] += segmentSums[rightParent];
+                parents[rightParent] = mid;
+            }
+        }
+    }
+}

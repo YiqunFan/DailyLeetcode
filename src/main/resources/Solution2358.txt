@@ -1,0 +1,17 @@
+// 2358. Maximum Number of Groups Entering a Competition
+class Solution {
+    public int maximumGroups(int[] grades) {
+        int n = grades.length;
+        int left = 1;
+        int right = 500;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (n >= (1 + mid) * mid / 2) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left - 1;
+    }
+}
