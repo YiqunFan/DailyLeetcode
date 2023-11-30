@@ -1,0 +1,21 @@
+// 1558. Minimum Numbers of Function Calls to Make Target Array
+class Solution {
+    public int minOperations(int[] nums) {
+        int len = nums.length;
+        int op0Sum = 0;
+        int maxOp1 = 0;
+        for (int i = 0; i < len; ++i) {
+            int op0 = 0;
+            int op1 = (int) (Math.log(nums[i]) / Math.log(2));
+            while (nums[i] > 0) {
+                if (nums[i] % 2 == 1) {
+                    ++op0;
+                }
+                nums[i] /= 2;
+            }
+            op0Sum += op0;
+            maxOp1 = Math.max(maxOp1, op1);
+        }
+        return op0Sum + maxOp1;
+    }
+}
