@@ -1,0 +1,44 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
+// 1429. First Unique Number
+class FirstUnique {
+
+    Queue<Integer> queue;
+    HashMap<Integer, Integer> frequencies;
+
+    public FirstUnique(int[] nums) {
+        queue = new LinkedList<>();
+        frequencies = new HashMap<>();
+        for (int num : nums) {
+            if (frequencies.containsKey(num)) {
+                frequencies.put(num, 2);
+            } else {
+                queue.offer(num);
+                frequencies.put(num, 1);
+            }
+        }
+    }
+
+    public int showFirstUnique() {
+        while (!queue.isEmpty()) {
+            Integer peek = queue.peek();
+            if (frequencies.get(peek) == 2) {
+                queue.poll();
+            } else {
+                return peek;
+            }
+        }
+        return -1;
+    }
+
+    public void add(int value) {
+        if (frequencies.containsKey(value)) {
+            frequencies.put(value, 2);
+        } else {
+            queue.offer(value);
+            frequencies.put(value, 1);
+        }
+    }
+}

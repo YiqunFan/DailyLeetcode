@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1868. Product of Two Run-Length Encoded Arrays
+class Solution {
+    public List<List<Integer>> findRLEArray(int[][] encoded1, int[][] encoded2) {
+        List<List<Integer>> ans = new ArrayList<>();
+        int i = 0;
+        int j = 0;
+        int partLength1 = encoded1[0][1];
+        int partLength2 = encoded2[0][1];
+        while (i < encoded1.length) {
+            List<Integer> newPart = new ArrayList<>();
+            newPart.add(encoded1[i][0] * encoded2[j][0]);
+            if (partLength1 == partLength2) {
+                newPart.add(partLength1);
+                ++i;
+                ++j;
+                if (i < encoded1.length && j < encoded2.length) {
+                    partLength1 = encoded1[i][1];
+                    partLength2 = encoded2[j][1];
+                }
+            } else if (partLength1 < partLength2) {
+                newPart.add(partLength1);
+                ++i;
+                partLength2 -= partLength1;
+                if (i < encoded1.length) {
+                    partLength1 = encoded1[i][1];
+                }
+            } else {
+                newPart.add(partLength2);
+                ++j;
+                partLength1 -= partLength2;
+                if (j < encoded2.length) {
+                    partLength2 = encoded2[j][1];
+                }
+            }
+            ans.add(newPart);
+        }
+        for (int second = 1; second < ans.size(); ++second) {
+            if (ans.get(second - 1).get(0).equals(ans.get(second).get(0))) {
+                int mergeLength = ans.get(second - 1).get(1) + ans.get(second).get(1);
+                ans.get(second - 1).set(1, mergeLength);
+                ans.remove(second);
+                --second;
+            }
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,26 @@
+import java.util.HashMap;
+
+// 2661. First Completely Painted Row or Column
+class Solution {
+    public int firstCompleteIndex(int[] arr, int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        HashMap<Integer, Long> numbersPositions = new HashMap<>();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                numbersPositions.put(mat[i][j], i * 100000L + j);
+            }
+        }
+        int[] filledRows = new int[m];
+        int[] filledCols = new int[n];
+        for (int i = 0; i < arr.length; ++i) {
+            long position = numbersPositions.get(arr[i]);
+            ++filledRows[(int) (position / 100000L)];
+            ++filledCols[(int) (position % 100000L)];
+            if (filledRows[(int) (position / 100000L)] == n || filledCols[(int) (position % 100000L)] == m) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
