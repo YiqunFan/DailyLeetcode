@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 2002. Maximum Product of the Length of Two Palindromic Subsequences
+class Solution {
+    public int maxProduct(String s) {
+        char[] charArray = s.toCharArray();
+        int len = charArray.length;
+        List<Character> subSequence1 = new ArrayList<>();
+        List<Character> subSequence2 = new ArrayList<>();
+        return dfs(charArray, subSequence1, subSequence2, 0, len);
+    }
+
+    private int dfs(char[] charArray, List<Character> subSequence1, List<Character> subSequence2, int i, int len) {
+        if (i == len) {
+            if (isPalindromic(subSequence1) && isPalindromic(subSequence2)) {
+                return subSequence1.size() * subSequence2.size();
+            }
+            return 0;
+        }
+        int ret = 0;
+        subSequence1.add(charArray[i]);
+        ret = Math.max(ret, dfs(charArray, subSequence1, subSequence2, i + 1, len));
+        subSequence1.remove(subSequence1.size() - 1);
+        subSequence2.add(charArray[i]);
+        ret = Math.max(ret, dfs(charArray, subSequence1, subSequence2, i + 1, len));
+        subSequence2.remove(subSequence2.size() - 1);
+        ret = Math.max(ret, dfs(charArray, subSequence1, subSequence2, i + 1, len));
+        return ret;
+    }
+
+    private boolean isPalindromic(List<Character> subSequence) {
+        int len = subSequence.size();
+        for (int i = 0; i < len / 2; ++i) {
+            if (subSequence.get(i) != subSequence.get(len - 1 - i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+}

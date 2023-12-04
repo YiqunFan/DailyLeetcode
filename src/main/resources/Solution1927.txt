@@ -1,0 +1,28 @@
+// 1927. Sum Game
+class Solution {
+    public boolean sumGame(String num) {
+        int leftSum = 0;
+        int rightSum = 0;
+        int leftQuestionMore = 0;
+        char[] charArray = num.toCharArray();
+        int len = charArray.length;
+        for (int i = 0; i < len / 2; ++i) {
+            if (charArray[i] == '?') {
+                ++leftQuestionMore;
+            } else {
+                leftSum += charArray[i] - '0';
+            }
+        }
+        for (int i = len / 2; i < len; ++i) {
+            if (charArray[i] == '?') {
+                --leftQuestionMore;
+            } else {
+                rightSum += charArray[i] - '0';
+            }
+        }
+        if (Math.abs(leftQuestionMore) % 2 == 1) {
+            return true;
+        }
+        return leftSum + leftQuestionMore / 2 * 9 != rightSum;
+    }
+}

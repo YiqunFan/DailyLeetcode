@@ -1,0 +1,18 @@
+// 1038. Binary Search Tree to Greater Sum Tree
+class Solution {
+    public TreeNode bstToGst(TreeNode root) {
+        reverseOrderTraversal(root, 0);
+        return root;
+    }
+
+    private int reverseOrderTraversal(TreeNode node, int maxPast) {
+        if (node == null) {
+            return maxPast;
+        }
+        maxPast = reverseOrderTraversal(node.right, maxPast);
+        maxPast += node.val;
+        node.val = maxPast;
+        maxPast = reverseOrderTraversal(node.left, maxPast);
+        return maxPast;
+    }
+}
