@@ -1,0 +1,21 @@
+import java.util.HashMap;
+
+// 2506. Count Pairs Of Similar Strings
+class Solution {
+    public int similarPairs(String[] words) {
+        HashMap<Integer, Integer> bitmasks = new HashMap<>();
+        for (String word : words) {
+            char[] chars = word.toCharArray();
+            int bitmask = 0;
+            for (char c : chars) {
+                bitmask |= 1 << (c - 'a');
+            }
+            bitmasks.put(bitmask, bitmasks.getOrDefault(bitmask, 0) + 1);
+        }
+        int ans = 0;
+        for (Integer value : bitmasks.values()) {
+            ans += value * (value - 1) / 2;
+        }
+        return ans;
+    }
+}
