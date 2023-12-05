@@ -1,0 +1,37 @@
+import java.util.*;
+
+// 2477. Minimum Fuel Cost to Report to the Capital
+class Solution {
+    public long minimumFuelCost(int[][] roads, int seats) {
+        int n = roads.length + 1;
+        List<List<Integer>> neighborhoods = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            neighborhoods.add(new ArrayList<>());
+        }
+        for (int[] road : roads) {
+            neighborhoods.get(road[0]).add(road[1]);
+            neighborhoods.get(road[1]).add(road[0]);
+        }
+        boolean[] visited = new boolean[n];
+        visited[0] = true;
+        int[] passedBy = new int[n];
+        dfs(0, neighborhoods, visited, passedBy);
+        long ans = 0;
+        for (int i = 1; i < n; ++i) {
+            ans += (passedBy[i] + seats - 1) / seats;
+        }
+        return ans;
+    }
+
+    private int dfs(int cur, List<List<Integer>> neighborhoods, boolean[] visited, int[] passedBy) {
+        int ret = 1;
+        for (int neighbor : neighborhoods.get(cur)) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                ret += dfs(neighbor, neighborhoods, visited, passedBy);
+            }
+        }
+        passedBy[cur] = ret;
+        return ret;
+    }
+}
