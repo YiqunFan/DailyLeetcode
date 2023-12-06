@@ -1,0 +1,72 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Queue;
+import java.util.Map;
+import java.util.LinkedList;
+
+// 2646. Minimize the Total Price of the Trips
+class Solution {
+    public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] trips) {
+        List<List<Integer>> adjacent = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            adjacent.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjacent.get(edge[0]).add(edge[1]);
+            adjacent.get(edge[1]).add(edge[0]);
+        }
+        int[] tolls = new int[n];
+        for (int[] trip : trips) {
+            List<Integer> passedNodes = findShortestPath(trip[0], trip[1], n, adjacent);
+            for (Integer passedNode : passedNodes) {
+                tolls[passedNode] += price[passedNode];
+            }
+        }
+        int[] minPrice = dfsDP(0, -1, adjacent, tolls);
+        return Math.min(minPrice[0], minPrice[1]);
+    }
+
+    private List<Integer> findShortestPath(int start, int end, int n, List<List<Integer>> adjacent) {
+        Map<Integer, Integer> previousNode = new HashMap<>();
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(start);
+        boolean[] visited = new boolean[n];
+        visited[start] = true;
+        OUTER:
+        while (!queue.isEmpty()) {
+            Integer front = queue.poll();
+            List<Integer> neighbors = adjacent.get(front);
+            for (Integer neighbor : neighbors) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    previousNode.put(neighbor, front);
+                    queue.offer(neighbor);
+                    if (neighbor == end) {
+                        break OUTER;
+                    }
+                }
+            }
+        }
+        List<Integer> passedNodes = new ArrayList<>();
+        passedNodes.add(end);
+        int cur = end;
+        while (cur != start) {
+            cur = previousNode.get(cur);
+            passedNodes.add(cur);
+        }
+        return passedNodes;
+    }
+
+    private int[] dfsDP(int cur, int parent, List<List<Integer>> adjacent, int[] tolls) {
+        int[] ret = new int[]{tolls[cur] / 2, tolls[cur]};
+        for (Integer neighbor : adjacent.get(cur)) {
+            if (neighbor != parent) {
+                int[] sonRet = dfsDP(neighbor, cur, adjacent, tolls);
+                ret[0] += sonRet[1];
+                ret[1] += Math.min(sonRet[0], sonRet[1]);
+            }
+        }
+        return ret;
+    }
+}
