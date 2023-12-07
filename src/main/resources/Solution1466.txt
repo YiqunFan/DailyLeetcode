@@ -1,0 +1,38 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1466. Reorder Routes to Make All Paths Lead to the City Zero
+class Solution {
+    public int minReorder(int n, int[][] connections) {
+        List<List<Path>> roads = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            roads.add(new ArrayList<>());
+        }
+        for (int[] connection : connections) {
+            roads.get(connection[0]).add(new Path(connection[1], 1));
+            roads.get(connection[1]).add(new Path(connection[0], 0));
+        }
+        return dfs(0, -1, roads, 0);
+    }
+
+    private int dfs(int cur, int parent, List<List<Path>> roads, int cost) {
+        List<Path> paths = roads.get(cur);
+        for (Path path : paths) {
+            if (path.to != parent) {
+                cost += dfs(path.to, cur, roads, path.cost);
+            }
+        }
+        return cost;
+    }
+
+}
+
+class Path {
+    int to;
+    int cost;
+
+    public Path(int to, int cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
