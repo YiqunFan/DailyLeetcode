@@ -1,5 +1,6 @@
 import java.util.Arrays;
 
+// 2008. Maximum Earnings From Taxi
 class Solution {
     public long maxTaxiEarnings(int n, int[][] rides) {
         Arrays.sort(rides, (int[] a, int[] b) -> a[1] - b[1]);
@@ -20,3 +21,4 @@ class Solution {
         return ans;
     }
 }
+
