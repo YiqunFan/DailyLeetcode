@@ -1,0 +1,42 @@
+// 2417. Closest Fair Integer
+class Solution {
+    public int closestFair(int n) {
+        int length = countLength(n);
+        if (length % 2 != 0) {
+            n = (int) Math.pow(10, length);
+        }
+        while (true) {
+            if (judge(n)) {
+                return n;
+            }
+            ++n;
+            length = countLength(n);
+            if (length % 2 == 1) {
+                n = (int) Math.pow(10, length);
+            }
+        }
+    }
+
+    private int countLength(int n) {
+        int len = 0;
+        while (n != 0) {
+            n /= 10;
+            ++len;
+        }
+        return len;
+    }
+
+    private boolean judge(int n) {
+        int odds = 0;
+        int evens = 0;
+        while (n != 0) {
+            if (n % 2 == 1) {
+                ++evens;
+            } else {
+                ++odds;
+            }
+            n /= 10;
+        }
+        return evens == odds;
+    }
+}

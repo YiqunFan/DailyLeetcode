@@ -1,0 +1,32 @@
+import java.util.Arrays;
+
+// 1959. Minimum Total Space Wasted With K Resizing Operations
+class Solution {
+    public int minSpaceWastedKResizing(int[] nums, int k) {
+        int n = nums.length;
+        int[][] minWasted = new int[n][k + 1];
+        for (int i = 0; i < n; ++i) {
+            Arrays.fill(minWasted[i], Integer.MAX_VALUE >> 1);
+        }
+        int maxNum = 0;
+        int sum = 0;
+        for (int i = 0; i < n; ++i) {
+            maxNum = Math.max(maxNum, nums[i]);
+            sum += nums[i];
+            minWasted[i][0] = maxNum * (i + 1) - sum;
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = 1; j <= k; ++j) {
+                int sectionMax = 0;
+                int sectionSum = 0;
+                for (int s = i; s >= 1; --s) {
+                    sectionMax = Math.max(sectionMax, nums[s]);
+                    sectionSum += nums[s];
+                    minWasted[i][j] = Math.min(minWasted[i][j],
+                            minWasted[s - 1][j - 1] + sectionMax * (i - s + 1) - sectionSum);
+                }
+            }
+        }
+        return minWasted[n - 1][k];
+    }
+}
