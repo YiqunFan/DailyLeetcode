@@ -3,10 +3,10 @@ class Solution {
     public int minimumEffortPath(int[][] heights) {
         int left = 0;
         int right = 1000000;
-        if (isConnected(heights, 1023)) {
-            right = 1023;
+        if (isConnected(heights, 2047)) {
+            right = 2047;
         } else {
-            left = 1024;
+            left = 2048;
         }
         while (left < right) {
             int middle = (left + right) / 2;
