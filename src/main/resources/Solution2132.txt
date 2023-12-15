@@ -1,0 +1,35 @@
+// 2132. Stamping the Grid
+class Solution {
+    public boolean possibleToStamp(int[][] grid, int stampHeight, int stampWidth) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] cumulativeEmpty = new int[m + 1][n + 1];
+        int[][] canPlace = new int[m][n];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                cumulativeEmpty[i + 1][j + 1] = cumulativeEmpty[i + 1][j] + cumulativeEmpty[i][j + 1] - cumulativeEmpty[i][j] + (1 - grid[i][j]);
+                if (i + 1 >= stampHeight && j + 1 >= stampWidth) {
+                    int x = i + 1 - stampHeight;
+                    int y = j + 1 - stampWidth;
+                    if (cumulativeEmpty[i + 1][j + 1] - cumulativeEmpty[x][j + 1] - cumulativeEmpty[i + 1][y] + cumulativeEmpty[x][y] == stampWidth * stampHeight)
+                        ++canPlace[i][j];
+                }
+            }
+        }
+        int[][] cumulativePlace = new int[m + 1][n + 1];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                cumulativePlace[i + 1][j + 1] = cumulativePlace[i + 1][j] + cumulativePlace[i][j + 1] - cumulativePlace[i][j] + canPlace[i][j];
+            }
+        }
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int x = Math.min(i + stampHeight, m);
+                int y = Math.min(j + stampWidth, n);
+                if (grid[i][j] == 0 && cumulativePlace[x][y] - cumulativePlace[i][y] - cumulativePlace[x][j] + cumulativePlace[i][j] == 0)
+                    return false;
+            }
+        }
+        return true;
+    }
+}

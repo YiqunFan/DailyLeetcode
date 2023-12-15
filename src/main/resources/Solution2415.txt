@@ -1,0 +1,21 @@
+// 2415. Reverse Odd Levels of Binary Tree
+class Solution {
+    public TreeNode reverseOddLevels(TreeNode root) {
+        dfs(root.left, root.right, 1);
+        return root;
+    }
+
+    private void dfs(TreeNode left, TreeNode right, int layer) {
+        if (left == null) {
+            return;
+        }
+        if ((layer & 1) == 1) {
+            int temp = left.val;
+            left.val = right.val;
+            right.val = temp;
+        }
+        ++layer;
+        dfs(left.left, right.right, layer);
+        dfs(left.right, right.left, layer);
+    }
+}
