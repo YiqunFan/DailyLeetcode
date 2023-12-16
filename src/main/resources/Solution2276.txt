@@ -1,0 +1,35 @@
+import java.util.Map;
+import java.util.TreeMap;
+
+// 2276. Count Integers in Intervals
+class CountIntervals {
+    TreeMap<Integer, Integer> intervals;
+    int count;
+
+    public CountIntervals() {
+        intervals = new TreeMap<>();
+        count = 0;
+    }
+
+    public void add(int left, int right) {
+        Map.Entry<Integer, Integer> interval = intervals.floorEntry(right);
+        while (interval != null) {
+            Integer key = interval.getKey();
+            Integer value = interval.getValue();
+            if (value < left) {
+                break;
+            }
+            left = Math.min(key, left);
+            right = Math.min(value, right);
+            intervals.remove(key);
+            interval = intervals.floorEntry(right);
+            count -= value - key + 1;
+        }
+        intervals.put(left, right);
+        count += right - left + 1;
+    }
+
+    public int count() {
+        return count;
+    }
+}

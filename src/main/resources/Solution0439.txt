@@ -1,0 +1,25 @@
+import java.util.Stack;
+
+// 0439. Ternary Expression Parser
+class Solution {
+    public String parseTernary(String expression) {
+        char[] charArray = expression.toCharArray();
+        int len = charArray.length;
+        Stack<Character> stack = new Stack<>();
+        stack.push(charArray[len - 1]);
+        for (int i = len - 2; i > 0; i -= 2) {
+            if (charArray[i] == ':') {
+                stack.push(charArray[i]);
+            } else {
+                Character exp2 = stack.pop();
+                Character exp3 = stack.pop();
+                if (charArray[i - 1] == 'T') {
+                    stack.push(exp2);
+                } else {
+                    stack.push(exp3);
+                }
+            }
+        }
+        return String.valueOf(stack.pop());
+    }
+}
