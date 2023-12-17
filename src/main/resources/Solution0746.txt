@@ -1,0 +1,11 @@
+// 0746. Min Cost Climbing Stairs
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] minCostTo = new int[n + 1];
+        for (int i = 2; i <= n; ++i) {
+            minCostTo[i] = Math.min(minCostTo[i - 1] + cost[i - 1], minCostTo[i - 2] + cost[i - 2]);
+        }
+        return minCostTo[n];
+    }
+}
