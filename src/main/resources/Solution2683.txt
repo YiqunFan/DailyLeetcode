@@ -1,0 +1,16 @@
+// 2683. Neighboring Bitwise XOR
+class Solution {
+    public boolean doesValidArrayExist(int[] derived) {
+        return makeOrigin(derived, 0) || makeOrigin(derived, 1);
+    }
+
+    private boolean makeOrigin(int[] derived, int start) {
+        int len = derived.length;
+        int[] origin = new int[len];
+        origin[0] = start;
+        for (int i = 0; i < len - 1; ++i) {
+            origin[i + 1] = derived[i] ^ origin[i];
+        }
+        return origin[0] == (derived[len - 1] ^ origin[len - 1]);
+    }
+}
