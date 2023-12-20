@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 0833. Find And Replace in String
+class Solution {
+    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+        List<Replacer> replacers = new ArrayList<>();
+        for (int i = 0; i < indices.length; ++i) {
+            replacers.add(new Replacer(indices[i], sources[i], targets[i]));
+        }
+        replacers.sort((r1, r2) -> r1.index - r2.index);
+        int replacerIndex = 0;
+        StringBuilder sb = new StringBuilder();
+        OUTER:
+        for (int i = 0; i < s.length(); ) {
+            while (replacerIndex < replacers.size() && i == replacers.get(replacerIndex).index) {
+                Replacer replacer = replacers.get(replacerIndex);
+                ++replacerIndex;
+                if (i + replacer.source.length() <= s.length()
+                        && replacer.source.equals(s.substring(i, i + replacer.source.length()))) {
+                    sb.append(replacer.target);
+                    i += replacer.source.length();
+                    continue OUTER;
+                }
+            }
+            sb.append(s.charAt(i));
+            ++i;
+        }
+        return sb.toString();
+    }
+}
+
+class Replacer {
+    public Replacer(int index, String source, String targets) {
+        this.index = index;
+        this.source = source;
+        this.target = targets;
+    }
+
+    int index;
+    String source;
+    String target;
+}
+
