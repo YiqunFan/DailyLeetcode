@@ -1,0 +1,51 @@
+import java.util.*;
+
+// 1671. Minimum Number of Removals to Make Mountain Array
+class Solution {
+    public int minimumMountainRemovals(int[] nums) {
+        int len = nums.length;
+        int[] maxIncrement = new int[len];
+        int[] maxDecrement = new int[len];
+        List<Integer> list0 = new ArrayList<>();
+        list0.add(nums[0]);
+        maxIncrement[0] = 1;
+        for (int i = 1; i < len; ++i) {
+            binarySearchAndInsert(list0, nums[i]);
+            maxIncrement[i] = list0.size();
+        }
+        List<Integer> list1 = new ArrayList<>();
+        list1.add(nums[len - 1]);
+        maxDecrement[len - 1] = 1;
+        for (int i = len - 2; i >= 0; --i) {
+            binarySearchAndInsert(list1, nums[i]);
+            maxDecrement[i] = list1.size();
+        }
+        int maxMountain = 0;
+        for (int i = 0; i < len; ++i) {
+            if (maxIncrement[i] != 1 && maxDecrement[i] != 1) {
+                maxMountain = Math.max(maxMountain, maxIncrement[i] + maxDecrement[i]);
+            }
+        }
+        --maxMountain;
+        return len - maxMountain;
+    }
+
+    private void binarySearchAndInsert(List<Integer> list, int num) {
+        if (num > list.get(list.size() - 1)) {
+            list.add(num);
+        } else {
+            int left = 0;
+            int right = list.size();
+            while (left < right) {
+                int mid = left + (right - left) / 2;
+                if (list.get(mid) < num) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            list.set(left, num);
+        }
+    }
+
+}

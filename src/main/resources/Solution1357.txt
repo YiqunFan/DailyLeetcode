@@ -1,0 +1,31 @@
+import java.util.HashMap;
+
+// 1357. Apply Discount Every n Orders
+class Cashier {
+    int i;
+    int n;
+    double discount;
+    HashMap<Integer, Double> menu;
+
+    public Cashier(int n, int discount, int[] products, int[] prices) {
+        this.i = 0;
+        this.n = n;
+        this.discount = discount / 100.0;
+        menu = new HashMap<>();
+        for (int j = 0; j < products.length; ++j) {
+            menu.put(products[j], prices[j] * 1.0);
+        }
+    }
+
+    public double getBill(int[] product, int[] amount) {
+        double total = 0.0;
+        for (int j = 0; j < product.length; ++j) {
+            total += menu.get(product[j]) * amount[j];
+        }
+        ++i;
+        if (i % n == 0) {
+            total *= discount;
+        }
+        return total;
+    }
+}
