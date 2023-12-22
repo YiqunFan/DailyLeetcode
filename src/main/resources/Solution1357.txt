@@ -10,7 +10,7 @@ class Cashier {
     public Cashier(int n, int discount, int[] products, int[] prices) {
         this.i = 0;
         this.n = n;
-        this.discount = discount / 100.0;
+        this.discount = 1- (discount / 100.0);
         menu = new HashMap<>();
         for (int j = 0; j < products.length; ++j) {
             menu.put(products[j], prices[j] * 1.0);
