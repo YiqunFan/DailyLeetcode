@@ -1,0 +1,16 @@
+// 1954. Minimum Garden Perimeter to Collect Enough Apples
+class Solution {
+    public long minimumPerimeter(long neededApples) {
+        long left = 1;
+        long right = 1000000;
+        while (left < right) {
+            long mid = left + (right - left) / 2;
+            if (mid * (mid + 1) * (mid * 2 + 1) * 2 >= neededApples) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left * 8;
+    }
+}
