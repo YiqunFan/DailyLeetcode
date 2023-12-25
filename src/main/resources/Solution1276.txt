@@ -1,0 +1,19 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// 1276. Number of Burgers with No Waste of Ingredients
+class Solution {
+    public List<Integer> numOfBurgers(int tomatoSlices, int cheeseSlices) {
+        List<Integer> ans = new ArrayList<>();
+        if (tomatoSlices == 0 || cheeseSlices == 0) {
+            if (tomatoSlices == cheeseSlices) {
+                ans.add(0);
+                ans.add(0);
+            }
+        } else if (tomatoSlices % 2 == 0 && tomatoSlices >= cheeseSlices * 2 && tomatoSlices <= cheeseSlices * 4) {
+            ans.add(tomatoSlices / 2 - cheeseSlices);
+            ans.add(cheeseSlices * 2 - tomatoSlices / 2);
+        }
+        return ans;
+    }
+}
