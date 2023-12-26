@@ -1,0 +1,70 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 1349. Maximum Students Taking Exam
+class Solution {
+    public int maxStudents(char[][] seats) {
+        int m = seats.length;
+        int n = seats[0].length;
+        HashMap<Integer, Integer> lastRowMaxStudents;
+        HashMap<Integer, Integer> currentRowMaxStudents = new HashMap<>();
+        int ans = 0;
+        for (int i = 0; i < m; ++i) {
+            lastRowMaxStudents = currentRowMaxStudents;
+            currentRowMaxStudents = new HashMap<>();
+            for (int j = 0; j < 1 << n; ++j) {
+                int cellMax = 0;
+                boolean reasonable0 = checkCurrentRow(i, j, seats, n);
+                if (reasonable0) {
+                    cellMax = Integer.bitCount(j);
+                    for (Map.Entry<Integer, Integer> entry : lastRowMaxStudents.entrySet()) {
+                        boolean reasonable1 = checkCrossRow(entry.getKey(), j, n);
+                        if (reasonable1) {
+                            cellMax = Math.max(cellMax, entry.getValue() + Integer.bitCount(j));
+                        }
+                    }
+                }
+                currentRowMaxStudents.put(j, cellMax);
+                ans = Math.max(ans, cellMax);
+            }
+        }
+        return ans;
+    }
+
+    private boolean checkCurrentRow(int currentRow, int currentStatus, char[][] seats, int n) {
+        int[] students = new int[n];
+        for (int i = 0; i < n; ++i) {
+            students[i] = currentStatus & 1;
+            currentStatus >>= 1;
+        }
+        for (int i = 0; i < n; ++i) {
+            if (students[i] == 1 && i > 0 && students[i - 1] == 1) {
+                return false;
+            }
+            if (students[i] == 1 && seats[currentRow][i] == '#') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkCrossRow(int lastStatus, int currentStatus, int n) {
+        int[] lastStudents = new int[n];
+        int[] currentStudents = new int[n];
+        for (int i = 0; i < n; ++i) {
+            lastStudents[i] = lastStatus & 1;
+            currentStudents[i] = currentStatus & 1;
+            lastStatus >>= 1;
+            currentStatus >>= 1;
+        }
+        for (int i = 0; i < n; ++i) {
+            if (currentStudents[i] == 1 && i > 0 && lastStudents[i - 1] == 1) {
+                return false;
+            }
+            if (currentStudents[i] == 1 && i < n - 1 && lastStudents[i + 1] == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
