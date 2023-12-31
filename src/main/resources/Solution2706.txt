@@ -1,0 +1,20 @@
+// 2706. Buy Two Chocolates
+class Solution {
+    public int buyChoco(int[] prices, int money) {
+        int len = prices.length;
+        int cheap1 = prices[0] < prices[1] ? 0 : 1;
+        int cheap2 = prices[0] < prices[1] ? 1 : 0;
+        for (int i = 2; i < len; ++i) {
+            if (prices[i] < prices[cheap1]) {
+                cheap2 = cheap1;
+                cheap1 = i;
+            } else if (prices[i] < prices[cheap2]) {
+                cheap2 = i;
+            }
+        }
+        if (prices[cheap1] + prices[cheap2] <= money) {
+            return money - prices[cheap1] - prices[cheap2];
+        }
+        return money;
+    }
+}
