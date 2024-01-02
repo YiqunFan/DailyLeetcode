@@ -1,0 +1,59 @@
+import java.util.HashMap;
+import java.util.Map;
+
+// 0466. Count The Repetitions
+class Solution {
+    public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+        int countS1 = 0;
+        int countS2 = 0;
+        int indexS1 = 0;
+        int indexS2 = 0;
+        Map<Integer, Counter> map = new HashMap<>();
+        while (true) {
+            ++countS1;
+            for (indexS1 = 0; indexS1 < s1.length(); ++indexS1) {
+                if (s1.charAt(indexS1) == s2.charAt(indexS2)) {
+                    ++indexS2;
+                    if (indexS2 == s2.length()) {
+                        indexS2 = 0;
+                        ++countS2;
+                    }
+                }
+            }
+            if (countS1 == n1) {
+                return countS2 / n2;
+            }
+            if (!map.containsKey(indexS2)) {
+                map.put(indexS2, new Counter(countS1, countS2));
+            } else {
+                Counter existed = map.get(indexS2);
+                int loopS1 = countS1 - existed.countS1;
+                int loopS2 = countS2 - existed.countS2;
+                int ans = existed.countS2 + (n1 - existed.countS1) / loopS1 * loopS2;
+                int remainS1 = (n1 - existed.countS1) % loopS1;
+                for (int i = 0; i < remainS1; ++i) {
+                    for (indexS1 = 0; indexS1 < s1.length(); ++indexS1) {
+                        if (s1.charAt(indexS1) == s2.charAt(indexS2)) {
+                            ++indexS2;
+                            if (indexS2 == s2.length()) {
+                                ++ans;
+                                indexS2 = 0;
+                            }
+                        }
+                    }
+                }
+                return ans / n2;
+            }
+        }
+    }
+}
+
+class Counter {
+    public Counter(int countS1, int countS2) {
+        this.countS1 = countS1;
+        this.countS2 = countS2;
+    }
+
+    int countS1;
+    int countS2;
+}
