@@ -1,0 +1,46 @@
+import java.util.Arrays;
+
+// 1575. Count All Possible Routes
+class Solution {
+    final long MOD = 1000000007L;
+    int n;
+    long[][] possibles;
+
+    public int countRoutes(int[] locations, int start, int finish, int fuel) {
+        n = locations.length;
+        possibles = new long[n][fuel + 1];
+        for (int i = 0; i < n; ++i) {
+            Arrays.fill(possibles[i], -1);
+        }
+        dfs(locations, start, finish, fuel);
+        if (possibles[start][fuel] == -1) {
+            return 0;
+        }
+        return (int) possibles[start][fuel];
+    }
+
+    private long dfs(int[] locations, int current, int finish, int fuel) {
+        if (possibles[current][fuel] != -1) {
+            return possibles[current][fuel];
+        }
+        if (fuel < Math.abs(locations[current] - locations[finish])) {
+            return 0;
+        }
+        long ret = 0;
+        for (int i = 0; i < n; ++i) {
+            if (current != i) {
+                int cost = Math.abs(locations[current] - locations[i]);
+                if (fuel >= cost) {
+                    ret += dfs(locations, i, finish, fuel - cost);
+                }
+            } else {
+                if (current == finish) {
+                    ++ret;
+                }
+            }
+        }
+        ret %= MOD;
+        possibles[current][fuel] = ret;
+        return ret;
+    }
+}
