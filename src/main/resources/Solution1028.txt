@@ -1,0 +1,52 @@
+// 1028. Recover a Tree From Preorder Traversal
+class Solution {
+    public TreeNode recoverFromPreorder(String traversal) {
+        int firstHyphen = traversal.indexOf("-");
+        if (firstHyphen == -1) {
+            return new TreeNode(Integer.parseInt(traversal));
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(traversal.substring(0, firstHyphen)));
+        recover(root, 0, traversal.substring(firstHyphen));
+        return root;
+    }
+
+    private String recover(TreeNode node, int depth, String remain) {
+        while (remain.length() != 0) {
+            int depthN = countHyphen(remain);
+            if (depthN == depth + 1) {
+                int past = 0;
+                while (remain.charAt(past) == '-') {
+                    ++past;
+                }
+                int value = 0;
+                while (past < remain.length() && remain.charAt(past) != '-') {
+                    value *= 10;
+                    value += remain.charAt(past) - '0';
+                    ++past;
+                }
+                if (node.left == null) {
+                    node.left = new TreeNode(value);
+                    remain = recover(node.left, depth + 1, remain.substring(past));
+                } else if (node.right == null) {
+                    node.right = new TreeNode(value);
+                    remain = recover(node.right, depth + 1, remain.substring(past));
+                }
+            } else {
+                return remain;
+            }
+        }
+        return "";
+    }
+
+    private int countHyphen(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == '-') {
+                ++count;
+            } else {
+                return count;
+            }
+        }
+        return -1;
+    }
+}
