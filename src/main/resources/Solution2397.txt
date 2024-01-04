@@ -1,0 +1,29 @@
+// 2397. Maximum Rows Covered by Columns
+class Solution {
+    public int maximumRows(int[][] matrix, int numSelect) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int ans = 0;
+        for (int i = 0; i < 1 << n; ++i) {
+            if (Integer.bitCount(i) == numSelect) {
+                int coveredRows = 0;
+                for (int j = 0; j < m; ++j) {
+                    boolean covered = true;
+                    for (int k = 0; k < n; ++k) {
+                        if (matrix[j][k] == 1) {
+                            if (((i >> k) & 1) == 0) {
+                                covered = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (covered) {
+                        ++coveredRows;
+                    }
+                }
+                ans = Math.max(ans, coveredRows);
+            }
+        }
+        return ans;
+    }
+}
