@@ -1,0 +1,47 @@
+import java.util.*;
+
+// 1772. Sort Features by Popularity
+class Solution {
+    public String[] sortFeatures(String[] features, String[] responses) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for (String feature : features) {
+            hashMap.put(feature, 0);
+        }
+        for (String response : responses) {
+            String[] words = response.split(" ");
+            HashSet<String> set = new HashSet<>(Arrays.asList(words));
+            for (String word : set) {
+                if (hashMap.containsKey(word)) {
+                    hashMap.put(word, hashMap.get(word) + 1);
+                }
+            }
+        }
+        List<Feature> featureList = new ArrayList<>();
+        for (int i = 0; i < features.length; ++i) {
+            featureList.add(new Feature(features[i], i, hashMap.get(features[i])));
+        }
+        featureList.sort((f1, f2) -> {
+            if (f1.appearance == f2.appearance) {
+                return f1.index - f2.index;
+            }
+            return f2.appearance - f1.appearance;
+        });
+        String[] ans = new String[features.length];
+        for (int i = 0; i < featureList.size(); ++i) {
+            ans[i] = featureList.get(i).fName;
+        }
+        return ans;
+    }
+}
+
+class Feature {
+    public Feature(String fName, int index, int appearance) {
+        this.fName = fName;
+        this.index = index;
+        this.appearance = appearance;
+    }
+
+    String fName;
+    int index;
+    int appearance;
+}
