@@ -1,0 +1,21 @@
+import java.util.Stack;
+
+// 1944. Number of Visible People in a Queue
+class Solution {
+    public int[] canSeePersonsCount(int[] heights) {
+        int len = heights.length;
+        Stack<Integer> stack = new Stack<>();
+        int[] ans = new int[len];
+        for (int i = len - 1; i >= 0; --i) {
+            while (!stack.isEmpty() && stack.peek() < heights[i]) {
+                stack.pop();
+                ++ans[i];
+            }
+            if (!stack.isEmpty()) {
+                ++ans[i];
+            }
+            stack.push(heights[i]);
+        }
+        return ans;
+    }
+}
